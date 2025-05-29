@@ -1,0 +1,107 @@
+.checkout-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.left, .right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.left input, .left .row input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.left .row {
+  display: flex;
+  gap: 1rem;
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.small-text {
+  display: block;
+  font-size: 0.75rem;
+  color: gray;
+}
+
+.right .summary-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-item img {
+  width: 80px;
+  height: 80px;
+  background-color: #eee;
+  object-fit: cover;
+}
+
+.product-title {
+  font-weight: bold;
+}
+
+.qty {
+  color: #555;
+}
+
+.qty-buttons button {
+  padding: 0.3rem 0.6rem;
+  margin-right: 0.5rem;
+  border: 1px solid #000;
+  background: white;
+}
+
+.summary-totals {
+  font-size: 0.95rem;
+}
+
+.summary-totals > div {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.3rem 0;
+}
+
+.summary-totals .savings {
+  color: red;
+}
+
+.total {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.checkout-btn {
+  background: black;
+  color: white;
+  padding: 0.75rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

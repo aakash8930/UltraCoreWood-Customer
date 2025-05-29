@@ -1,0 +1,123 @@
+.wishlist-container {
+    background-color: #fff;
+    min-height: 100vh;
+    padding: 3rem 1.5rem;
+  }
+  
+  .wishlist-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: 1px;
+  }
+  
+  .wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .wishlist-card {
+    width: 17vw;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .wishlist-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  .wishlist-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .wishlist-card-content {
+    padding: 1rem;
+    text-align: left;
+  }
+  
+  .wishlist-card-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .wishlist-card-content p {
+    margin: 0.25rem 0;
+    color: #555;
+  }
+  
+  .price {
+    font-weight: 700;
+    color: #000;
+  }
+  
+
+  
+  .add-cart-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background-color: #000;
+    color: #fff;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .remove-wishlist-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: #e53e3e;
+    color: #fff;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .wishlist-action-row {
+    display: flex;
+    margin-top: 1rem;
+  }
+  
+  .add-cart-btn {
+    flex: 1;
+    background-color: #f5f5f5;
+    color: #000;
+    padding: 0.5rem;
+    border: 1px solid #000;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  
+  .remove-icon-btn {
+   width: 40px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    font-size: 3rem;
+    font-weight: 400;
+    padding: 0;
+    line-height: 0px;
+    cursor: pointer;
+    height: 33px;
+    position: relative;
+    top: 17px;
+    left: 8px;
+  }
+  
+  .remove-icon-btn:hover {
+    background-color: #eee;
+  }
+  
