@@ -1,3 +1,4 @@
+// src/components/ProductCard.js
 import React from 'react';
 import { useCart } from './CartContext';
 import { useWishlist } from './WishlistContext';
@@ -14,19 +15,44 @@ const ProductCard = ({ product }) => {
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
   const itemId = product._id || product.id || product.name;
-  const isWished = wishlistItems.some((item) => (item._id || item.id || item.name) === itemId);
+  const isWished = wishlistItems.some(
+    (item) => (item._id || item.id || item.name) === itemId
+  );
 
   const handleWishlistToggle = () => {
     isWished ? removeFromWishlist(itemId) : addToWishlist(product);
   };
 
+  let imageSrc = '/images/placeholder.jpg';
+  if (product.images) {
+    const key = Object.keys(product.images).find(k => product.images[k]?.data);
+    if (key) {
+      const { contentType, data } = product.images[key];
+      imageSrc = `data:${contentType};base64,${data}`;
+    }
+  } else if (product.image) {
+    imageSrc = product.image;
+  }
+
+  const discount = product.discount || 0;
+  const hasDiscount = discount > 0;
+  const discountedPrice = hasDiscount
+    ? (product.price * (100 - discount)) / 100
+    : product.price;
+
   return (
     <div className="product-card-enhanced">
       <div className="image-wrapper">
+        {hasDiscount && (
+          <div className="discount-badge">
+            {`-${discount}%`}
+          </div>
+        )}
         <img
-          src={product.image}
+          src={imageSrc}
           alt={product.name}
-          onError={(e) => (e.target.src = '/images/placeholder.jpg')}
+          className="product-image"
+          onError={e => (e.target.src = '/images/placeholder.jpg')}
         />
         <div className="wishlist-icon" onClick={handleWishlistToggle}>
           <FontAwesomeIcon icon={isWished ? solidHeart : regularHeart} />
@@ -34,11 +60,21 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="product-details">
         <h4 className="product-name">{product.name}</h4>
-        <p className="product-subtext">{product.subtext}</p>
-        <p className="product-price">
-          {formatPrice(product.price)} <span className="inr-label">inr</span>
-        </p>
-        <button className="add-cart-btn" onClick={() => addToCart(product)}>
+        <p className="product-subtext">{product.subtext || product.category}</p>
+        <div className="price-row">
+          {hasDiscount && (
+            <span className="original-price">
+              {formatPrice(product.price)}
+            </span>
+          )}
+          <span className="discounted-price">
+            {formatPrice(discountedPrice)}
+          </span>
+        </div>
+        <button
+          className="add-cart-btn"
+          onClick={() => addToCart(product)}
+        >
           🛒 Add to Cart
         </button>
       </div>

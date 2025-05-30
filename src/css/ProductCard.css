@@ -1,83 +1,113 @@
+/* src/css/ProductCard.css */
 .product-card-enhanced {
-  background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: 0.3s ease;
-    width: 260px;
+  background: linear-gradient(145deg, #fafafa, #f0f0f0);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 280px;
+  font-family: 'Playfair Display', serif;
 }
-
 .product-card-enhanced:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 .image-wrapper {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 240px;
   overflow: hidden;
 }
-
-.image-wrapper img {
+.product-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.product-card-enhanced:hover .product-image {
+  transform: scale(1.05);
+}
+
+.discount-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #b8860b;
+  color: #fff;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  z-index: 2;
 }
 
 .wishlist-icon {
   position: absolute;
-  /* bottom: 10px; */
-  right: 10px;
-  font-size: 1.2rem;
-  color: crimson;
+  top: 12px;
+  right: 12px;
+  font-size: 1.3rem;
+  color: #b8860b;
   cursor: pointer;
-  background-color: white;
-  padding: 5px;
+  background-color: rgba(255,255,255,0.9);
+  padding: 6px;
   border-radius: 50%;
+  z-index: 2;
 }
 
 .product-details {
-  padding: 16px;
+  padding: 20px;
+  text-align: center;
 }
 
 .product-name {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 4px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 6px 0;
+  color: #333;
 }
 
 .product-subtext {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #555;
-  margin: 2px 0 6px;
+  margin: 4px 0 12px;
 }
 
-.product-price {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #000;
+.price-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.inr-label {
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #777;
-  margin-left: 4px;
+.original-price {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.discounted-price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #b8860b;
 }
 
 .add-cart-btn {
-  margin-top: 12px;
   width: 100%;
-  padding: 10px;
-  background: black;
-  color: white;
-  font-weight: 500;
-  border: none;
-  border-radius: 5px;
+  padding: 12px;
+  background: #333;
+  color: #f5f5f5;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
 }
-
 .add-cart-btn:hover {
-  background: #222;
+  border:none;
+  background: #b8860b;
+  color: #fff;
 }

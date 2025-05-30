@@ -478,41 +478,38 @@
   }
 /* Banner Slider (was .hero-slider) */
 .banner-slider {
-  display: block;
-  position: relative;
   width: 100%;
-  overflow: hidden;    /* you can remove this if you want scrollbars */
-  background: rgba(255, 255, 255, 0.462);
-  height: auto;        /* let it grow with your slides */
-}
-
-/* Each slide container (was .hero-slide) */
-.banner-slide {
+  overflow: hidden;
+  background-color: #f5f5f5;
   position: relative;
 }
 
-/* The image inside a slide (was .slide-image) */
+.banner-slide {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .banner-image {
-  display: block;
-  margin: 0 auto;
-  width: 80%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* Text overlay on each slide (was .hero-text) */
 .banner-text {
   position: absolute;
-  top: 50%;
-  right: 20%;
-  transform: translateY(-50%);
-  width: 20vw;
-  color: #07aca4;
-  text-align: right;
-  font-size: 40px;
-  font-weight: 100;
-  letter-spacing: 2px;
+  bottom: 30px;
+  left: 40px;
+  font-size: 32px;
   font-family: 'Poppins', sans-serif;
-  background-color: transparent;
-  z-index: 2;
+  font-weight: 300;
+  color: white;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 15px;
+  border-radius: 4px;
+  z-index: 1;
 }

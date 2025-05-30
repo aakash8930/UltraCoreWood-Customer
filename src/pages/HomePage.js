@@ -1,3 +1,4 @@
+// src/pages/HomePage.js
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { useSearchParams } from 'react-router-dom';
@@ -42,7 +43,7 @@ const productSliderSettings = {
   ],
 };
 
-const bannerSettings = {
+const baseBannerSettings = {
   dots: false,
   infinite: true,
   autoplay: true,
@@ -59,18 +60,17 @@ const HomePage = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [banners, setBanners] = useState([]);
 
-    // Load public banners on mount
-    useEffect(() => {
-      const loadBanners = async () => {
-        try {
-          const data = await getPublicBanners();
-          setBanners(data);
-        } catch (err) {
-          console.error('Failed to load banners', err);
-        }
-      };
-      loadBanners();
-    }, []);
+  useEffect(() => {
+    const loadBanners = async () => {
+      try {
+        const data = await getPublicBanners();
+        setBanners(data);
+      } catch (err) {
+        console.error('Failed to load banners', err);
+      }
+    };
+    loadBanners();
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -86,81 +86,69 @@ const HomePage = () => {
 
   useEffect(() => {
     socket.on("product:added", (newProduct) => {
-      setFilteredProducts((prev) => [...prev, newProduct]);
+      setFilteredProducts(prev => [...prev, newProduct]);
     });
-
     socket.on("product:deleted", (deletedId) => {
-      setFilteredProducts((prev) =>
-        prev.filter((p) => (p._id || p.id || p.name) !== deletedId)
+      setFilteredProducts(prev =>
+        prev.filter(p => (p._id || p.id || p.name) !== deletedId)
       );
     });
-
     return () => {
       socket.off("product:added");
       socket.off("product:deleted");
     };
   }, []);
 
+  // if only one banner, disable infinite/autoplay to avoid clones
+  const bannerSettings = banners.length > 1
+    ? baseBannerSettings
+    : { ...baseBannerSettings, infinite: false, autoplay: false };
+
   return (
     <>
-      {/* Banner Slider (Admin managed) */}
+      {/* Banner Slider */}
       {banners.length > 0 && (
         <div className="banner-slider">
-         <Slider {...bannerSettings}>
-  {banners.map((b) => {
-    const href =b.link
-    ? b.link.match(/^https?:\/\//)
-      ? b.link
-      : `https://${b.link}`
-    : '#';
-    return (
-      <a
-        key={b._id}
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        className="banner-link"
-      >
-        <div className="banner-slide">
-          <img
-            src={b.image}
-            alt={b.text || 'Banner'}
-            className="banner-image"
-          />
-          {b.text && <div className="banner-text">{b.text}</div>}
-        </div>
-      </a>
-    );
-  })}
-</Slider>
+          {banners.length > 1
+            ? <Slider {...bannerSettings}>
+                {banners.map(b => {
+                  const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
+                  return (
+                    <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
+                      <div className="banner-slide">
+                        <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
+                        {b.text && <div className="banner-text">{b.text}</div>}
+                      </div>
+                    </a>
+                  );
+                })}
+              </Slider>
+            : (() => {
+                const b = banners[0];
+                const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
+                return (
+                  <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
+                    <div className="banner-slide">
+                      <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
+                      {b.text && <div className="banner-text">{b.text}</div>}
+                    </div>
+                  </a>
+                );
+              })()
+          }
         </div>
       )}
-      {/* Hero Banner
-      <div className="hero-slider">
-        <Slider {...heroSettings}>
-          {['img1.jpg', 'img2.jpg', 'img3.jpg'].map((img, i) => (
-            <div className="hero-slide" key={i}>
-              <img src={`/images/${img}`} alt={img} className="slide-image" />
-              <div className="hero-text">
-                <h1>
-                  {i === 0
-                    ? 'EXPLORE NEW ARRIVALS'
-                    : i === 1
-                      ? 'STYLE YOUR SPACE'
-                      : 'DESIGN MEETS COMFORT'}
-                </h1>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div> */}
 
       {/* Essentials */}
       <div className="essentials-section">
         <h2 className="essentials-title">THE ESSENTIALS</h2>
         <div className="essentials-grid">
           {essentials.map((item, i) => (
-            <div className="essentials-item" style={{ backgroundImage: `url(${item.image})` }} key={i}>
+            <div
+              className="essentials-item"
+              style={{ backgroundImage: `url(${item.image})` }}
+              key={i}
+            >
               <div className="essentials-overlay"><span>{item.title}</span></div>
             </div>
           ))}
@@ -190,7 +178,7 @@ const HomePage = () => {
         </Slider>
       </div>
 
-      {/* Filtered Products Slider (if category is selected) */}
+      {/* Filtered Products */}
       {category && filteredProducts.length > 0 && (
         <>
           <div className="top-button-section">
@@ -220,10 +208,7 @@ const HomePage = () => {
         <div className="whyus-container">
           <div className="whyus-content">
             <div className="whyus-description">
-              <p>
-                We are a furniture design brand based in New Delhi...
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-              </p>
+              <p>We are a furniture design brand based in New Delhi... Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
             <div className="whyus-image">
               <img src="/images/sofa.jpg" alt="Why Us" />
@@ -231,16 +216,16 @@ const HomePage = () => {
           </div>
           <div className="whyus-features">
             <div className="feature">🚚 <span>Free Delivery and Returns</span></div>
-            <hr className='underline' />
+            <hr className="underline" />
             <div className="feature">👑 <span>1 Lakh Happy Customers</span></div>
-            <hr className='underline' />
+            <hr className="underline" />
             <div className="feature">🔁 <span>7 Day Return Policy</span></div>
           </div>
           <div className="whyus-trustpilot">
             <div className="brand">
-              <h3><img src='/images/logo_white.png' alt='logo' /> FURNITURE</h3>
+              <h3><img src="/images/logo_white.png" alt="logo" /> FURNITURE</h3>
               <div className="brand star">
-                <h3 className='trust'><img src='/images/trust_star.png' alt='star' /> Trustpilot</h3>
+                <h3 className="trust"><img src="/images/trust_star.png" alt="star" /> Trustpilot</h3>
                 <img src="/images/star.png" alt="Trustpilot" />
                 <p>TrustScore <strong>4.8</strong> <span>141,840</span> reviews</p>
               </div>
