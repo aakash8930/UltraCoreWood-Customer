@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+// src/ProtectedRoute.js
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
 
 const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [checking, setChecking] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setLoggedIn(!!user);
+      setChecking(false);
+    });
+    return unsubscribe;
   }, []);
 
-  if (isAuthenticated === null) {
-    // While checking auth, optionally show a loader or nothing
-    return null;
-  }
+  if (checking) return null; // or a spinner
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return loggedIn ? children : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

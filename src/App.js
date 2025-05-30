@@ -13,13 +13,14 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { CartProvider } from './pages/CartContext';
 import { WishlistProvider } from './pages/WishlistContext';
+import AddressBook from './pages/AddressBook';
 
 function App() {
   return (
     <Router>
       <CartProvider>
         <WishlistProvider>
-          <Navbar /> {/* Always visible */}
+          <Navbar />
 
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -30,14 +31,14 @@ function App() {
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/products" element={<ProductPage />} />
+            <Route path="/address" element={<AddressBook/>}/>
           </Routes>
 
-          <Footer /> {/* Always visible */}
+          <Footer />
         </WishlistProvider>
       </CartProvider>
     </Router>
   );
 }
-
 
 export default App;
