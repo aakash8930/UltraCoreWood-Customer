@@ -1,69 +1,72 @@
 // src/api/addressApi.js
 import axios from 'axios';
 
-// Base URL for API calls; adjust as needed or set via environment variable
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
-// Helper to get auth header
-function authHeader() {
-  const token = localStorage.getItem('token');
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  };
-}
+const BASE_URL = 'http://localhost:8000';
 
 /**
- * Fetch all addresses for the logged-in user
- * @returns {Promise<Array>} list of address objects
+ * Fetch all addresses for the current user
+ * @param {string} token  Firebase ID token
+ * @returns {Promise<Array>}
  */
-export const fetchAddresses = async () => {
-  const response = await axios.get(
+export const fetchAddresses = async (token) => {
+  const res = await axios.get(
     `${BASE_URL}/api/addresses`,
-    authHeader()
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
   );
-  return response.data;
+  return res.data;
 };
 
 /**
  * Create a new address
- * @param {Object} addressData
- * @returns {Promise<Object>} created address
  */
-export const createAddress = async (addressData) => {
-  const response = await axios.post(
+export const createAddress = async (token, addressData) => {
+  const res = await axios.post(
     `${BASE_URL}/api/addresses`,
     addressData,
-    authHeader()
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
   );
-  return response.data;
+  return res.data;
 };
-
 /**
  * Update an existing address
- * @param {string} id - address document ID
+ * @param {string} token
+ * @param {string} id  Address document ID
  * @param {Object} addressData
  * @returns {Promise<Object>} updated address
  */
-export const updateAddress = async (id, addressData) => {
-  const response = await axios.put(
+export const updateAddress = async (token, id, addressData) => {
+  const res = await axios.put(
     `${BASE_URL}/api/addresses/${id}`,
     addressData,
-    authHeader()
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
   );
-  return response.data;
+  return res.data;
 };
 
 /**
  * Delete an address
- * @param {string} id - address document ID
+ * @param {string} token
+ * @param {string} id  Address document ID
  * @returns {Promise<Object>} deletion response
  */
-export const deleteAddress = async (id) => {
-  const response = await axios.delete(
+export const deleteAddress = async (token, id) => {
+  const res = await axios.delete(
     `${BASE_URL}/api/addresses/${id}`,
-    authHeader()
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
   );
-  return response.data;
+  return res.data;
 };

@@ -1,26 +1,111 @@
-import React, { createContext, useContext, useState } from "react";
+// src/pages/CartContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import {
+  getCart as fetchCartApi,
+  addToCart as addToCartApi,
+  updateCartItem as updateCartItemApi,
+  removeFromCart as removeFromCartApi,
+  clearCart as clearCartApi
+} from '../api/cartApi';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState({ items: [] });
 
-  const addToCart = (item) => {
-    setCartItems((prev) => {
-      const exists = prev.find((p) => p.id === item.id);
-      if (exists) return prev; // Avoid duplicates
-      return [...prev, item];
+  // Whenever auth state changes, load (or clear) the cart
+  useEffect(() => {
+    const auth = getAuth();
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          const data  = await fetchCartApi(token);
+          setCart(data);
+        } catch (e) {
+          console.error('Failed to load cart', e);
+          setCart({ items: [] });
+        }
+      } else {
+        // signed out
+        setCart({ items: [] });
+      }
     });
+    return () => unsub();
+  }, []);
+
+  const addToCart = async (productId, quantity = 1) => {
+    const auth  = getAuth();
+    const user  = auth.currentUser;
+    if (!user) {
+      console.warn('Not signed in – cannot add to cart');
+      return;
+    }
+    try {
+      const token   = await user.getIdToken();
+      const updated = await addToCartApi(token, productId, quantity);
+      setCart(updated);
+    } catch (e) {
+      console.error('Add to cart failed', e);
+    }
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const updateCartItem = async (productId, quantity) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      const token   = await user.getIdToken();
+      const updated = await updateCartItemApi(token, productId, quantity);
+      setCart(updated);
+    } catch (e) {
+      console.error('Update cart item failed', e);
+    }
   };
 
-  const cartTotal = cartItems.length * 28500; // Dummy flat price (₹28,500 per item)
+  const removeFromCart = async (productId) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      const token   = await user.getIdToken();
+      const updated = await removeFromCartApi(token, productId);
+      setCart(updated);
+    } catch (e) {
+      console.error('Remove from cart failed', e);
+    }
+  };
+
+  const clearCart = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      const token = await user.getIdToken();
+      await clearCartApi(token);
+      setCart({ items: [] });
+    } catch (e) {
+      console.error('Clear cart failed', e);
+    }
+  };
+
+  const cartTotal = cart.items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, cartTotal }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        updateCartItem,
+        removeFromCart,
+        clearCart,
+        cartTotal
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
