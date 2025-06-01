@@ -15,7 +15,6 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
-
 import ProtectedRoute from './api/ProtectedRoute';
 
 import Navbar from './components/Navbar';
@@ -23,6 +22,7 @@ import Footer from './components/Footer';
 
 import { CartProvider } from './pages/CartContext';
 import { WishlistProvider } from './pages/WishlistContext';
+import MyAccountPage from './pages/MyAccount';
 
 function App() {
   return (
@@ -54,6 +54,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AddressBook />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/myaccount"
+              element={
+                <ProtectedRoute>
+                  <MyAccountPage />
                 </ProtectedRoute>
               }
             />

@@ -47,7 +47,7 @@ const Navbar = () => {
                 {isLoggedIn ? (
                   <>
                   <Link to="/address">Address</Link>
-                    <Link to="/account">My Account</Link>
+                    <Link to="/myaccount">My Account</Link>
                     <Link to="/orders">Orders</Link>
                     <button onClick={handleLogout}>Logout</button>
                   </>

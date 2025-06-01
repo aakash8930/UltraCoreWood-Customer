@@ -26,4 +26,8 @@
 
 - v 1.0.4
 - cart product image fixed 
-- 
+
+- v 1.0.5
+- made my account
+- fixed coupon 
+

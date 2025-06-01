@@ -29,6 +29,8 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('');
   const [discountValue, setDiscountValue] = useState(0);
   const [customCouponInput, setCustomCouponInput] = useState('');
+  // <-- NEW FLAG: tracks if last applied coupon came from the "applyCouponAPI" call
+  const [isCustomApplied, setIsCustomApplied] = useState(false);
 
   // Order placement state
   const [placingOrder, setPlacingOrder] = useState(false);
@@ -87,7 +89,8 @@ export default function CheckoutPage() {
     })();
   }, []);
 
-  // When user clicks a visible‐coupon card, calculate discount
+  // Whenever user clicks a “visible” coupon card or itemsTotal changes,
+  // recalculate discount _only if_ it is a visible coupon (and not a custom‐api one).
   useEffect(() => {
     if (!selectedCouponCode) {
       setDiscountValue(0);
@@ -95,53 +98,59 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Check if selectedCouponCode is one of the visible coupons
-    const coupon = availableCoupons.find(c => c.code === selectedCouponCode);
-    if (coupon) {
-      if (itemsTotal < coupon.minOrderValue) {
-        setCouponError(`Requires ₹${coupon.minOrderValue} minimum`);
+    // Look for the code in the visible list
+    const couponObj = availableCoupons.find(
+      c => c.code === selectedCouponCode
+    );
+    if (couponObj) {
+      // It’s a “visible” coupon; compute discount here:
+      if (itemsTotal < couponObj.minOrderValue) {
+        setCouponError(`Requires ₹${couponObj.minOrderValue} minimum`);
         setDiscountValue(0);
         return;
       }
-      const discount = coupon.discountPercent > 0
-        ? Math.floor((coupon.discountPercent / 100) * itemsTotal)
-        : coupon.discountAmount;
+      const calc =
+        couponObj.discountPercent > 0
+          ? Math.floor((couponObj.discountPercent / 100) * itemsTotal)
+          : couponObj.discountAmount;
       setCouponError('');
-      setDiscountValue(discount);
+      setDiscountValue(calc);
+      // Since user manually clicked a visible coupon, ensure “custom” flag is off:
+      setIsCustomApplied(false);
     } else {
-      // If it's not a “visible” card (maybe user typed manually), do nothing here
-      setDiscountValue(0);
+      // If it’s not in the “visible” list and also not just applied via API, zero out:
+      if (!isCustomApplied) {
+        setDiscountValue(0);
+      }
     }
-  }, [selectedCouponCode, availableCoupons, itemsTotal]);
+  }, [selectedCouponCode, availableCoupons, itemsTotal, isCustomApplied]);
 
   const grandTotal = subtotal - discountValue;
 
   // Handle manual “Apply” button for custom coupon code
   const handleApplyCustomCoupon = async () => {
-    // Trim and uppercase
     const code = customCouponInput.trim().toUpperCase();
-
-    // 1) If input is empty, bail out immediately
-    if (!code) {
-      return;
-    }
+    if (!code) return;
 
     try {
-      // 2) Call backend endpoint (ignores visibility) to validate / compute discount
-      const { discount } = await applyCouponAPI(code, itemsTotal);
+      const token = await getToken();
+      if (!token) throw new Error('Not authenticated');
 
-      // 3) If successful, clear errors and store code + discount
+      // Call the backend to validate—even if coupon is invisible, backend checks assignedTo
+      const { discount } = await applyCouponAPI(code, itemsTotal, token);
+
+      // Mark this as “custom applied” so the effect above won’t wipe it out:
       setSelectedCouponCode(code);
       setDiscountValue(discount);
       setCouponError('');
+      setIsCustomApplied(true);
     } catch (err) {
-      // 4) If server returned 400/404, show the error message here
-      const message = err.response?.data?.error || 'Invalid or expired coupon';
+      const message = err.message || 'Invalid or expired coupon';
       setCouponError(message);
       setDiscountValue(0);
       setSelectedCouponCode('');
+      setIsCustomApplied(false);
     } finally {
-      // 5) Regardless, clear the input field
       setCustomCouponInput('');
     }
   };
@@ -160,6 +169,7 @@ export default function CheckoutPage() {
       alert(couponError);
       return;
     }
+
     setPlacingOrder(true);
     const token = await getToken();
     const products = cart.items.map(i => ({
@@ -199,7 +209,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="checkout-container">
-      {/* LEFT SIDE: Address & Payment & Coupons */}
+      {/* ───────────── LEFT SIDE ───────────── */}
       <div className="checkout-left">
         <h2>Delivery Address</h2>
         {loadingAddresses ? (
@@ -277,7 +287,8 @@ export default function CheckoutPage() {
               <button
                 className="apply-coupon-btn"
                 onClick={() => {
-                  // Clicking a visible coupon card:
+                  // Mark that a visible coupon was clicked
+                  setIsCustomApplied(false);
                   setSelectedCouponCode(c.code);
                   setCustomCouponInput('');
                 }}
@@ -313,7 +324,7 @@ export default function CheckoutPage() {
         )}
       </div>
 
-      {/* RIGHT SIDE: Order Summary */}
+      {/* ───────────── RIGHT SIDE ───────────── */}
       <div className="checkout-right">
         <h2>Order Summary</h2>
 

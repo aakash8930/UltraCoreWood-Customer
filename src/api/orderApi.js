@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const BASE_URL ='http://localhost:8000';
 
 /**
  * Create a new order
@@ -11,7 +11,8 @@ const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
  *   userAddress: string (Address _id),
  *   paymentMethod: string,
  *   paymentBreakdown: { itemsTotal, tax, shipping, discount?, total },
- *   products: [ { product: string, quantity: number } ]
+ *   products: [ { product: string, quantity: number } ],
+ *   couponCode: string (optional, uppercase trimmed)
  * }
  * @returns {Promise<Object>}  The created order
  */
@@ -62,7 +63,7 @@ export const getMyOrders = async (token) => {
 
 /**
  * Fetch all orders (admin only)
- * @param {string} token  Firebase ID token
+ * @param {string} token  JWT for admin
  * @returns {Promise<Array>} List of all orders
  */
 export const getAllOrders = async (token) => {
@@ -85,7 +86,7 @@ export const getAllOrders = async (token) => {
 
 /**
  * Fetch a single order by its Mongo _id or business orderId
- * @param {string} token    Firebase ID token
+ * @param {string} token    Firebase ID token (or admin JWT)
  * @param {string} orderId  Mongo _id or orderId (e.g. "OD-31_05_2025_1")
  * @returns {Promise<Object>} The order details
  */
@@ -109,7 +110,7 @@ export const getOrder = async (token, orderId) => {
 
 /**
  * Update the status of an order
- * @param {string} token    Firebase ID token
+ * @param {string} token    Firebase ID token (or admin JWT)
  * @param {string} orderId  Mongo _id of the order
  * @param {string} status   New status ('Pending','Confirmed','Shipped','Delivered','Cancelled')
  * @returns {Promise<Object>} The updated order
