@@ -14,4 +14,16 @@
 - made Address Book
 - Created OTP Signin
 - Created OTP Login
->>>>>>> a285201096ea59ebce94e43447d71255b9e9d968
+<<<<<<< HEAD
+=======
+
+
+- v 1.0.3
+- Added Coupons
+- Cart Fully Functional
+- Order Creation, Deletion, Details
+>>>>>>> 84bafaf4326a06b50df303f994f3e756df783cd0
+
+- v 1.0.4
+- cart product image fixed 
+- 

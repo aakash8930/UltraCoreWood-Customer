@@ -1,4 +1,3 @@
-// src/pages/HomePage.js
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { useSearchParams } from 'react-router-dom';

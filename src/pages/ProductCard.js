@@ -1,6 +1,8 @@
 // src/components/ProductCard.js
 import React from 'react';
-import { useCart } from './CartContext';
+import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+import { useCart } from '../pages/CartContext';
 import { useWishlist } from './WishlistContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
@@ -11,21 +13,28 @@ const formatPrice = (amount) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
 
-  const itemId = product._id || product.id || product.name;
-  const isWished = wishlistItems.some(
-    (item) => (item._id || item.id || item.name) === itemId
-  );
+  const itemId = product._id;
+  const isWished = wishlistItems.some((item) => item._id === itemId);
 
   const handleWishlistToggle = () => {
     isWished ? removeFromWishlist(itemId) : addToWishlist(product);
   };
 
+  const handleAddToCart = () => {
+    const user = getAuth().currentUser;
+    if (!user) {
+      return navigate('/login');
+    }
+    addToCart(product._id, 1);
+  };
+
   let imageSrc = '/images/placeholder.jpg';
   if (product.images) {
-    const key = Object.keys(product.images).find(k => product.images[k]?.data);
+    const key = Object.keys(product.images).find((k) => product.images[k]?.data);
     if (key) {
       const { contentType, data } = product.images[key];
       imageSrc = `data:${contentType};base64,${data}`;
@@ -43,16 +52,12 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product-card-enhanced">
       <div className="image-wrapper">
-        {hasDiscount && (
-          <div className="discount-badge">
-            {`-${discount}%`}
-          </div>
-        )}
+        {hasDiscount && <div className="discount-badge">-{discount}%</div>}
         <img
           src={imageSrc}
           alt={product.name}
           className="product-image"
-          onError={e => (e.target.src = '/images/placeholder.jpg')}
+          onError={(e) => (e.target.src = '/images/placeholder.jpg')}
         />
         <div className="wishlist-icon" onClick={handleWishlistToggle}>
           <FontAwesomeIcon icon={isWished ? solidHeart : regularHeart} />
@@ -63,18 +68,11 @@ const ProductCard = ({ product }) => {
         <p className="product-subtext">{product.subtext || product.category}</p>
         <div className="price-row">
           {hasDiscount && (
-            <span className="original-price">
-              {formatPrice(product.price)}
-            </span>
+            <span className="original-price">{formatPrice(product.price)}</span>
           )}
-          <span className="discounted-price">
-            {formatPrice(discountedPrice)}
-          </span>
+          <span className="discounted-price">{formatPrice(discountedPrice)}</span>
         </div>
-        <button
-          className="add-cart-btn"
-          onClick={() => addToCart(product)}
-        >
+        <button className="add-cart-btn" onClick={handleAddToCart}>
           🛒 Add to Cart
         </button>
       </div>

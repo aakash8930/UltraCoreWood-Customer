@@ -1,4 +1,3 @@
-// /pages/ProductPage.js
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getAllProducts } from '../api/productApi';

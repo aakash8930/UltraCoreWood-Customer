@@ -6,6 +6,7 @@ import {
   updateAddress,
   deleteAddress
 } from '../api/addressApi';
+import { getAuth } from 'firebase/auth';
 
 const blankAddress = {
   fullName: '',
@@ -20,17 +21,32 @@ const blankAddress = {
 };
 
 export default function AddressBook() {
-  const [addresses, setAddresses] = useState([]);
-  const [formData, setFormData] = useState(blankAddress);
-  const [editingId, setEditingId] = useState(null);
-  const [error, setError] = useState('');
+  const [addresses, setAddresses]       = useState([]);
+  const [formData, setFormData]         = useState(blankAddress);
+  const [editingId, setEditingId]       = useState(null);
+  const [error, setError]               = useState('');
+  const [loading, setLoading]           = useState(true);
 
+  // helper to pull the Firebase token
+  const getToken = async () => {
+    const user = getAuth().currentUser;
+    return user ? await user.getIdToken() : null;
+  };
+
+  // load addresses
   const loadAddresses = async () => {
+    setError('');
+    setLoading(true);
     try {
-      const data = await fetchAddresses();
+      const token = await getToken();
+      if (!token) throw new Error('Not authenticated');
+      const data  = await fetchAddresses(token);
       setAddresses(data);
     } catch (err) {
-      setError(err.message || 'Failed to load addresses');
+      console.error('Error listing addresses:', err);
+      setError(err.response?.data?.error || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,57 +67,66 @@ export default function AddressBook() {
     e.preventDefault();
     setError('');
     try {
+      const token = await getToken();
+      if (!token) throw new Error('Not authenticated');
+
       if (editingId) {
-        await updateAddress(editingId, formData);
+        await updateAddress(token, editingId, formData);
       } else {
-        await createAddress(formData);
+        await createAddress(token, formData);
       }
-      handleCancel();
-      loadAddresses();
+
+      setFormData(blankAddress);
+      setEditingId(null);
+      await loadAddresses();
     } catch (err) {
-      setError(err.response?.data?.error || err.message || 'Save failed');
+      console.error('Save address failed:', err);
+      setError(err.response?.data?.error || err.message);
     }
   };
 
   const handleEdit = addr => {
-    setFormData({
-      fullName: addr.fullName,
-      phone: addr.phone,
-      flat: addr.flat,
-      area: addr.area,
-      landmark: addr.landmark,
-      pincode: addr.pincode,
-      city: addr.city,
-      state: addr.state,
-      isDefault: addr.isDefault || false
-    });
-    setEditingId(addr._id);
     setError('');
+    setEditingId(addr._id);
+    setFormData({
+      fullName:  addr.fullName,
+      phone:     addr.phone,
+      flat:      addr.flat,
+      area:      addr.area,
+      landmark:  addr.landmark,
+      pincode:   addr.pincode,
+      city:      addr.city,
+      state:     addr.state,
+      isDefault: addr.isDefault
+    });
   };
 
   const handleDelete = async id => {
     if (!window.confirm('Delete this address?')) return;
+    setError('');
     try {
-      await deleteAddress(id);
+      const token = await getToken();
+      if (!token) throw new Error('Not authenticated');
+      await deleteAddress(token, id);
       if (id === editingId) {
-        handleCancel();
+        setEditingId(null);
+        setFormData(blankAddress);
       }
-      loadAddresses();
+      await loadAddresses();
     } catch (err) {
-      setError(err.response?.data?.error || err.message || 'Delete failed');
+      console.error('Delete address failed:', err);
+      setError(err.response?.data?.error || err.message);
     }
   };
 
-  const handleCancel = () => {
-    setFormData(blankAddress);
-    setEditingId(null);
-    setError('');
-  };
+  if (loading) {
+    return <p>Loading addresses…</p>;
+  }
 
   return (
     <div className="container">
       <h2>Address</h2>
-      {error && <div className="error">{error}</div>}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -165,14 +190,18 @@ export default function AddressBook() {
             checked={formData.isDefault}
             onChange={handleChange}
           />{' '}
-          Make default address
+          Make default
         </label>
 
-        <button type="submit">
+        <button type="submit" disabled={loading}>
           {editingId ? 'Update Address' : 'Add Address'}
         </button>
         {editingId && (
-          <button type="button" onClick={handleCancel}>
+          <button type="button" onClick={() => {
+            setEditingId(null);
+            setFormData(blankAddress);
+            setError('');
+          }}>
             Cancel
           </button>
         )}
