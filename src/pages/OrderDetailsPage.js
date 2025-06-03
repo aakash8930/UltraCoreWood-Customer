@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 import { getOrder, updateOrderStatus } from '../api/orderApi';
 import axios from 'axios';
+import ReviewForm from './ReviewForm';
 import '../css/OrderDetailsPage.css';
 
 export default function OrderDetailsPage() {
@@ -150,6 +151,18 @@ export default function OrderDetailsPage() {
               <p>{product.name}</p>
               <p>Qty: {quantity}</p>
               <p>₹{(product.price * quantity).toLocaleString()}</p>
+
+              {order.status === 'Delivered' && (
+                <div className="review-section">
+                  <h4>Leave a Review:</h4>
+                  <ReviewForm
+                    productId={product._id}
+                    onReviewSubmitted={() => {
+                      // Optional: you can add logic here to refresh product reviews or disable the form
+                    }}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

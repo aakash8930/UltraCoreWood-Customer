@@ -1,18 +1,21 @@
-// src/components/ProductCard.js
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAuth } from 'firebase/auth';
-import { useCart } from '../pages/CartContext';
-import { useWishlist } from './WishlistContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
-import '../css/ProductCard.css';
+// src/components/ProductCard.jsx
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import { useCart } from "../pages/CartContext";
+import { useWishlist } from "../pages/WishlistContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHeart as solidHeart,
+  faStar as solidStar,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart, faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import "../css/ProductCard.css";
 
 const formatPrice = (amount) =>
-  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount);
 
-const ProductCard = ({ product }) => {
+export default function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { wishlistItems, addToWishlist, removeFromWishlist } = useWishlist();
@@ -27,12 +30,13 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = () => {
     const user = getAuth().currentUser;
     if (!user) {
-      return navigate('/login');
+      return navigate("/login");
     }
-    addToCart(product._id, 1);
+    addToCart(itemId, 1);
   };
 
-  let imageSrc = '/images/placeholder.jpg';
+  // Pick first available image
+  let imageSrc = "/images/placeholder.jpg";
   if (product.images) {
     const key = Object.keys(product.images).find((k) => product.images[k]?.data);
     if (key) {
@@ -49,35 +53,63 @@ const ProductCard = ({ product }) => {
     ? (product.price * (100 - discount)) / 100
     : product.price;
 
+  // --- NEW: retrieve average rating & count from product.rating ---
+  const avgRating = product.rating?.average || 0; // e.g. 4.2
+  const reviewCount = product.rating?.count || 0; // e.g. 5
+
+  // Convert avgRating (e.g. 4.2) into 5 stars UI
+  const starElements = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(avgRating)) {
+      starElements.push(<FontAwesomeIcon key={i} icon={solidStar} className="star filled" />);
+    } else if (i === Math.ceil(avgRating) && avgRating % 1 >= 0.5) {
+      // If half star needed (optional): we’ll use a regular star for simplicity—but you can swap in a half‐star icon if available.
+      starElements.push(<FontAwesomeIcon key={i} icon={solidStar} className="star filled" />);
+    } else {
+      starElements.push(<FontAwesomeIcon key={i} icon={regularStar} className="star" />);
+    }
+  }
+
   return (
     <div className="product-card-enhanced">
       <div className="image-wrapper">
         {hasDiscount && <div className="discount-badge">-{discount}%</div>}
-        <img
-          src={imageSrc}
-          alt={product.name}
-          className="product-image"
-          onError={(e) => (e.target.src = '/images/placeholder.jpg')}
-        />
+
+        <Link to={`/products/${itemId}`} className="product-image-link">
+          <img
+            src={imageSrc}
+            alt={product.name}
+            className="product-image"
+            onError={(e) => (e.target.src = "/images/placeholder.jpg")}
+          />
+        </Link>
+
         <div className="wishlist-icon" onClick={handleWishlistToggle}>
           <FontAwesomeIcon icon={isWished ? solidHeart : regularHeart} />
         </div>
       </div>
+
       <div className="product-details">
-        <h4 className="product-name">{product.name}</h4>
+        <Link to={`/products/${itemId}`} className="product-name-link">
+          <h4 className="product-name">{product.name}</h4>
+        </Link>
         <p className="product-subtext">{product.subtext || product.category}</p>
+
+        {/* --- NEW: Show stars and review count --- */}
+        <div className="rating-row">
+          {starElements}
+          <span className="review-count">({reviewCount})</span>
+        </div>
+
         <div className="price-row">
-          {hasDiscount && (
-            <span className="original-price">{formatPrice(product.price)}</span>
-          )}
+          {hasDiscount && <span className="original-price">{formatPrice(product.price)}</span>}
           <span className="discounted-price">{formatPrice(discountedPrice)}</span>
         </div>
+
         <button className="add-cart-btn" onClick={handleAddToCart}>
           🛒 Add to Cart
         </button>
       </div>
     </div>
   );
-};
-
-export default ProductCard;
+}

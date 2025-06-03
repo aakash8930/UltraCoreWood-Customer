@@ -31,3 +31,8 @@
 - made my account
 - fixed coupon 
 
+
+- v 1.0.6
+- Fixed Wishlist
+- Added Review and rating system 
+- Added Product Details

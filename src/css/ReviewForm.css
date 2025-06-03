@@ -1,0 +1,71 @@
+/* src/css/ReviewForm.css */
+
+.review-form {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+.review-form h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.form-stars {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.form-stars .star {
+  font-size: 1.5rem;
+  color: #ccc;
+  margin-right: 4px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.form-stars .star.selected {
+  color: #ffc107;
+}
+
+.review-textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.submit-btn {
+  background: #1976d2;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submit-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.submit-btn:not(:disabled):hover {
+  background: #115293;
+}
+
+/* New style for the eligibility notice */
+
+.review-notice {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 16px;
+  font-style: italic;
+  text-align: center;
+}
