@@ -26,7 +26,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-top">
         <div className="navbar-logo">
-          <Link to="/" className="logo">🛒 FURNITURE</Link>
+          <Link to="/" className="logo"><img src="/images/logo_white.png" alt="Furniture Logo" className="footer-logo" /> FURNITURE</Link>
         </div>
 
         <div className="navbar-search">

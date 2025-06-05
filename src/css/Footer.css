@@ -1,125 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
 .footer {
-    background-color: #f3f3f3;
-    padding: 40px 10% 20px;
-    font-family: 'Poppins', sans-serif;
-    color: #222;
-  }
-  
-  .footer-divider {
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 20px 0 30px;
-  }
-  
-  .footer-grid {
-    display: grid;
-    gap: 40px;
-    margin-bottom: 40px;
-  }
-  
-  .footer-grid.top {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  
-  .footer-grid.bottom {
-    grid-template-columns: repeat(5, 1fr);
-  }
-  
-  .footer-grid h4 {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-    font-weight: 900;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  }
-  
-  .footer-grid ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .footer-grid ul li {
-    font-size: 0.95rem;
-    margin-bottom: 8px;
-    color: #555;
-    cursor: pointer;
-    font-weight: 900;
-    font-family: 'Courier New', Courier, monospace;
-  }
-  
-  .footer-grid ul li:hover {
-    font-weight: 300;
-    color: #000;
-  }
-  
-  /* Contact Section */
-  .footer-bottom-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-    flex-wrap: wrap;
-    padding: 0 5%;
-  }
-  
-  .footer-logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-    top: 10vw;padding-bottom: 5vw;
-  }
-  
-  .footer-logo {
-    width: 100px;
-    height: auto;
-  }
-  
-  .footer-logo-area h3 {
-    font-size: 4rem;
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-  }
-  
-  .footer-contact-items {
-    display: flex;
-    gap: 10vw;
-    align-items: center;
-  }
-  
-  .footer-contact-box {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-    font-size: 1.8rem;
-    position: relative;
-    right: 19vw;
-  }
-  
-  .footer-contact-label {
-    font-size: 14px;
-    margin: 0 0 6px 0;
-    font-weight: 400;
-    color: #555;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 900;
-  }
-  
-  .footer-contact-value {
-    font-size: 14px;
-    margin: 0;
-    font-weight: 500;
-    color: #000;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: 900;
-  }
-  
-  .footer-social-icons {
-    display: flex;
-    align-items: center;
-    font-size: 1.3rem;
-    position: relative;
-    right: 6vw;
-  }
-  
+  background-color: #f3f3f3;
+  padding: 40px 7% 20px 11%;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+}
+
+.footer-divider {
+  border: none;
+  border-top: 2px solid #ccc;
+  margin: 20px 35px 30px;
+  width: 1050px;
+}
+
+.footer-grid {
+  display: grid;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-grid.top {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.footer-grid.bottom {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.footer-grid h4 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-weight: 900;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.footer-grid ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-grid ul li {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #555;
+  cursor: pointer;
+  font-weight: 900;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.footer-grid ul li:hover {
+  font-weight: 300;
+  color: #000;
+}
+
+/* Contact Section */
+.footer-bottom-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  padding: 0 5%;
+}
+
+.footer-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  top: 10vw;
+  padding-bottom: 5vw;
+}
+
+.footer-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100px;
+  height: auto;
+}
+
+.footer-logo-area h3 {
+  font-size: 4rem;
+  margin: 0;
+   font-family: "Lora", serif;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.footer-contact-items {
+  display: flex;
+  gap: 10vw;
+  align-items: center;
+}
+
+.footer-contact-box {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  font-size: 1.8rem;
+  position: relative;
+  right: 19vw;
+}
+
+.footer-contact-label {
+  font-size: 14px;
+  margin: 0 0 6px 0;
+  font-weight: 400;
+  color: #555;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 900;
+}
+
+.footer-contact-value {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+  color: #000;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 900;
+}
+
+.footer-social-icons {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  position: relative;
+  right: 6vw;
+}

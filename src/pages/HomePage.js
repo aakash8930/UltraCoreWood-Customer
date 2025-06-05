@@ -7,6 +7,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../css/HomePage.css';
 import { getAllProducts } from '../api/productApi';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
 
 const essentials = [
   { title: "COFFEE TABLE", image: "/images/coffee_table.jpg" },
@@ -26,6 +28,18 @@ const products = [
   { name: "Luffy Lounge", subtext: "Recliner Chair", image: "/images/chair.jpg" },
 ];
 
+const CustomPrevArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-prev" onClick={onClick}>
+    <FaChevronLeft />
+  </div>
+);
+
+const CustomNextArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-next" onClick={onClick}>
+    <FaChevronRight />
+  </div>
+);
+
 const productSliderSettings = {
   dots: false,
   infinite: true,
@@ -35,12 +49,15 @@ const productSliderSettings = {
   autoplay: true,
   autoplaySpeed: 3000,
   arrows: true,
+  prevArrow: <CustomPrevArrow />,
+  nextArrow: <CustomNextArrow />,
   responsive: [
     { breakpoint: 1024, settings: { slidesToShow: 3 } },
     { breakpoint: 768, settings: { slidesToShow: 2 } },
     { breakpoint: 480, settings: { slidesToShow: 1 } },
   ],
 };
+
 
 const baseBannerSettings = {
   dots: false,
@@ -110,20 +127,7 @@ const HomePage = () => {
         <div className="banner-slider">
           {banners.length > 1
             ? <Slider {...bannerSettings}>
-                {banners.map(b => {
-                  const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
-                  return (
-                    <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
-                      <div className="banner-slide">
-                        <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
-                        {b.text && <div className="banner-text">{b.text}</div>}
-                      </div>
-                    </a>
-                  );
-                })}
-              </Slider>
-            : (() => {
-                const b = banners[0];
+              {banners.map(b => {
                 const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
                 return (
                   <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
@@ -133,7 +137,20 @@ const HomePage = () => {
                     </div>
                   </a>
                 );
-              })()
+              })}
+            </Slider>
+            : (() => {
+              const b = banners[0];
+              const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
+              return (
+                <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
+                  <div className="banner-slide">
+                    <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
+                    {b.text && <div className="banner-text">{b.text}</div>}
+                  </div>
+                </a>
+              );
+            })()
           }
         </div>
       )}
@@ -153,9 +170,9 @@ const HomePage = () => {
           ))}
         </div>
         <div className="comfort-section">
-          <hr className="underline" />
+          <hr className="underline1" />
           <h2>CRAFTED COMFORT DELIVERED TO YOUR DOOR</h2>
-          <hr className="underline" />
+          <hr className="underline1" />
         </div>
       </div>
 
@@ -207,26 +224,30 @@ const HomePage = () => {
         <div className="whyus-container">
           <div className="whyus-content">
             <div className="whyus-description">
-              <p>We are a furniture design brand based in New Delhi... Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
             </div>
             <div className="whyus-image">
               <img src="/images/sofa.jpg" alt="Why Us" />
             </div>
           </div>
-          <div className="whyus-features">
-            <div className="feature">🚚 <span>Free Delivery and Returns</span></div>
-            <hr className="underline" />
-            <div className="feature">👑 <span>1 Lakh Happy Customers</span></div>
-            <hr className="underline" />
-            <div className="feature">🔁 <span>7 Day Return Policy</span></div>
-          </div>
-          <div className="whyus-trustpilot">
-            <div className="brand">
-              <h3><img src="/images/logo_white.png" alt="logo" /> FURNITURE</h3>
-              <div className="brand star">
-                <h3 className="trust"><img src="/images/trust_star.png" alt="star" /> Trustpilot</h3>
-                <img src="/images/star.png" alt="Trustpilot" />
-                <p>TrustScore <strong>4.8</strong> <span>141,840</span> reviews</p>
+
+          <div className='whyus_column'>
+            <div className="whyus-features">
+              <div className="feature">🚚 <span>Free Delivery and Returns</span></div>
+              <hr className="underline2" />
+              <div className="feature">👑 <span>1 Lakh Happy Customers</span></div>
+              <hr className="underline2" />
+              <div className="feature">🔁 <span>7 Day Return Policy</span></div>
+            </div>
+
+            <div className="whyus-trustpilot">
+              <div className="brand">
+                <h3><img src="/images/logo_white.png" alt="logo" /> FURNITURE</h3>
+                <div className="brand star">
+                  <h3 className="trust"><img src="/images/trust_star.png" alt="star" /> Trustpilot</h3>
+                  <img src="/images/star.png" alt="Trustpilot" />
+                  <p>TrustScore <strong>4.8</strong> <span>141,840</span> reviews</p>
+                </div>
               </div>
             </div>
           </div>

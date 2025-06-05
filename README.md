@@ -36,3 +36,6 @@
 - Fixed Wishlist
 - Added Review and rating system 
 - Added Product Details
+
+-v 1.0.7
+-Fix Homepage UI
