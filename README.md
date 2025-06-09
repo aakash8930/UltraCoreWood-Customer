@@ -39,3 +39,6 @@
 
 -v 1.0.7
 -Fix Homepage UI
+
+- v 1.0.8
+- Responsive Navbar, HomePage, Footer
