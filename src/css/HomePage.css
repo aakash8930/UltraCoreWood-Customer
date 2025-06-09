@@ -4,46 +4,65 @@ body {
   background-color: #f3f3f3 !important;
 }
 
-/* --- HERO BANNER --- */
-.hero-slider {
-  align-items: center;
-  position: relative;
+/* ---  BANNER  SLIDER --- */
+
+.banner-slider {
   width: 100%;
   overflow: hidden;
-  align-content: center;
-  background: rgba(255, 255, 255, 0.462);
-  height: 90vh;
-}
-
-.hero-slide {
+  background: #f3f3f3;
   position: relative;
-  width: 100%;
-  height: 550px;
 }
 
-.slide-image {
-  display: block;
-  margin: 0 auto;
-  width: 80%;
+.banner-slide {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-image {
+  width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.hero-text {
-  width: 20vw;
-  position: absolute;
-  top: 50%;
-  right: 20%;
-  transform: translateY(-50%);
-  color: #07aca4;
-  text-align: right;
-  font-size: 40px;
-  font-weight: 100;
-  letter-spacing: 2px;
+.banner-text {
+  font-size: 5rem;
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
+  color: white;
+  padding: 10px 15px;
+  z-index: 1;
+  width: 20vw;
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  color: #07aca4;
+  text-align: right;
+  font-weight: 100;
+  letter-spacing: 2px;
   background-color: transparent;
+}
+
+.slick-slider {
+  margin: -5px;
+}
+
+.banner-slider .custom-prev {
+  left: 40px;       
+}
+
+.banner-slider .custom-next {
+  right: 40px;
+}
+
+.banner-slider .custom-arrow {
+  top: 50%;          
 }
 
 /* --- ESSENTIALS --- */
@@ -198,8 +217,8 @@ body {
   z-index: 10;
   width: 40px;
   height: 40px;
-  background-color: white;
-  color: black;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -307,7 +326,7 @@ body {
   justify-content: center;
   width: 1075px;
   height: auto;
-margin-top: -35px;
+  margin-top: -35px;
 
 }
 
@@ -316,7 +335,7 @@ margin-top: -35px;
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 900;
-  margin-left: 125px;
+  /* margin-left: 125px; */
   font-size: 1.3rem;
   display: flex;
   letter-spacing: 3px;
@@ -326,7 +345,7 @@ margin-top: -35px;
 
 .underline2 {
   width: 360px;
-  margin-left: 125px;
+  /* margin-left: 25px; */
 }
 
 .whyus-trustpilot {
@@ -378,15 +397,11 @@ margin-top: -35px;
 }
 
 
-
-
+/* --- TABLET (600px to 1024px) --- */
 @media (max-width: 1024px) and (min-width: 600px) {
-
-  html,
-  body {
+  html, body {
     overflow-x: hidden;
   }
-
 
   body {
     margin: 0;
@@ -394,36 +409,6 @@ margin-top: -35px;
     width: 100%;
   }
 
-  /* Navbar */
-  .navbar-top {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 0;
-  }
-
-  .navbar-search {
-    left: 0;
-    margin: 10px auto;
-    width: 90%;
-  }
-
-  .navbar-icons {
-    margin-top: 10px;
-  }
-
-  .navbar-links-container {
-    overflow-x: auto;
-  }
-
-  .navbar-links li {
-    padding: 1vh 2vw;
-  }
-
-  .navbar {
-    box-sizing: border-box;
-  }
-
-  /* Hero Section */
   .hero-slider {
     height: 70vh;
     margin-top: 0;
@@ -439,11 +424,6 @@ margin-top: -35px;
     right: 5%;
   }
 
-  /* Essentials */
-  .essentials-section {
-    padding: 30px 10px;
-  }
-
   .essentials-grid {
     grid-template-columns: repeat(2, 1fr);
     width: 95%;
@@ -455,7 +435,6 @@ margin-top: -35px;
     margin-bottom: 30px;
   }
 
-  /* Top Selections */
   .top-selections-btn {
     margin: 3vw auto;
     display: block;
@@ -469,11 +448,6 @@ margin-top: -35px;
     height: 160px;
   }
 
-  /* Why Us Section */
-  .whyus-section {
-    padding: 40px 5%;
-  }
-
   .whyus-btn {
     left: 0;
     display: block;
@@ -481,11 +455,9 @@ margin-top: -35px;
   }
 
   .whyus-container {
-    width: 620px;
-    /* left: 0; */
-    margin: 0 -25px;
-    height: 910px;
-    /* padding-bottom: 30px; */
+    width: 90%;
+    margin: 0 auto;
+    height: auto;
   }
 
   .whyus-content {
@@ -493,134 +465,133 @@ margin-top: -35px;
   }
 
   .whyus-description p {
-    width: 350px;
-    margin: 60px 0 0 50px;
-  }
-
-  .whyus-image {
-    width: 100%;
-    text-align: center;
+    width: 90%;
+    margin: 60px auto 0 auto;
   }
 
   .whyus-image img {
     width: 150px;
     height: auto;
-    margin-top: 20px;
-    position: relative;
-    left: 200px;
-    top: -165px;
+    margin: 20px auto;
+    display: block;
+    position: static;
   }
 
   .whyus-features {
     width: 90%;
-    margin: -170px auto 0 -15px;
+    margin: 20px auto;
   }
 
-  .feature {
-    font-size: 18px;
-    letter-spacing: 2px;
+  .whyus_column {
+    flex-direction: column;
+    width: 100%;
   }
 
   .underline2 {
-    text-decoration: underline;
     width: 295px;
-    position: relative;
-    left: -9vw;
-    margin-top: 1vw;
-    margin-bottom: 1vw;
+    margin: 1vw auto;
   }
 
-  .whyus-trustpilot {
+  .trust img, .star img {
+    width: 40px !important;
+  }
+}
+
+/* --- MOBILE (less than 600px) --- */
+@media (max-width: 599px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
     width: 100%;
+  }
+
+  .hero-slider {
+    height: 60vh;
+  }
+
+  .hero-slide {
+    height: 320px;
+  }
+
+  
+
+  .hero-text {
+    width: 80vw;
+    font-size: 20px;
+    right: 5%;
+    text-align: center;
+  }
+
+  .essentials-grid {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+
+  .essentials-title {
+    right: 0;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .product-card img {
+    height: 140px;
+  }
+
+  .top-selections-btn {
+    margin: 3vw auto;
+    display: block;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .whyus-btn {
     left: 0;
-    bottom: 0;
-    text-align: center;
-    margin-top: 2vw;
-    position: relative;
+    display: block;
+    margin: 0 auto 2vw;
+    padding: 10px 20px;
+    font-size: 14px;
   }
 
-  .brand h3 {
-    font-size: 30px;
-  }
-
-  .brand img {
-    width: 60px;
+  .whyus-container {
+    width: 95%;
     height: auto;
-    position: relative;
-    top: 20px;
-
+    margin: 0 auto;
   }
 
-  /* Footer */
-  .footer-grid.top,
-  .footer-grid.bottom {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .footer-bottom-section {
+  .whyus-content {
     flex-direction: column;
-    gap: 30px;
-    text-align: center;
   }
 
-  .footer-logo-area {
-    justify-content: center;
-    top: 0;
-    padding-bottom: 2vw;
+  .whyus-description p {
+    width: 90%;
+    margin: 40px auto 0 auto;
   }
 
-  .footer-contact-items {
+  .whyus-image img {
+    width: 140px;
+    height: auto;
+    margin: 10px auto;
+    display: block;
+    position: static;
+  }
+
+  .whyus-features {
+    width: 90%;
+    margin: 20px auto;
+  }
+
+  .whyus_column {
     flex-direction: column;
-    gap: 20px;
+    width: 100%;
   }
 
-  .footer-contact-box {
-    right: 0;
+  .underline2 {
+    width: 90%;
+    margin: 1vw auto;
   }
 
-  .footer-social-icons {
-    justify-content: center;
-    right: 0;
-  }
-}
-
-/* Banner Slider (was .hero-slider) */
-.banner-slider {
-  width: 100%;
-  overflow: hidden;
-  background-color: #f5f5f5;
-  position: relative;
-}
-
-.banner-slide {
-  width: 100%;
-  height: 500px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.banner-text {
-  position: absolute;
-  bottom: 30px;
-  left: 40px;
-  font-size: 32px;
-  font-family: "Cormorant Garamond", serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-weight: 300;
-  color: white;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 10px 15px;
-  border-radius: 4px;
-  z-index: 1;
 }

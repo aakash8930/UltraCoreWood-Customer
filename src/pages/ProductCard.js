@@ -1,4 +1,3 @@
-// src/components/ProductCard.jsx
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
@@ -8,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as solidHeart,
   faStar as solidStar,
+  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart, faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import "../css/ProductCard.css";
@@ -53,29 +53,32 @@ export default function ProductCard({ product }) {
     ? (product.price * (100 - discount)) / 100
     : product.price;
 
-  // --- NEW: retrieve average rating & count from product.rating ---
+  // Retrieve average rating & count
   const avgRating = product.rating?.average || 0; // e.g. 4.2
-  const reviewCount = product.rating?.count || 0; // e.g. 5
+  const reviewCount = product.rating?.count || 0; // e.g. 97
 
-  // Convert avgRating (e.g. 4.2) into 5 stars UI
+  // Build star icons
   const starElements = [];
   for (let i = 1; i <= 5; i++) {
     if (i <= Math.floor(avgRating)) {
-      starElements.push(<FontAwesomeIcon key={i} icon={solidStar} className="star filled" />);
-    } else if (i === Math.ceil(avgRating) && avgRating % 1 >= 0.5) {
-      // If half star needed (optional): we’ll use a regular star for simplicity—but you can swap in a half‐star icon if available.
-      starElements.push(<FontAwesomeIcon key={i} icon={solidStar} className="star filled" />);
+      starElements.push(
+        <FontAwesomeIcon key={i} icon={solidStar} className="star filled" />
+      );
     } else {
-      starElements.push(<FontAwesomeIcon key={i} icon={regularStar} className="star" />);
+      starElements.push(
+        <FontAwesomeIcon key={i} icon={regularStar} className="star" />
+      );
     }
   }
 
   return (
-    <div className="product-card-enhanced">
-      <div className="image-wrapper">
+    <div className="product-card">
+
+      {/* --------- Image + Icons --------- */}
+      <div className="image-section">
         {hasDiscount && <div className="discount-badge">-{discount}%</div>}
 
-        <Link to={`/products/${itemId}`} className="product-image-link">
+        <Link to={`/products/${itemId}`} className="image-link">
           <img
             src={imageSrc}
             alt={product.name}
@@ -84,32 +87,45 @@ export default function ProductCard({ product }) {
           />
         </Link>
 
-        <div className="wishlist-icon" onClick={handleWishlistToggle}>
-          <FontAwesomeIcon icon={isWished ? solidHeart : regularHeart} />
+        <div className="actions-icons">
+          {/* If you want a "compare" icon above, substitute “faScaleBalanced” or any other icon here */}
+          {/* <div className="compare-icon">
+            <FontAwesomeIcon icon={faScaleBalanced} />
+          </div> */}
+          <div className="wishlist-icon" onClick={handleWishlistToggle}>
+            <FontAwesomeIcon icon={isWished ? solidHeart : regularHeart} />
+          </div>
         </div>
       </div>
 
-      <div className="product-details">
-        <Link to={`/products/${itemId}`} className="product-name-link">
+      {/* --------- Product Details --------- */}
+      <div className="product-info">
+        <Link to={`/products/${itemId}`} className="name-link">
           <h4 className="product-name">{product.name}</h4>
         </Link>
-        <p className="product-subtext">{product.subtext || product.category}</p>
+        <p className="product-category">{product.category || ""}</p>
 
-        {/* --- NEW: Show stars and review count --- */}
         <div className="rating-row">
           {starElements}
-          <span className="review-count">({reviewCount})</span>
+          <span className="review-count">{reviewCount}</span>
         </div>
 
         <div className="price-row">
-          {hasDiscount && <span className="original-price">{formatPrice(product.price)}</span>}
-          <span className="discounted-price">{formatPrice(discountedPrice)}</span>
+          {hasDiscount && (
+            <span className="original-price">{formatPrice(product.price)}</span>
+          )}
+          {hasDiscount && (
+            <span className="discount-percentage">-{discount}%</span>
+          )}
         </div>
-
-        <button className="add-cart-btn" onClick={handleAddToCart}>
-          🛒 Add to Cart
-        </button>
       </div>
+      <div className="pricing">
+      <span className="discounted-price">{formatPrice(discountedPrice)}</span>
+      {/* --------- Add to Cart Button --------- */}
+      <button className="cart-button" onClick={handleAddToCart}>
+        <FontAwesomeIcon icon={faCartShopping} />
+      </button>
+    </div>
     </div>
   );
 }

@@ -9,7 +9,6 @@ import '../css/HomePage.css';
 import { getAllProducts } from '../api/productApi';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-
 const essentials = [
   { title: "COFFEE TABLE", image: "/images/coffee_table.jpg" },
   { title: "SOFAS", image: "/images/sofa.jpg" },
@@ -40,17 +39,21 @@ const CustomNextArrow = ({ onClick }) => (
   </div>
 );
 
-const productSliderSettings = {
+const sliderSettings = {
   dots: false,
   infinite: true,
   speed: 1000,
-  slidesToShow: 4,
-  slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 3000,
   arrows: true,
   prevArrow: <CustomPrevArrow />,
   nextArrow: <CustomNextArrow />,
+};
+
+const productSliderSettings = {
+  ...sliderSettings,
+  slidesToShow: 4,
+  slidesToScroll: 1,
   responsive: [
     { breakpoint: 1024, settings: { slidesToShow: 3 } },
     { breakpoint: 768, settings: { slidesToShow: 2 } },
@@ -58,16 +61,10 @@ const productSliderSettings = {
   ],
 };
 
-
 const baseBannerSettings = {
-  dots: false,
-  infinite: true,
-  autoplay: true,
-  autoplaySpeed: 4000,
-  speed: 2000,
+  ...sliderSettings,
   slidesToShow: 1,
   slidesToScroll: 1,
-  arrows: false,
 };
 
 const HomePage = () => {
@@ -115,7 +112,6 @@ const HomePage = () => {
     };
   }, []);
 
-  // if only one banner, disable infinite/autoplay to avoid clones
   const bannerSettings = banners.length > 1
     ? baseBannerSettings
     : { ...baseBannerSettings, infinite: false, autoplay: false };
@@ -125,22 +121,8 @@ const HomePage = () => {
       {/* Banner Slider */}
       {banners.length > 0 && (
         <div className="banner-slider">
-          {banners.length > 1
-            ? <Slider {...bannerSettings}>
-              {banners.map(b => {
-                const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
-                return (
-                  <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
-                    <div className="banner-slide">
-                      <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
-                      {b.text && <div className="banner-text">{b.text}</div>}
-                    </div>
-                  </a>
-                );
-              })}
-            </Slider>
-            : (() => {
-              const b = banners[0];
+          <Slider {...bannerSettings}>
+            {banners.map(b => {
               const href = b.link && (b.link.startsWith('http') ? b.link : `https://${b.link}`);
               return (
                 <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
@@ -150,8 +132,8 @@ const HomePage = () => {
                   </div>
                 </a>
               );
-            })()
-          }
+            })}
+          </Slider>
         </div>
       )}
 
@@ -176,7 +158,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Top Selections Slider */}
+      {/* Top Selections */}
       <div className="top-button-section">
         <button className="top-selections-btn">TOP SELECTIONS</button>
       </div>
@@ -224,7 +206,7 @@ const HomePage = () => {
         <div className="whyus-container">
           <div className="whyus-content">
             <div className="whyus-description">
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <p>Lorem Ipsum is simply dummy text...</p>
             </div>
             <div className="whyus-image">
               <img src="/images/sofa.jpg" alt="Why Us" />
@@ -235,20 +217,8 @@ const HomePage = () => {
             <div className="whyus-features">
               <div className="feature">🚚 <span>Free Delivery and Returns</span></div>
               <hr className="underline2" />
-              <div className="feature">👑 <span>1 Lakh Happy Customers</span></div>
-              <hr className="underline2" />
               <div className="feature">🔁 <span>7 Day Return Policy</span></div>
-            </div>
-
-            <div className="whyus-trustpilot">
-              <div className="brand">
-                <h3><img src="/images/logo_white.png" alt="logo" /> FURNITURE</h3>
-                <div className="brand star">
-                  <h3 className="trust"><img src="/images/trust_star.png" alt="star" /> Trustpilot</h3>
-                  <img src="/images/star.png" alt="Trustpilot" />
-                  <p>TrustScore <strong>4.8</strong> <span>141,840</span> reviews</p>
-                </div>
-              </div>
+              <hr className="underline2" />
             </div>
           </div>
         </div>

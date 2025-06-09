@@ -2,16 +2,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../css/Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faHeart, faCartShopping, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faHeart,
+  faCartShopping,
+  faSearch,
+  faBars,
+  faXmark
+} from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // or whatever key you store auth in
+    const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
 
@@ -22,11 +30,20 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  
+
   return (
     <nav className="navbar">
       <div className="navbar-top">
         <div className="navbar-logo">
-          <Link to="/" className="logo"><img src="/images/logo_white.png" alt="Furniture Logo" className="footer-logo" /> FURNITURE</Link>
+          <Link to="/" className="logo">
+            <img
+              src="/images/logo_white.png"
+              alt="Furniture Logo"
+              className="navbar_logo_img"
+            />
+            FURNITURE
+          </Link>
         </div>
 
         <div className="navbar-search">
@@ -38,7 +55,11 @@ const Navbar = () => {
 
         <div className="navbar-icons">
           <div className="profile-dropdown" ref={dropdownRef}>
-            <span className="icon" title="Profile" onClick={() => setShowDropdown(prev => !prev)}>
+            <span
+              className="icon"
+              title="Profile"
+              onClick={() => setShowDropdown((prev) => !prev)}
+            >
               <FontAwesomeIcon icon={faUser} />
             </span>
 
@@ -46,7 +67,7 @@ const Navbar = () => {
               <div className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
-                  <Link to="/address">Address</Link>
+                    <Link to="/address">Address</Link>
                     <Link to="/myaccount">My Account</Link>
                     <Link to="/orders">Orders</Link>
                     <button onClick={handleLogout}>Logout</button>
@@ -61,21 +82,50 @@ const Navbar = () => {
             )}
           </div>
 
-          <Link to="/wishlist" className="icon"><FontAwesomeIcon icon={faHeart} /></Link>
-          <Link to="/cart" className="icon"><FontAwesomeIcon icon={faCartShopping} /></Link>
+          <Link to="/wishlist" className="icon">
+            <FontAwesomeIcon icon={faHeart} />
+          </Link>
+          <Link to="/cart" className="icon">
+            <FontAwesomeIcon icon={faCartShopping} />
+          </Link>
+
+          {/* Toggle icon for mobile */}
+          <span
+            className="icon navbar-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <FontAwesomeIcon icon={menuOpen ? faXmark : faBars} />
+          </span>
         </div>
       </div>
 
-      <div className="navbar-links-container">
+      {/* Sidebar Toggle Container */}
+      <div className={`navbar-links-container ${menuOpen ? 'open' : ''}`}>
         <ul className="navbar-links">
-          <li><Link to="/products?category=Sale">SALE</Link></li>
-          <li><Link to="/products?category=Bedroom">BEDROOM</Link></li>
-          <li><Link to="/products?category=Living Room">LIVING ROOM</Link></li>
-          <li><Link to="/products?category=Dining">DINING</Link></li>
-          <li><Link to="/products?category=Office">OFFICE</Link></li>
-          <li><Link to="/products?category=Tableware">TABLEWARE</Link></li>
-          <li><Link to="/products?category=Outdoor">OUTDOOR</Link></li>
-          <li><Link to="/products?category=Decor">DECOR</Link></li>
+          <li>
+            <Link to="/products?category=Sale">SALE</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Bedroom">BEDROOM</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Living Room">LIVING ROOM</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Dining">DINING</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Office">OFFICE</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Tableware">TABLEWARE</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Outdoor">OUTDOOR</Link>
+          </li>
+          <li>
+            <Link to="/products?category=Decor">DECOR</Link>
+          </li>
         </ul>
       </div>
     </nav>

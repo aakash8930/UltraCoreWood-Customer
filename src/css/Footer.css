@@ -3,7 +3,10 @@
 .footer {
   background-color: #f3f3f3;
   padding: 40px 7% 20px 11%;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
   color: #222;
 }
 
@@ -21,18 +24,27 @@
 }
 
 .footer-grid.top {
+  display: grid;
   grid-template-columns: repeat(5, 1fr);
+  gap: 60px;
+  margin-bottom: 40px;
 }
 
 .footer-grid.bottom {
+  display: grid;
   grid-template-columns: repeat(5, 1fr);
+  gap: 60px;
+  margin-bottom: 60px;
 }
 
 .footer-grid h4 {
   font-size: 1.5rem;
   margin-bottom: 12px;
   font-weight: 900;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .footer-grid ul {
@@ -47,7 +59,10 @@
   color: #555;
   cursor: pointer;
   font-weight: 900;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .footer-grid ul li:hover {
@@ -62,16 +77,77 @@
   align-items: center;
   margin-top: 40px;
   flex-wrap: wrap;
-  padding: 0 5%;
+  padding: 0 8% 0 0;
 }
+
+.contact-social {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-contact-items {
+  display: flex;
+  grid-gap: 220px;
+  align-items: center;
+  margin-left: 100px;
+}
+
+.footer-contact-box {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  font-size: 2rem;
+}
+
+.footer-contact-label {
+  font-size: 20px;
+  margin: 0 0 6px 0;
+  font-weight: 400;
+  color: #555;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.footer-contact-value {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+  color: #000;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.footer-social-icons {
+  display: flex;
+  align-items: center;
+}
+
+.social-icon {
+  font-size: 3rem;
+  color: #000;
+  margin-right: 20px;
+}
+
+
+.social-icon:last-child {
+  margin-right: 0;
+}
+
 
 .footer-logo-area {
   display: flex;
   align-items: center;
-  gap: 12px;
-  position: relative;
-  top: 10vw;
-  padding-bottom: 5vw;
+  margin: 60px 0;
+
 }
 
 .footer-logo {
@@ -85,48 +161,125 @@
 .footer-logo-area h3 {
   font-size: 4rem;
   margin: 0;
-   font-family: "Lora", serif;
+  font-family: "Lora", serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-style: normal;
   font-style: normal;
   font-weight: 700;
 }
 
-.footer-contact-items {
-  display: flex;
-  gap: 10vw;
-  align-items: center;
+
+@media screen and (max-width: 1024px),
+screen and (max-width: 768px),
+screen and (max-width: 480px) {
+  .footer {
+    padding: 20px 7%;
+  }
+
+  .footer-grid.top {
+    grid-template-columns: repeat(3, 2fr);
+    gap: 25px 20px;
+  }
+
+  .footer-grid.bottom {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px 20px;
+  }
+
+  .footer-grid h4 {
+    font-size: 1.4rem;
+  }
+
+  .footer-grid ul li {
+    font-size: 0.9rem;
+  }
+
+  .footer-top-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .footer-contact-items {
+    gap: 25px;
+    flex-wrap: wrap;
+  }
+
+  .footer-contact-box {
+    gap: 10px;
+  }
+
+  .footer-contact-text {
+    line-height: 1.2;
+  }
+
+  .footer-social-icons {
+    justify-content: flex-end;
+  }
+
+  .footer-logo-area {
+    justify-content: flex-start;
+  }
+
 }
 
-.footer-contact-box {
-  display: flex;
-  align-items: center;
-  gap: 1vw;
-  font-size: 1.8rem;
-  position: relative;
-  right: 19vw;
-}
+@media screen and (max-width: 780px) {
 
-.footer-contact-label {
-  font-size: 14px;
-  margin: 0 0 6px 0;
-  font-weight: 400;
-  color: #555;
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: 900;
-}
+  .footer {
+    padding: 0 20px;
+  }
 
-.footer-contact-value {
-  font-size: 14px;
-  margin: 0;
-  font-weight: 500;
-  color: #000;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-weight: 900;
-}
+  .footer-bottom-section {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    padding-left: 0 20px;
+  }
 
-.footer-social-icons {
-  display: flex;
-  align-items: center;
-  font-size: 1.3rem;
-  position: relative;
-  right: 6vw;
+  .footer-contact-items {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    text-align: left;
+  }
+
+  .contact-social {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .footer-contact-box svg {
+    font-size: 20px;
+  }
+
+  .footer-contact-label {
+    font-size: 13px;
+  }
+
+  .footer-social-icons {
+    margin-left: 50px;
+  }
+
+  .social-icon {
+    font-size: 2.5rem;
+    color: #000;
+  }
+
+  .footer-logo-area h3 {
+    font-size: 1.5rem;
+  }
+
+  .footer-logo {
+    width: 50px;
+  }
+
+  .footer-logo-area {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: auto;
+    margin-top: 10px;
+  }
 }
