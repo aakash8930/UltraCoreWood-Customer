@@ -30,12 +30,13 @@
   margin-bottom: 40px;
 }
 
+/* 
 .footer-grid.bottom {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 60px;
   margin-bottom: 60px;
-}
+} */
 
 .footer-grid h4 {
   font-size: 1.5rem;
@@ -75,9 +76,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
   flex-wrap: wrap;
   padding: 0 8% 0 0;
+  height: 300px;
 }
 
 .contact-social {
@@ -146,8 +147,6 @@
 .footer-logo-area {
   display: flex;
   align-items: center;
-  margin: 60px 0;
-
 }
 
 .footer-logo {
@@ -174,18 +173,19 @@
 screen and (max-width: 768px),
 screen and (max-width: 480px) {
   .footer {
-    padding: 20px 7%;
+    padding: 20px 8%;
   }
 
   .footer-grid.top {
     grid-template-columns: repeat(3, 2fr);
-    gap: 25px 20px;
+    gap: 25px 15px;
   }
 
+  /* 
   .footer-grid.bottom {
     grid-template-columns: repeat(3, 1fr);
     gap: 25px 20px;
-  }
+  } */
 
   .footer-grid h4 {
     font-size: 1.4rem;
@@ -228,14 +228,28 @@ screen and (max-width: 480px) {
 @media screen and (max-width: 780px) {
 
   .footer {
-    padding: 0 20px;
+    padding-left: 30px;
+    padding-right: 10px;
+  }
+
+  .footer-grid h4 {
+    font-size: 18px;
+  }
+
+  .footer-grid ul li {
+    font-size: 10px;
+  }
+
+  .footer-divider {
+    width: 300px;
+    margin-left: 15px;
   }
 
   .footer-bottom-section {
     display: flex;
     align-items: center;
-    margin-top: 40px;
-    padding-left: 0 20px;
+    margin-top: 30px;
+    height: 220px;
   }
 
   .footer-contact-items {
@@ -245,9 +259,18 @@ screen and (max-width: 480px) {
     text-align: left;
   }
 
+  .footer-contact-box {
+    display: flex;
+    align-items: self-end;
+    
+  }
+
   .contact-social {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 40px;
   }
 
   .footer-contact-box svg {
@@ -255,15 +278,11 @@ screen and (max-width: 480px) {
   }
 
   .footer-contact-label {
-    font-size: 13px;
-  }
-
-  .footer-social-icons {
-    margin-left: 50px;
+    font-size: 11px;
   }
 
   .social-icon {
-    font-size: 2.5rem;
+    font-size: 30px;
     color: #000;
   }
 
@@ -275,11 +294,4 @@ screen and (max-width: 480px) {
     width: 50px;
   }
 
-  .footer-logo-area {
-    display: flex;
-    align-items: center;
-    position: relative;
-    top: auto;
-    margin-top: 10px;
-  }
 }

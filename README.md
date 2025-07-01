@@ -42,3 +42,6 @@
 
 - v 1.0.8
 - Responsive Navbar, HomePage, Footer
+
+- v 1.0.9
+- Fix Product Filteration or Sorting By Category

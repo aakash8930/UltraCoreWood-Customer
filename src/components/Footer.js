@@ -49,19 +49,31 @@ const Footer = () => {
             <li>Garden</li>
           </ul>
         </div>
-        <div className="footer-explore">
-          <h4>Explore</h4>
+        <div>
+          <h4>Furnishing</h4>
           <ul>
-            <li>Catalogues</li>
-            <li>Store Locator</li>
-            <li>Visit our Store</li>
-            <li>Accent Chairs</li>
-            <li>Customized recliners</li>
+            <li>Bedding</li>
+            <li>Curtains</li>
+            <li>Cusions</li>
+            <li>Floor Coverings</li>
+            <li>Accessories</li>
           </ul>
         </div>
-      </div>
 
-      <div className="footer-grid bottom">
+
+        <div className="footer-grid bottom">
+
+          <div className="footer-explore">
+            <h4>Explore</h4>
+            <ul>
+              <li>Catalogues</li>
+              <li>Store Locator</li>
+              <li>Visit our Store</li>
+              <li>Accent Chairs</li>
+              <li>Customized recliners</li>
+            </ul>
+          </div>
+        </div>
         <div className="footer-about">
           <h4>About</h4>
           <ul>

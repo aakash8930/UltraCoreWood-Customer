@@ -15,7 +15,7 @@ body {
 
 .banner-slide {
   width: 100%;
-  height: 500px;
+  height: 600px;
   position: relative;
   display: flex;
   align-items: center;
@@ -34,15 +34,14 @@ body {
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 10px 15px;
   z-index: 1;
-  width: 20vw;
+  width: 420px;
   position: absolute;
   top: 50%;
   right: 10%;
   transform: translateY(-50%);
-  color: #07aca4;
   text-align: right;
   font-weight: 100;
   letter-spacing: 2px;
@@ -50,11 +49,11 @@ body {
 }
 
 .slick-slider {
-  margin: -5px;
+  margin: -4px;
 }
 
 .banner-slider .custom-prev {
-  left: 40px;       
+  left: 40px;
 }
 
 .banner-slider .custom-next {
@@ -62,7 +61,7 @@ body {
 }
 
 .banner-slider .custom-arrow {
-  top: 50%;          
+  top: 50%;
 }
 
 /* --- ESSENTIALS --- */
@@ -302,7 +301,7 @@ body {
 
 .whyus-image img {
   position: relative;
-  width: 230px;
+  width: 330px;
   border-radius: 8px;
   height: 195px;
   top: 5vw;
@@ -323,11 +322,9 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  width: 1075px;
+  width: 500px;
   height: auto;
-  margin-top: -35px;
-
+  margin-left: 110px;
 }
 
 .feature {
@@ -335,7 +332,6 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 900;
-  /* margin-left: 125px; */
   font-size: 1.3rem;
   display: flex;
   letter-spacing: 3px;
@@ -345,61 +341,15 @@ body {
 
 .underline2 {
   width: 360px;
-  /* margin-left: 25px; */
 }
 
-.whyus-trustpilot {
-  width: 400px;
-  margin-top: -40px;
-}
-
-.brand h3 {
-  margin: 60px 0 0 0;
-  font-size: 2rem;
-}
-
-.brand img {
-  width: 80px;
-  position: relative;
-  top: 1.7vw;
-}
-
-.star {
-  width: 18vw;
-  margin-top: 45px;
-  margin-left: 15px;
-  font-size: 20px;
-
-}
-
-.star h3 {
-  font-size: 1.8rem;
-  margin-top: 20px;
-  margin-left: -23px;
-}
-
-.trust img {
-  width: 3vw !important;
-  position: relative;
-  top: -22px;
-  left: 10px;
-}
-
-.star p {
-  font-size: medium;
-}
-
-.star img {
-  width: 15vw;
-  margin: -70px 0 -30px 5px;
-  padding: 0;
-
-}
 
 
 /* --- TABLET (600px to 1024px) --- */
 @media (max-width: 1024px) and (min-width: 600px) {
-  html, body {
+
+  html,
+  body {
     overflow-x: hidden;
   }
 
@@ -409,18 +359,16 @@ body {
     width: 100%;
   }
 
-  .hero-slider {
-    height: 70vh;
+  .banner-slider {
+    height: auto;
     margin-top: 0;
   }
 
-  .hero-slide {
-    height: 450px;
-  }
 
-  .hero-text {
-    width: 60vw;
-    font-size: 28px;
+  .banner-text {
+    text-align: right;
+    width: 380px;
+    font-size: 100px;
     right: 5%;
   }
 
@@ -435,14 +383,23 @@ body {
     margin-bottom: 30px;
   }
 
+  .comfort-section {
+    margin-top: 60px;
+  }
+
+  .underline1 {
+    left: 90px;
+
+  }
+
   .top-selections-btn {
     margin: 3vw auto;
     display: block;
   }
-
+/* 
   .carousel-slider-wrapper {
     height: auto;
-  }
+  } */
 
   .product-card img {
     height: 160px;
@@ -455,18 +412,24 @@ body {
   }
 
   .whyus-container {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     height: auto;
   }
 
-  .whyus-content {
-    flex-direction: column;
+  .whyus-content{
+    width: 640px;
+    flex-direction: row;
+    align-items: center;
   }
 
   .whyus-description p {
-    width: 90%;
-    margin: 60px auto 0 auto;
+    width: 60%;
+    margin: 60px 0 0 50px;
+  }
+
+  .whyus-image{
+    margin: 0;
   }
 
   .whyus-image img {
@@ -478,28 +441,26 @@ body {
   }
 
   .whyus-features {
-    width: 90%;
-    margin: 20px auto;
+    width: 60%;
+    margin: 20px 0;
   }
 
   .whyus_column {
-    flex-direction: column;
     width: 100%;
+    margin-left: 50px;
   }
 
   .underline2 {
-    width: 295px;
-    margin: 1vw auto;
-  }
-
-  .trust img, .star img {
-    width: 40px !important;
+    width: 325px;
+    margin: 10px 0;
   }
 }
 
 /* --- MOBILE (less than 600px) --- */
 @media (max-width: 599px) {
-  html, body {
+
+  html,
+  body {
     overflow-x: hidden;
   }
 
@@ -509,32 +470,61 @@ body {
     width: 100%;
   }
 
-  .hero-slider {
-    height: 60vh;
+  .banner-text {
+    font-size: 60px;
+    right: 15px;
+    color: #ffffff;
+    top: 485px;
+    width: 298px;
   }
 
-  .hero-slide {
-    height: 320px;
+  .slick-slider{
+    margin: -5px;
   }
 
-  
-
-  .hero-text {
-    width: 80vw;
-    font-size: 20px;
-    right: 5%;
-    text-align: center;
+  .custom-arrow {
+    display: none;
   }
 
   .essentials-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     width: 90%;
+  }
+
+  .essentials-item {
+    height: 150px;
+  }
+
+  .essentials-overlay {
+    /* background: transparent; */
+    font-size: 12px;
+    font-weight: 900;
   }
 
   .essentials-title {
     right: 0;
     text-align: center;
     margin-bottom: 20px;
+  }
+
+  .comfort-section {
+    margin-top: 50px;
+  }
+
+  .comfort-section h2 {
+    color: white;
+    font-weight: 100;
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 17px;
+  }
+
+  .underline1 {
+    position: relative;
+    width: 200px;
+    left: 100px;
+    top: 0px;
   }
 
   .product-card img {
@@ -571,27 +561,36 @@ body {
     margin: 40px auto 0 auto;
   }
 
+  .whyus-image {
+    margin: 0;
+  }
+
   .whyus-image img {
-    width: 140px;
-    height: auto;
-    margin: 10px auto;
-    display: block;
-    position: static;
+    width: 300px;
+    margin: 0;
   }
 
   .whyus-features {
-    width: 90%;
-    margin: 20px auto;
+    width: 75%;
+    margin-left: 20px;
+  }
+
+  .feature {
+    font-size: 18px;
+
   }
 
   .whyus_column {
-    flex-direction: column;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 400px;
+    margin: 0;
   }
 
   .underline2 {
     width: 90%;
-    margin: 1vw auto;
+    margin: 20px auto;
   }
 
 }

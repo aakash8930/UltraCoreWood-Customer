@@ -65,6 +65,8 @@ const baseBannerSettings = {
   ...sliderSettings,
   slidesToShow: 1,
   slidesToScroll: 1,
+  speed: 2500,
+  autoplaySpeed: 3000,
 };
 
 const HomePage = () => {
@@ -206,7 +208,7 @@ const HomePage = () => {
         <div className="whyus-container">
           <div className="whyus-content">
             <div className="whyus-description">
-              <p>Lorem Ipsum is simply dummy text...</p>
+              <p>Lorem Ipsum is simply dummy text...A wiki is a web-based collaborative platform that enables users to store, create and modify content in an organized manner. The term comes from the word wiki wiki, which means fast in Hawaiian.</p>
             </div>
             <div className="whyus-image">
               <img src="/images/sofa.jpg" alt="Why Us" />

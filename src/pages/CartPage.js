@@ -23,7 +23,7 @@ const CartPage = () => {
 
   return (
     <div className="sale-container">
-      <h2 className="essentials-title">🛒 YOUR CART</h2>
+      <h2 className="essentials-title" style={{ color: 'black' }}>🛒 YOUR CART</h2>
       <div className="essentials-grid">
         {items.map(({ product, quantity }) => {
           // 1) Build `imageSrc` from product.images.{…}.data (already Base64 from the backend)
