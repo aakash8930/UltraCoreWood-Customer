@@ -67,9 +67,9 @@ const Navbar = () => {
               <div className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
-                    <Link to="/address">Address</Link>
-                    <Link to="/myaccount">My Account</Link>
-                    <Link to="/orders">Orders</Link>
+                    <Link to="/account" state={{ defaultTab: 'address' }}>Address</Link>
+                    <Link to="/account" state={{ defaultTab: 'account' }}>My Account</Link>
+                    <Link to="/account" state={{ defaultTab: 'orders' }}>Orders</Link>
                     <button onClick={handleLogout}>Logout</button>
                   </>
                 ) : (

@@ -37,7 +37,7 @@ export default function OrdersPage() {
   }, []);
 
   if (loading) return <p className="center">Loading your orders…</p>;
-  if (error)   return <p className="center error">{error}</p>;
+  if (error)  return <p className="center error">{error}</p>;
   if (!orders.length) return <p className="center">You have no orders yet.</p>;
 
   return (
@@ -56,7 +56,7 @@ export default function OrdersPage() {
             </div>
             <div>
               <strong>Status:</strong>{' '}
-              <span className={`order-status status-${order.status.toLowerCase()}`}>
+              <span className={`order-status status-${order.status?.toLowerCase()}`}>
                 {order.status}
               </span>
             </div>
@@ -66,18 +66,22 @@ export default function OrdersPage() {
           </div>
 
           <div className="order-products-grid">
+            {/* The primary change is here. Using optional chaining (?.) makes the code safer. */}
             {order.products.map(({ product, quantity }) => (
-              <div key={product._id} className="product-cell">
-                <img
-                  src={product.imageUrl || '/images/placeholder.jpg'}
-                  alt={product.name}
-                  className="product-thumb"
-                />
-                <div className="product-info">
-                  <p className="product-name">{product.name}</p>
-                  <p className="product-qty">x{quantity}</p>
+              // This check ensures that if a product is null for some reason, it doesn't crash the page.
+              product && (
+                <div key={product._id} className="product-cell">
+                  <img
+                    src={product.imageUrl || '/images/placeholder.jpg'}
+                    alt={product.name}
+                    className="product-thumb"
+                  />
+                  <div className="product-info">
+                    <p className="product-name">{product.name}</p>
+                    <p className="product-qty">x{quantity}</p>
+                  </div>
                 </div>
-              </div>
+              )
             ))}
           </div>
         </div>
