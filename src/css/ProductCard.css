@@ -1,201 +1,284 @@
-/* -------------------------------------------
-   MAIN CARD
--------------------------------------------- */
-.product-card {
-  position: relative;
-  width: 300px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: "Inter", sans-serif;
-
-  /* Make this a column flex container so child sections stack vertically */
-  display: flex;
-  flex-direction: column;
+/* /* Add to your main CSS file or index.css to get the background color */
+body {
+  background-color: #eef2f9;
+  font-family: "Poppins", sans-serif;
 }
 
 /* -------------------------------------------
-   IMAGE SECTION (fixed height)
+   MAIN CARD
+-------------------------------------------- */
+
+
+.product-card {
+  width: calc(30% - 1rem);
+  box-sizing: border-box;
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  display: flex;
+  flex-direction: column;
+  /* padding: 16px; */
+}
+
+.product-id {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+/* -------------------------------------------
+   IMAGE SECTION
 -------------------------------------------- */
 .image-section {
   position: relative;
   width: 100%;
-  height: 240px;         /* fixed height for uniform cards */
-  background-color: #f9f9f9;
-  overflow: hidden;
-  flex-shrink: 0;        /* do not shrink this area */
+  margin-bottom: 12px;
+}
+
+.image-link {
+  display: block;
+  height: 100%;
 }
 
 .product-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  /* Use 'contain' to show the whole product */
   transition: transform 0.4s ease;
 }
 
-.image-section:hover .product-image {
+.product-card:hover .product-image {
   transform: scale(1.05);
 }
 
-/* Discount Badge (top-left of image) */
-.discount-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background-color: #e0f0ff;
-  color: #005bb5;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  z-index: 5;
-}
-
-/* Wishlist Icon (right side of image) */
 .actions-icons {
   position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+  top: 12px;
+  right: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   z-index: 5;
 }
 
-.actions-icons .wishlist-icon {
-  background-color: rgba(255, 255, 255, 0.95);
+.action-icon {
+  margin-right: 15px;
+  background-color: rgba(20, 20, 20, 0.8);
+  color: #fff;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #d32f2f;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  font-size: 1rem;
+  backdrop-filter: blur(4px);
+  transition: background-color 0.3s;
 }
 
-.actions-icons .wishlist-icon:hover {
-  background-color: #ffffff;
+.action-icon:hover {
+  background-color: #000;
 }
 
 /* -------------------------------------------
-   PRODUCT TEXT INFO (flexible + min-height)
+   PRODUCT TEXT INFO
 -------------------------------------------- */
 .product-info {
-  padding: 16px 20px;
-  text-align: left;
-
-  /* Minimum height ensures that all cards have enough room
-     for name, category, stars, original price, so .pricing
-     always sits at the same vertical spot */
-  min-height: 140px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
-/* Product Name */
 .name-link {
   text-decoration: none;
 }
 
 .product-name {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #333333;
-  line-height: 1.3;
+  color: #111;
 }
 
-/* Subtext / Category */
-.product-category {
-  margin: 4px 0 12px;
-  font-size: 0.85rem;
-  color: #555555;
-}
-
-/* Rating & Review Count */
 .rating-row {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 6px;
+  color: #333;
 }
 
 .rating-row .star {
   font-size: 0.9rem;
-  color: #cccccc; /* empty star color */
-}
-
-.rating-row .star.filled {
-  color: #ffc107; /* filled star color */
 }
 
 .review-count {
-  font-size: 0.85rem;
-  color: #777777;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #777;
+  margin-left: 8px;
 }
 
-/* Original Price + Discounted Label (inside .product-info) */
-.price-row {
+/* -------------------------------------------
+   FOOTER (Pricing + Cart Button)
+-------------------------------------------- */
+/* In ProductCard.css */
+
+/* Add this to allow absolute positioning inside the footer */
+.card-footer {
+  position: relative; 
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 16px;
+}
+
+/* Define the animation for the toast */
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  15%, 85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+
+.price-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.price-top-row {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-top: 15px;
-  margin-bottom: 5px;
 }
 
 .original-price {
-  font-size: 0.85rem;
-  color: #999999;
+  font-size: 1rem;
+  color: #999;
   text-decoration: line-through;
 }
 
 .discount-percentage {
-  font-size: 0.85rem;
-  background-color: #e0f0ff;
-  color: #005bb5;
+  font-size: 0.8rem;
+  color: #555;
+  background-color: #f0f0f0;
   padding: 2px 6px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* -------------------------------------------
-   DISCOUNTED PRICE + CART BUTTON ROW
--------------------------------------------- */
-.pricing {
-  /* Separate row beneath .product-info */
-  display: flex;
-  gap: 70px;
-  justify-content: space-between;
-  align-items: center;
-
-  /* Give a bit of padding so button isn’t flush to edges */
-  padding: 0 20px 16px;
-}
-
-/* Discounted Price Text */
-.discounted-price {
-  font-size: 1.25rem;
+.final-price {
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #222222;
+  color: #111;
 }
 
-/* Add to Cart Button (now static within .pricing) */
+/* In ProductCard.css */
+/* In ProductCard.css */
+/* In ProductCard.css */
+
+/* In ProductCard.css */
+
+/* Define the pop-in animation for the checkmark */
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Base button style (for when item is NOT in cart) */
 .cart-button {
-  background-color: #000000;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    width: 60px;
+    height: 45px;
+    flex-shrink: 0;
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #000;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
 }
 
 .cart-button:hover {
-  background-color: #274bdb;
+  background-color: #333;
+}
+
+/* Style for when the item IS in the cart */
+.cart-button.is-in-cart {
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black icon */
+  border: 1px solid #e0e0e0;
+}
+
+.cart-button.is-in-cart:hover {
+  background-color: #f5f5f5;
+}
+
+/* The checkmark badge that appears on top */
+.added-checkmark {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop-in 0.3s ease-out forwards;
+}
+
+.added-checkmark .svg-inline--fa {
+  font-size: 1.2rem;
+  color: #28a745;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+/* Toast Notification Styles (keep as before) */
+@keyframes fade-in-out {
+  0% { opacity: 0; transform: translateY(10px); }
+  15%, 85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+.add-to-cart-toast {
+  position: absolute;
+  bottom: 70px;
+  left: 20%;
+  transform: translateX(-50%);
+  background-color: #212121;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 10;
+  white-space: nowrap;
+  animation: fade-in-out 3s forwards;
 }

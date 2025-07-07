@@ -45,3 +45,6 @@
 
 - v 1.0.9
 - Fix Product Filteration or Sorting By Category
+
+- v 1.1.0
+- Checkout Page UI / Payment Method

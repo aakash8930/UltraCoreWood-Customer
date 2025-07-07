@@ -9,11 +9,10 @@ const WishList = () => {
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
 
+  // In WishList.js
   const handleAddToCart = async (item) => {
-    // Add the item to the cart with quantity = 1
-    await addToCart(item._id || item.id, 1);
-
-    // Optionally remove from wishlist after adding to cart
+    // Pass the full product object from the wishlist item
+    await addToCart(item, 1);
     removeFromWishlist(item._id || item.id || item.name);
   };
 

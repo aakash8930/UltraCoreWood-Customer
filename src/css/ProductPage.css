@@ -54,10 +54,13 @@
   margin-bottom: 1.5rem;
 }
 
+
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.8rem;
+  /* CHANGE THIS FROM GRID TO FLEX */
+  display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap to the next line */
+  gap: 2rem; /* Keeps the spacing between cards */
+  justify-content: flex-start; /* Aligns cards to the left */
 }
 
 /* Modern Product Card */
