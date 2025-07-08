@@ -112,17 +112,15 @@ export default function ProductDetailsPage() {
   if (loadingProduct) return <p className="loading-text">Loading product...</p>;
   if (!product) return <p className="empty-text">Product not found.</p>;
 
-  // Build image list from Base64
-  const imageKeys = ["image1", "image2", "image3", "image4", "image5"];
-  const imageList = imageKeys
-    .map((key) => {
-      if (product.images[key]?.data) {
-        return `data:${product.images[key].contentType};base64,${product.images[key].data}`;
-      }
-      return null;
-    })
-    .filter(Boolean);
-
+  // In ProductDetails.js
+  const imageList = product.images ? Object.keys(product.images).map(key => {
+    const img = product.images[key];
+    if (img && img.data) {
+      return `data:${img.contentType};base64,${img.data}`;
+    }
+    return null;
+  }).filter(Boolean) : [];
+  
   const discount = product.discount || 0;
   const hasDiscount = discount > 0;
   const discountedPrice = hasDiscount

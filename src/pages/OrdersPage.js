@@ -1,5 +1,3 @@
-// src/pages/OrdersPage.js
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
@@ -67,22 +65,37 @@ export default function OrdersPage() {
 
           <div className="order-products-grid">
             {/* The primary change is here. Using optional chaining (?.) makes the code safer. */}
-            {order.products.map(({ product, quantity }) => (
+            {/* 1. Filter out any items where the product is null (deleted) */}
+            {order.products.filter(item => item.product).map(({ product, quantity }) => {
+                
+                // 2. Add correct logic to find and build the image source
+                let imageSrc = '/images/placeholder.jpg';
+                if (product.images) {
+                    const firstImageKey = Object.keys(product.images).find(key => product.images[key]?.data);
+                    if (firstImageKey) {
+                        const { contentType, data } = product.images[firstImageKey];
+                        imageSrc = `data:${contentType};base64,${data}`;
+                    }
+                }
+
+                return (
               // This check ensures that if a product is null for some reason, it doesn't crash the page.
               product && (
-                <div key={product._id} className="product-cell">
-                  <img
-                    src={product.imageUrl || '/images/placeholder.jpg'}
-                    alt={product.name}
-                    className="product-thumb"
-                  />
-                  <div className="product-info">
-                    <p className="product-name">{product.name}</p>
-                    <p className="product-qty">x{quantity}</p>
-                  </div>
-                </div>
+                      <div key={product._id} className="product-cell">
+                          <img
+                              src={imageSrc}
+                              alt={product.name}
+                              className="product-thumb"
+                              onError={(e) => (e.target.src = "/images/placeholder.jpg")}
+                        />
+                          <div className="product-info">
+                          <p className="product-name">{product.name}</p>
+                          <p className="product-qty">x{quantity}</p>
+                          </div>
+                      </div>
               )
-            ))}
+                );
+            })}
           </div>
         </div>
       ))}

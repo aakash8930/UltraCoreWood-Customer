@@ -6,19 +6,19 @@ import { getAllProducts } from '../api/productApi';
 import ProductCard from './ProductCard';
 import '../css/ProductPage.css';
 
-const ProductPage = () => {
+// 1. Accept `openCart` as a prop here
+const ProductPage = ({ openCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
 
-  // Step 1: Fetch ALL products once when the component loads
   useEffect(() => {
     const loadAllProducts = async () => {
       try {
         setLoading(true);
-        const data = await getAllProducts(); // Fetch all products without a category
+        const data = await getAllProducts();
         setAllProducts(data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -27,31 +27,24 @@ const ProductPage = () => {
       }
     };
     loadAllProducts();
-  }, []); // Empty dependency array means this runs only once on mount
+  }, []);
 
-  // Step 2: Filter and sort products whenever the category or the full product list changes
   useEffect(() => {
     let filtered = [];
     if (category) {
-      // Filter the full list based on the category from the URL
       filtered = allProducts.filter(
         (product) => product.category.toLowerCase() === category.toLowerCase()
       );
     } else {
-      // If no category, show all products
       filtered = allProducts;
     }
-
-    // Sort the filtered list alphabetically by name
     const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
-    
     setDisplayProducts(sorted);
-  }, [category, allProducts]); // This effect re-runs when the category or product list changes
+  }, [category, allProducts]);
 
   return (
     <>
       <div className="product-page">
-        {/* Left Sidebar Filters (static for now) */}
         <aside className="sidebar">
           <h3>FILTER</h3>
           <div className="filter-group">
@@ -72,7 +65,6 @@ const ProductPage = () => {
           </div>
         </aside>
 
-        {/* Right Main Content */}
         <main className="main-content">
           <h2>{category || "All Products"}</h2>
           {loading ? (
@@ -81,7 +73,12 @@ const ProductPage = () => {
             <div className="product-grid">
               {displayProducts.length > 0 ? (
                 displayProducts.map((product) => (
-                  <ProductCard key={product._id} product={product} />
+                  // 2. Pass the `openCart` prop down to each ProductCard
+                  <ProductCard 
+                    key={product._id} 
+                    product={product} 
+                    openCart={openCart} 
+                  />
                 ))
               ) : (
                 <p>No products found for this category.</p>
