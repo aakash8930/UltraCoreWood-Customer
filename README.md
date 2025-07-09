@@ -48,3 +48,6 @@
 
 - v 1.1.0
 - Checkout Page UI / Payment Method
+
+- v 1.1.1
+-Address books, profile Panel, My Account

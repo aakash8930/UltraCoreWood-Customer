@@ -126,7 +126,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import '../css/CartSlider.css';
-import '../css/cartpage.css';
+
 const formatPrice = (amount) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
 
