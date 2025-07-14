@@ -6,13 +6,19 @@ import { getAllProducts } from '../api/productApi';
 import ProductCard from './ProductCard';
 import '../css/ProductPage.css';
 
-// 1. Accept `openCart` as a prop here
+
+
+
+
 const ProductPage = ({ openCart }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
+
+  // Get both category and search term from URL
   const category = searchParams.get('category');
+  const searchTerm = searchParams.get('search'); // <-- Get search term
 
   useEffect(() => {
     const loadAllProducts = async () => {
@@ -29,18 +35,41 @@ const ProductPage = ({ openCart }) => {
     loadAllProducts();
   }, []);
 
+  // --- START: UPDATED FILTERING LOGIC ---
   useEffect(() => {
-    let filtered = [];
+    let filtered = [...allProducts];
+
+    // First, filter by category if it exists
     if (category) {
-      filtered = allProducts.filter(
+      filtered = filtered.filter(
         (product) => product.category.toLowerCase() === category.toLowerCase()
       );
-    } else {
-      filtered = allProducts;
     }
+
+    // Then, filter by search term if it exists
+    if (searchTerm) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
     const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
     setDisplayProducts(sorted);
-  }, [category, allProducts]);
+  }, [category, searchTerm, allProducts]);
+  // --- END: UPDATED FILTERING LOGIC ---
+
+  // Determine the heading based on the filter applied
+  const getHeading = () => {
+    if (searchTerm) {
+      return `Search Results for: "${searchTerm}"`;
+    }
+    if (category) {
+      return category;
+    }
+    return "All Products";
+  };
+
 
   return (
     <>
@@ -74,10 +103,10 @@ const ProductPage = ({ openCart }) => {
               {displayProducts.length > 0 ? (
                 displayProducts.map((product) => (
                   // 2. Pass the `openCart` prop down to each ProductCard
-                  <ProductCard 
-                    key={product._id} 
-                    product={product} 
-                    openCart={openCart} 
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    openCart={openCart}
                   />
                 ))
               ) : (

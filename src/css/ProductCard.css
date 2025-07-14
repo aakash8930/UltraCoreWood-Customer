@@ -282,3 +282,46 @@ body {
   white-space: nowrap;
   animation: fade-in-out 3s forwards;
 }
+
+.cart-button {
+  position: relative;
+}
+
+/* Tooltip base styles */
+.cart-tooltip {
+  position: absolute;
+  bottom: 115%; /* Position it above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #212121;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap; /* Prevent text from wrapping */
+  z-index: 10;
+  
+  /* Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+/* Add a small triangle pointing down */
+.cart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #212121 transparent transparent transparent;
+}
+
+/* Show the tooltip when hovering over the button */
+.cart-button:hover .cart-tooltip {
+  opacity: 1;
+  visibility: visible;
+}

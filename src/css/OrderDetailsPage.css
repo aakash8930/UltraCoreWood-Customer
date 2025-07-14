@@ -52,7 +52,7 @@
   .product-cell {
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     text-align: center;
   }
   

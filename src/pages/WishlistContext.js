@@ -60,58 +60,78 @@
 
 
 // src/pages/WishlistContext.js
-import React, { createContext, useContext, useState, useEffect } from "react";
-import socket from '../sockets.js';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { fetchWishlist, addItemToWishlist, removeItemFromWishlist } from '../api/wishlistApi';
 
 const WishlistContext = createContext();
 
-// Helper to reliably get a unique ID. Prioritizes MongoDB's _id.
-const getItemId = (item) => item?._id || item?.id;
+export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState([]);
+  const auth = getAuth();
 
-  const addToWishlist = (item) => {
-    const itemId = getItemId(item);
-    if (!itemId) return; // Do not add items without a valid ID
-
-    setWishlistItems((prev) => {
-      const exists = prev.some((p) => getItemId(p) === itemId);
-      if (exists) return prev;
-      socket.emit("wishlist:add", item);
-      return [...prev, item];
-    });
-  };
-
-  const removeFromWishlist = (id) => {
-    setWishlistItems((prev) => {
-      const updated = prev.filter((item) => getItemId(item) !== id);
-      if (updated.length !== prev.length) socket.emit("wishlist:remove", id);
-      return updated;
-    });
-  };
-
+  // Effect to load wishlist when auth state changes
   useEffect(() => {
-    socket.on("wishlist:added", (item) => {
-      const itemId = getItemId(item);
-      if (!itemId) return;
-      setWishlistItems((prev) => {
-        const exists = prev.some((p) => getItemId(p) === itemId);
-        return exists ? prev : [...prev, item];
-      });
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          const serverWishlist = await fetchWishlist(token);
+          setWishlistItems(serverWishlist.items || []);
+        } catch (error) {
+          console.error("Failed to fetch wishlist:", error);
+          setWishlistItems([]); // Clear on error
+        }
+      } else {
+        // User logged out, clear the wishlist
+        setWishlistItems([]);
+      }
     });
 
-    socket.on("wishlist:removed", (id) => {
-      setWishlistItems((prev) =>
-        prev.filter((item) => getItemId(item) !== id)
-      );
+    return () => unsubscribe();
+  }, [auth]);
+
+  const addToWishlist = async (product) => {
+    const user = auth.currentUser;
+    if (!user || !product?._id) return;
+
+    // Optimistic UI update: Add immediately to the frontend state
+    setWishlistItems((prev) => {
+      const exists = prev.some((p) => p._id === product._id);
+      return exists ? prev : [...prev, product];
     });
 
-    return () => {
-      socket.off("wishlist:added");
-      socket.off("wishlist:removed");
-    };
-  }, []);
+    // Call the backend to save the change
+    try {
+      const token = await user.getIdToken();
+      await addItemToWishlist(token, product._id);
+    } catch (error) {
+      console.error("Failed to add item to wishlist:", error);
+      // Revert optimistic update on error
+      setWishlistItems((prev) => prev.filter((p) => p._id !== product._id));
+    }
+  };
+
+  const removeFromWishlist = async (productId) => {
+    const user = auth.currentUser;
+    if (!user || !productId) return;
+
+    const originalItems = [...wishlistItems];
+    // Optimistic UI update: Remove immediately
+    setWishlistItems((prev) => prev.filter((p) => p._id !== productId));
+    
+    // Call the backend
+    try {
+      const token = await user.getIdToken();
+      await removeItemFromWishlist(token, productId);
+    } catch (error) {
+      console.error("Failed to remove item from wishlist:", error);
+      // Revert on error
+      setWishlistItems(originalItems);
+    }
+  };
 
   return (
     <WishlistContext.Provider value={{ wishlistItems, addToWishlist, removeFromWishlist }}>
@@ -119,5 +139,3 @@ export const WishlistProvider = ({ children }) => {
     </WishlistContext.Provider>
   );
 };
-
-export const useWishlist = () => useContext(WishlistContext);

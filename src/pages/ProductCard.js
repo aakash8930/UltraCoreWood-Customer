@@ -131,10 +131,9 @@
 // }
 
 
-// src/pages/ProductCard.js
+/// src/pages/ProductCard.js
 
 import React, { useState } from "react";
-// 1. IMPORT `useNavigate` HERE
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "./CartContext";
@@ -156,7 +155,6 @@ import {
 import "../css/ProductCard.css";
 
 export default function ProductCard({ product, openCart }) {
-  // 2. INITIALIZE `Maps` HERE
   const navigate = useNavigate();
   const { user } = useAuth(); 
   const { cart: { items }, addToCart } = useCart();
@@ -262,6 +260,10 @@ export default function ProductCard({ product, openCart }) {
           onClick={handleCartButtonClick}
         >
           <FontAwesomeIcon icon={faCartShopping} />
+          {/* --- NEW: Tooltip added here --- */}
+          <span className="cart-tooltip">
+            {isInCart ? 'View Cart' : 'Add to Cart'}
+          </span>
           {isInCart && (
             <div className="added-checkmark">
               <FontAwesomeIcon icon={faCheckCircle} />

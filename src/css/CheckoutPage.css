@@ -255,5 +255,271 @@
 }
 
 .cancel-btn:hover {
-    background-color: #f1f1f1;
+    background-color: #000000;
+}
+
+/* frontend/src/css/CheckoutPage.css */
+
+.checkout-page-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem 4rem;
+  background-color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+  min-height: calc(100vh - 80px); /* Adjust 80px based on your navbar height */
+}
+
+/* ... existing styles for .checkout-content, .checkout-left, .checkout-right ... */
+
+.checkout-content {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  gap: 3rem;
+}
+
+.checkout-left {
+  flex: 1.5;
+}
+
+.checkout-right {
+  flex: 1;
+}
+
+.shipping-address,
+.delivery-method,
+.coupon-section { /* Added .coupon-section */
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+.shipping-address h2,
+.delivery-method h2,
+.coupon-section h2 { /* Added .coupon-section */
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+
+/* --- Start: New Coupon Section Styles --- */
+
+.custom-coupon-input-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.coupon-input-field {
+  flex-grow: 1;
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.coupon-input-field:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+.apply-coupon-button {
+  background-color: #212529;
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.apply-coupon-button:hover {
+  background-color: #495057;
+}
+
+.coupon-error-message {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.coupon-success-message {
+  color: #198754;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.available-coupons-list {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.coupon-card {
+  border: 1px dashed #adb5bd;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.coupon-card:hover {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+.coupon-code-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.coupon-details .coupon-heading {
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 0.25rem 0;
+}
+
+.coupon-details .coupon-desc {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* --- End: New Coupon Section Styles --- */
+
+
+.order-summary {
+  position: sticky;
+  top: 2rem;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+.order-summary h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.price-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+.price-row.savings { color: #198754; font-weight: 500; }
+.price-breakdown hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 0.5rem 0;
+}
+.price-row.total-amount {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.checkout-securely-btn {
+  width: 100%;
+  background-color: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: background-color 0.2s;
+}
+
+.available-coupons-list {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.coupon-card {
+  border: 1px dashed #adb5bd;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.coupon-card:hover {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+.coupon-code-tag {
+  background-color: #e9ecef;
+  color: #495057;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.coupon-details .coupon-heading {
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 0.25rem 0;
+}
+
+.coupon-details .coupon-desc {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* frontend/src/css/CheckoutPage.css */
+
+/* ... (add these styles to your existing file) ... */
+
+/* Style for the "Coupon Discount" line in the order summary */
+.price-row.savings { 
+  color: #198754; /* Green color for savings */
+  font-weight: 500; 
+}
+
+/* Style for the success message e.g., "Coupon ... applied!" */
+.coupon-success-message {
+  color: #198754; /* Green color for success */
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
