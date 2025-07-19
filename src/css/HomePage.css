@@ -135,7 +135,7 @@ body {
 
 .underline1 {
   position: relative;
-  left: 455px;
+  /* left: 455px; */
   width: 600px;
   top: 7px;
 }
@@ -322,7 +322,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 500px;
+  width: 340px;
   height: auto;
   margin-left: 110px;
 }
@@ -340,7 +340,7 @@ body {
 }
 
 .underline2 {
-  width: 360px;
+  width: 340px;
 }
 
 
