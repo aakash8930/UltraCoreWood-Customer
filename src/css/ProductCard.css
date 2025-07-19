@@ -266,7 +266,7 @@ body {
 .add-to-cart-toast {
   position: absolute;
   bottom: 70px;
-  left: 20%;
+  left: 50% !important;
   transform: translateX(-50%);
   background-color: #212121;
   color: #fff;

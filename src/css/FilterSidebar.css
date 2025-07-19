@@ -1,0 +1,143 @@
+/* src/components/FilterSidebar.css */
+
+.filter-sidebar {
+  width: 240px;
+  padding-right: 2rem;
+  border-right: 1px solid #e5e7eb;
+  font-family: 'Poppins', sans-serif;
+  flex-shrink: 0;
+}
+
+.filter-sidebar h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  color: #374151;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+
+.filter-group h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #4b5563;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+/* Hide default checkbox */
+.filter-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+/* Custom checkbox style */
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  margin-right: 0.75rem;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Style for the checkmark */
+.filter-checkbox input[type="checkbox"]:checked + .checkbox-custom::after {
+  content: '✔';
+  font-size: 14px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Change background on check */
+.filter-checkbox input[type="checkbox"]:checked + .checkbox-custom {
+  background-color: #000;
+  border-color: #000;
+}
+
+.filter-checkbox:hover .checkbox-custom {
+  border-color: #9ca3af;
+}
+
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.swatch:hover {
+  transform: scale(1.1);
+}
+
+.swatch.selected {
+  border-color: #000;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #000;
+}
+
+/* Add these styles to the end of src/css/FilterSidebar.css */
+
+.price-slider {
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+}
+
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #000;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #000;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-label {
+  margin-top: 0.5rem;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+}

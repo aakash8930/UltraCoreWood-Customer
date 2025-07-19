@@ -1,0 +1,218 @@
+/* General Wrapper for the entire My Account page */
+.account-page-wrapper {
+    display: flex;
+    gap: 40px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    font-family: 'Inter', sans-serif;
+    min-height: 120vh;
+}
+
+.account-main-content {
+    flex: 3;
+}
+
+.account-sidebar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+}
+
+.account-header {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* --- Info Box Styling --- */
+.info-box {
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.info-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-box-header-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* --- Info Row (Label + Value) Styling --- */
+.info-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e7e7e7;
+    padding: 20px 25px;
+}
+
+.info-row.no-border {
+    border-bottom: none;
+}
+
+.info-label {
+    width: 200px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.info-value {
+    color: #222;
+    font-weight: 500;
+}
+
+/* --- Edit Mode Input Styling --- */
+.info-input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+}
+
+/* --- Button Styling --- */
+.edit-btn, .save-btn, .cancel-btn {
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    color: #555;
+}
+
+.edit-btn:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.edit-buttons-container {
+    display: flex;
+    gap: 10px;
+}
+
+.save-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+.save-btn:hover {
+    background-color: #333;
+}
+
+.cancel-btn {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+}
+
+.cancel-btn:hover {
+    background-color: #ccc;
+}
+
+/* --- Right Sidebar Greeting --- */
+.user-greeting {
+    text-align: center;
+}
+
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #e9e9e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+}
+
+.user-greeting-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* --- Message Styling --- */
+.account-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.account-message.success {
+    background-color: #e6f7f0;
+    color: #006437;
+}
+
+.account-message.error {
+    background-color: #fde8e8;
+    color: #c53030;
+}
+
+.account-loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+}
+
+/* --- Delete Section Styling --- */
+.delete-section-header {
+    background-color: #fff1f1;
+    border-bottom-color: #ffcccc;
+}
+
+.delete-section-title {
+    color: #c53030;
+}
+
+.delete-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-text {
+    margin: 0;
+    color: #666;
+    max-width: 60%;
+}
+
+.delete-btn {
+    background-color: #c53030;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

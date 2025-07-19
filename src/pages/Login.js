@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { auth, setupRecaptcha } from '../firebaseConfig';
 import { signInWithPhoneNumber } from 'firebase/auth';
-
+import '../css/Login.css'
 const Login = () => {
   const [step, setStep] = useState(1);
   const [phone, setPhone] = useState('+91');           // start with +91
@@ -66,7 +66,7 @@ const Login = () => {
       <div id="recaptcha-container" />
 
       {step === 1 && (
-        <form onSubmit={sendOtp}>
+        <form className='login-form' onSubmit={sendOtp}>
           <input
             name="phone"
             type="tel"

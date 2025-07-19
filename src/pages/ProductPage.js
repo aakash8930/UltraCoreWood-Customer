@@ -1,30 +1,58 @@
 // src/pages/ProductPage.js
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react'; // Import useMemo
 import { useSearchParams } from 'react-router-dom';
 import { getAllProducts } from '../api/productApi';
 import ProductCard from './ProductCard';
+import FilterSidebar from '../components/FilterSidebar';
 import '../css/ProductPage.css';
 
-
-
+// ... (SUBCATEGORY_MAP and COLOR_OPTIONS remain the same)
+const SUBCATEGORY_MAP = {
+  'BEDROOM': ['Beds', 'Wardrobes', 'Nightstands', 'Dressers'],
+  'LIVING ROOM': ['Sofas', 'Coffee Tables', 'TV Units', 'Accent Chairs'],
+  'DINING': ['Dining Tables', 'Dining Chairs', 'Sideboards', 'Bar Cabinets'],
+  'OFFICE': ['Work Desks', 'Office Chairs', 'Bookshelves'],
+  'TABLEWARE': ['Dinnerware', 'Serveware', 'Cutlery', 'Glassware'],
+  'OUTDOOR': ['Outdoor Seating', 'Patio Tables', 'Garden Decor'],
+  'DECOR': ['Vases', 'Lamps', 'Rugs', 'Wall Art'],
+  'SALE': [],
+};
+const COLOR_OPTIONS = [
+  { name: 'Brown', hex: '#6b3e26' },
+  { name: 'Beige', hex: '#d3a268' },
+  { name: 'Black', hex: '#1e1e1e' },
+  { name: 'White', hex: '#ffffff' },
+];
 
 
 const ProductPage = ({ openCart }) => {
+  // --- STATE MANAGEMENT ---
   const [allProducts, setAllProducts] = useState([]);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // State for all interactive filters
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [sortOrder, setSortOrder] = useState('default');
+
+  // --- NEW: State for price filter ---
+  const [priceRange, setPriceRange] = useState(0);
+
   const [searchParams] = useSearchParams();
+  const urlCategory = searchParams.get('category')?.toUpperCase();
+  const searchTerm = searchParams.get('search');
 
-  // Get both category and search term from URL
-  const category = searchParams.get('category');
-  const searchTerm = searchParams.get('search'); // <-- Get search term
+  const sidebarFilterOptions = SUBCATEGORY_MAP[urlCategory] || [];
 
+  // --- DATA FETCHING ---
   useEffect(() => {
     const loadAllProducts = async () => {
       try {
         setLoading(true);
         const data = await getAllProducts();
+        console.log('PRODUCTS RECEIVED BY REACT:', data); // <-- ADD THIS LINE
         setAllProducts(data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -35,88 +63,138 @@ const ProductPage = ({ openCart }) => {
     loadAllProducts();
   }, []);
 
-  // --- START: UPDATED FILTERING LOGIC ---
+  // --- NEW: Calculate max price and initialize priceRange ---
+  const maxPrice = useMemo(() => {
+    if (allProducts.length === 0) return 100000; // Default max
+    return Math.max(...allProducts.map(p => p.price));
+  }, [allProducts]);
+
   useEffect(() => {
-    let filtered = [...allProducts];
+    if (maxPrice > 0) {
+      setPriceRange(maxPrice);
+    }
+  }, [maxPrice]);
 
-    // First, filter by category if it exists
-    if (category) {
-      filtered = filtered.filter(
-        (product) => product.category.toLowerCase() === category.toLowerCase()
+
+  // --- UNIFIED FILTERING & SORTING LOGIC ---
+  useEffect(() => {
+    let processedProducts = [...allProducts];
+
+    // 1. Filter by main category from URL
+    if (urlCategory) {
+      processedProducts = processedProducts.filter(product =>
+        product.category.toUpperCase() === urlCategory
       );
     }
 
-    // Then, filter by search term if it exists
+    // 2. Filter by selected sub-categories from sidebar
+    if (selectedSubCategories.length > 0) {
+      processedProducts = processedProducts.filter(product =>
+        product.subCategory && selectedSubCategories.includes(product.subCategory)
+      );
+    }
+
+    // 3. Filter by selected colors from sidebar
+    if (selectedColors.length > 0) {
+      processedProducts = processedProducts.filter(product =>
+        product.color && selectedColors.includes(product.color)
+      );
+    }
+
+    // --- NEW: 4. Filter by price range ---
+    if (priceRange < maxPrice) {
+      processedProducts = processedProducts.filter(product =>
+        product.price <= priceRange
+      );
+    }
+
+    // 5. Filter by search term from URL
     if (searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      processedProducts = processedProducts.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
-    setDisplayProducts(sorted);
-  }, [category, searchTerm, allProducts]);
-  // --- END: UPDATED FILTERING LOGIC ---
+    // 6. Apply sorting
+    switch (sortOrder) {
+      case 'price-asc':
+        processedProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        processedProducts.sort((a, b) => b.price - a.price);
+        break;
+      case 'name-asc':
+        processedProducts.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        processedProducts.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        break;
+    }
 
-  // Determine the heading based on the filter applied
+    setDisplayProducts(processedProducts);
+
+  }, [allProducts, urlCategory, searchTerm, selectedSubCategories, selectedColors, sortOrder, priceRange, maxPrice]); // Add priceRange and maxPrice to dependency array
+
+  // Clear sidebar filters when the main category or search term changes
+  useEffect(() => {
+    setSelectedSubCategories([]);
+    setSelectedColors([]);
+    setPriceRange(maxPrice); // Reset price slider
+  }, [urlCategory, searchTerm, maxPrice]); // Add maxPrice dependency
+
   const getHeading = () => {
-    if (searchTerm) {
-      return `Search Results for: "${searchTerm}"`;
-    }
-    if (category) {
-      return category;
-    }
-    return "All Products";
+    if (searchTerm) return `Search Results for: "${searchTerm}"`;
+    return urlCategory || "All Products";
   };
 
-
   return (
-    <>
-      <div className="product-page">
-        <aside className="sidebar">
-          <h3>FILTER</h3>
-          <div className="filter-group">
-            <h4>CATEGORY</h4>
-            <label><input type="checkbox" /> Dining Tables</label>
-            <label><input type="checkbox" /> Coffee Tables</label>
-            <label><input type="checkbox" /> Work Desks</label>
-            <label><input type="checkbox" /> Study Tables</label>
-            <label><input type="checkbox" /> Nightstands</label>
-          </div>
-          <div className="filter-group">
-            <h4>FINISH / COLOR</h4>
-            <div className="color-swatches">
-              {['#6b3e26', '#d3a268', '#1e1e1e', '#fff', '#000'].map((color, i) => (
-                <span key={i} style={{ background: color }} className="swatch" />
-              ))}
-            </div>
-          </div>
-        </aside>
+    <div className="product-page">
+      <FilterSidebar
+        categoryTitle={urlCategory}
+        subCategoryOptions={sidebarFilterOptions}
+        selectedSubCategories={selectedSubCategories}
+        onSubCategoryChange={setSelectedSubCategories}
+        colorOptions={COLOR_OPTIONS}
+        selectedColors={selectedColors}
+        onColorChange={setSelectedColors}
+        // --- Pass new props for the price slider ---
+        priceRange={priceRange}
+        onPriceChange={(e) => setPriceRange(Number(e.target.value))}
+        maxPrice={maxPrice}
+      />
 
-        <main className="main-content">
-          <h2>{category || "All Products"}</h2>
-          {loading ? (
-            <p>Loading products...</p>
-          ) : (
-            <div className="product-grid">
-              {displayProducts.length > 0 ? (
-                displayProducts.map((product) => (
-                  // 2. Pass the `openCart` prop down to each ProductCard
-                  <ProductCard
-                    key={product._id}
-                    product={product}
-                    openCart={openCart}
-                  />
-                ))
-              ) : (
-                <p>No products found for this category.</p>
-              )}
-            </div>
-          )}
-        </main>
-      </div>
-    </>
+      <main className="main-content">
+        <div className="page-header">
+          <h2>{getHeading()}</h2>
+          <div className="sort-container">
+            <label htmlFor="sort">Sort by: </label>
+            <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="sort-dropdown">
+              <option value="default">Relevance</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+              <option value="name-desc">Name: Z to A</option>
+            </select>
+          </div>
+        </div>
+
+        {loading ? (
+          <p>Loading products...</p>
+        ) : (
+          <div className="product-grid">
+            {displayProducts.length > 0 ? (
+              displayProducts.map((product) => (
+                <ProductCard key={product._id} product={product} openCart={openCart} />
+              ))
+            ) : (
+              <p>No products match your filters.</p>
+            )}
+          </div>
+        )}
+      </main>
+    </div>
   );
 };
 

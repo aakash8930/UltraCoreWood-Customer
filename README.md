@@ -50,4 +50,7 @@
 - Checkout Page UI / Payment Method
 
 - v 1.1.1
-- Wishlist/coupon/search bar
+-Address books, profile Panel, My Account
+
+- v 1.1.2
+- Account deletion confirmation fix/Review

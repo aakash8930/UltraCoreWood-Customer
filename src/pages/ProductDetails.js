@@ -8,7 +8,8 @@ import { getProductById } from "../api/productApi";
 import { getReviewsByProduct } from "../api/reviewApi";
 import ReviewList from "./ReviewList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar as solidStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+// --- UPDATED: Added icons for the button and toast message ---
+import { faStar as solidStar, faStarHalfAlt, faCartShopping, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import "../css/ProductDetails.css";
 
 const formatPrice = (amount) =>
@@ -47,25 +48,27 @@ const renderAverageStars = (avg) => {
   return stars;
 };
 
-export default function ProductDetailsPage() {
-  // Adjust this if your route uses a different param name
+// --- UPDATED: Accepting openCart prop ---
+export default function ProductDetailsPage({ openCart }) {
   const { id: productId } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const currentUser = getAuth().currentUser; // used only for cart; not for reviews
+  const currentUser = getAuth().currentUser;
 
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loadingProduct, setLoadingProduct] = useState(true);
   const [loadingReviews, setLoadingReviews] = useState(true);
 
-  // 1) Fetch product details
+  // --- ADDED: State for the toast notification ---
+  const [showToast, setShowToast] = useState(false);
+
+  // 1) Fetch product details (User's original logic retained)
   useEffect(() => {
     if (!productId) {
       setLoadingProduct(false);
       return;
     }
-
     const fetchProduct = async () => {
       try {
         const data = await getProductById(productId);
@@ -76,20 +79,17 @@ export default function ProductDetailsPage() {
         setLoadingProduct(false);
       }
     };
-
     fetchProduct();
   }, [productId]);
 
-  // 2) Fetch reviews
+  // 2) Fetch reviews (User's original logic retained)
   useEffect(() => {
     if (!productId) {
       setLoadingReviews(false);
       return;
     }
-
     const fetchReviews = async () => {
       try {
-        // No token needed to fetch public reviews
         const revData = await getReviewsByProduct(productId, null);
         setReviews(revData);
       } catch (err) {
@@ -98,21 +98,32 @@ export default function ProductDetailsPage() {
         setLoadingReviews(false);
       }
     };
-
     fetchReviews();
   }, [productId]);
 
+  // --- UPDATED: handleAddToCart function with correct logic and toast ---
   const handleAddToCart = () => {
     if (!currentUser) {
       return navigate("/login");
     }
-    addToCart(product._id, 1);
+    if (showToast) return; // Prevent multiple clicks while toast is active
+
+    // The CartContext expects the full product object, not just the ID
+    addToCart(product, 1);
+
+    // Show toast message for user feedback
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+
+    // Open the cart slider if the function is provided
+    if (typeof openCart === 'function') {
+      openCart();
+    }
   };
 
   if (loadingProduct) return <p className="loading-text">Loading product...</p>;
   if (!product) return <p className="empty-text">Product not found.</p>;
 
-  // In ProductDetails.js
   const imageList = product.images ? Object.keys(product.images).map(key => {
     const img = product.images[key];
     if (img && img.data) {
@@ -180,13 +191,23 @@ export default function ProductDetailsPage() {
           </div>
         )}
 
+        {/* --- UPDATED: Button logic and style --- */}
         <button
           className="detail-add-cart-btn"
           onClick={handleAddToCart}
-          disabled={product.stock === 0}
+          disabled={product.stock === 0 || showToast}
         >
-          {product.stock > 0 ? "🛒 Add to Cart" : "Unavailable"}
+          <FontAwesomeIcon icon={faCartShopping} />
+          {product.stock > 0 ? " Add to Cart" : " Unavailable"}
         </button>
+
+        {/* --- ADDED: Toast notification rendered conditionally --- */}
+        {showToast && (
+            <div className="add-to-cart-toast active">
+                <FontAwesomeIcon icon={faCheckCircle} />
+                <span>Item added to cart</span>
+            </div>
+        )}
 
         {/* Reviews Section */}
         <div className="reviews-section">
@@ -194,7 +215,6 @@ export default function ProductDetailsPage() {
             Reviews ({product.rating?.count || 0})
           </h2>
 
-          {/* 1) Show overall average rating as stars, if available */}
           {product.rating?.count > 0 && (
             <div className="overall-rating">
               {renderAverageStars(product.rating.average)}
@@ -204,7 +224,6 @@ export default function ProductDetailsPage() {
             </div>
           )}
 
-          {/* 2) Individual Review List */}
           {loadingReviews ? (
             <p className="loading-text">Loading reviews...</p>
           ) : (

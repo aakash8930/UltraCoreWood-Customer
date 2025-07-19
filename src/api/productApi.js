@@ -1,23 +1,33 @@
-// src/api/productApi.js
+// frontend/src/api/productApi.js
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8000/api/products';
 
-// 1) Get all products (optionally filtered by category query param)
-export const getAllProducts = async (category = '') => {
-  const query = category ? `?category=${encodeURIComponent(category)}` : '';
-  const res = await axios.get(`${BASE_URL}${query}`);
+// --- MODIFIED: This function now sends filters to the backend ---
+export const getAllProducts = async (filters = {}) => {
+  // Use URLSearchParams to easily build the query string
+  const params = new URLSearchParams();
+
+  if (filters.category) params.append('category', filters.category);
+  if (filters.subCategories?.length > 0) params.append('subCategories', filters.subCategories.join(','));
+  if (filters.colors?.length > 0) params.append('colors', filters.colors.join(','));
+  if (filters.priceRange) params.append('priceRange', filters.priceRange);
+  if (filters.sort) params.append('sort', filters.sort);
+  if (filters.search) params.append('search', filters.search);
+
+  // axios will automatically append the params as a query string (e.g., "?category=BEDROOM&...")
+  const res = await axios.get(BASE_URL, { params });
   return res.data;
 };
 
-// 2) Get products by category (if you prefer explicit endpoint)
+// This can now be removed or kept if you have direct category links elsewhere
 export const getProductsByCategory = async (category) => {
   if (!category) return getAllProducts();
   const res = await axios.get(`${BASE_URL}/category/${encodeURIComponent(category)}`);
   return res.data;
 };
 
-// 3) New: Get a single product by its ID
+// This function remains the same
 export const getProductById = async (id) => {
   const res = await axios.get(`${BASE_URL}/${id}`);
   return res.data;

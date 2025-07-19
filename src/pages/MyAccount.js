@@ -1,51 +1,55 @@
-// src/pages/MyAccountPage.jsx
+// src/pages/MyAccount.js
 
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { getProfile, updateProfile, deleteProfile } from '../api/accountApi';
+import ConfirmationModal from '../pages/ConfirmationModal';
+import '../css/MyAccount.css';
 
 export default function MyAccountPage() {
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [deleting, setDeleting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [profile, setProfile] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+
+  const [isEditingInfo, setIsEditingInfo] = useState(false);
+  const [isEditingContact, setIsEditingContact] = useState(false);
 
   const navigate = useNavigate();
   const auth = getAuth();
 
-  // 1) On mount: wait for Firebase user → fetch profile
   useEffect(() => {
-    let unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        // Not logged in → redirect to login
         navigate('/login');
         return;
       }
-
       try {
         const data = await getProfile();
-        setForm({
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-        });
-        setLoading(false);
+        const safeData = {
+            name: data?.name || '',
+            email: data?.email || '',
+            phone: data?.phone || ''
+        };
+        setProfile(safeData);
+        setFormData(safeData);
       } catch (err) {
         console.error(err);
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     });
-
     return () => unsubscribe();
   }, [auth, navigate]);
 
-  // 2) Handle form-field changes
   const handleChange = (e) => {
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -53,45 +57,43 @@ export default function MyAccountPage() {
     setError('');
   };
 
-  // 3) Submit updated profile
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
+  const handleSave = async (section) => {
     setError('');
     setSuccessMsg('');
-
     try {
-      const updated = await updateProfile(form);
-      setForm({
-        name: updated.name,
-        email: updated.email,
-        phone: updated.phone,
-      });
-      setSuccessMsg('Profile updated successfully.');
+      const updatedProfile = await updateProfile(formData);
+      setProfile(updatedProfile);
+      setSuccessMsg('Profile updated successfully!');
+      
+      if (section === 'info') setIsEditingInfo(false);
+      if (section === 'contact') setIsEditingContact(false);
+
     } catch (err) {
       console.error(err);
       setError(err.message);
-    } finally {
-      setSaving(false);
     }
   };
 
-  // 4) Delete account
-  const handleDelete = async () => {
-    if (
-      !window.confirm(
-        'Are you sure you want to delete your account? This action cannot be undone.'
-      )
-    ) {
-      return;
-    }
+  const handleCancel = (section) => {
+    setFormData(profile);
+    if (section === 'info') setIsEditingInfo(false);
+    if (section === 'contact') setIsEditingContact(false);
+  };
+
+  // This function just opens the modal
+  const handleDeleteClick = () => {
+    setIsModalOpen(true);
+  };
+
+  // This function contains the actual deletion logic and is called by the modal
+  const confirmDeleteAccount = async () => {
+    setIsModalOpen(false);
     setDeleting(true);
     setError('');
     try {
       await deleteProfile();
-      // After deletion, sign out locally and redirect to /goodbye or /login
       await auth.signOut();
-      navigate('/goodbye');
+      navigate('/login');
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -100,119 +102,119 @@ export default function MyAccountPage() {
     }
   };
 
-  // While loading the profile data, show a spinner/message
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <div className="account-loading">
         <p>Loading your account…</p>
       </div>
     );
   }
 
+  const userFirstName = profile.name ? profile.name.split(' ')[0] : 'User';
+
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', fontFamily: 'sans-serif' }}>
-      <h2 style={{ textAlign: 'center' }}>My Account</h2>
+    <>
+      <div className="account-page-wrapper">
+        <div className="account-main-content">
+          <h1 className="account-header">Account settings</h1>
+          
+          {error && <div className="account-message error">{error}</div>}
+          {successMsg && <div className="account-message success">{successMsg}</div>}
 
-      {error && (
-        <div style={{ color: 'crimson', marginBottom: '1rem', textAlign: 'center' }}>
-          {error}
+          {/* --- Personal Information Box --- */}
+          <div className="info-box">
+            <div className="info-box-header">
+              <h3 className="info-box-header-title">Personal Information</h3>
+              {isEditingInfo ? (
+                <div className="edit-buttons-container">
+                  <button onClick={() => handleSave('info')} className="save-btn">Save</button>
+                  <button onClick={() => handleCancel('info')} className="cancel-btn">Cancel</button>
+                </div>
+              ) : (
+                <button onClick={() => setIsEditingInfo(true)} className="edit-btn">✏️ EDIT</button>
+              )}
+            </div>
+            <div className="info-row">
+              <span className="info-label">Name</span>
+              {isEditingInfo ? (
+                <input type="text" name="name" value={formData.name} onChange={handleChange} className="info-input" />
+              ) : (
+                <span className="info-value">{profile.name}</span>
+              )}
+            </div>
+            <div className="info-row">
+              <span className="info-label">Date of Birth</span>
+              <span className="info-value">10-11-2000</span>
+            </div>
+            <div className="info-row no-border">
+              <span className="info-label">Gender</span>
+              <span className="info-value">Male</span>
+            </div>
+          </div>
+
+          {/* --- Contact Information Box --- */}
+          <div className="info-box">
+            <div className="info-box-header">
+              <h3 className="info-box-header-title">Contact Information</h3>
+              {isEditingContact ? (
+                <div className="edit-buttons-container">
+                  <button onClick={() => handleSave('contact')} className="save-btn">Save</button>
+                  <button onClick={() => handleCancel('contact')} className="cancel-btn">Cancel</button>
+                </div>
+              ) : (
+                <button onClick={() => setIsEditingContact(true)} className="edit-btn">✏️ EDIT</button>
+              )}
+            </div>
+            <div className="info-row">
+              <span className="info-label">Email Address</span>
+              {isEditingContact ? (
+                <input type="email" name="email" value={formData.email} onChange={handleChange} className="info-input" />
+              ) : (
+                <span className="info-value">{profile.email}</span>
+              )}
+            </div>
+            <div className="info-row no-border">
+              <span className="info-label">Mobile Number</span>
+              {isEditingContact ? (
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="info-input" />
+              ) : (
+                <span className="info-value">{profile.phone}</span>
+              )}
+            </div>
+          </div>
+          
+          {/* --- Delete Account Section --- */}
+          <div className="info-box">
+              <div className="info-box-header delete-section-header">
+                  <h3 className="info-box-header-title delete-section-title">Delete Account</h3>
+              </div>
+              <div className="info-row delete-row no-border">
+                  <p className="delete-text">Once you delete your account, there is no going back. Please be certain.</p>
+                  <button onClick={handleDeleteClick} disabled={deleting} className="delete-btn">
+                      {deleting ? 'Deleting...' : 'Delete My Account'}
+                  </button>
+              </div>
+          </div>
         </div>
-      )}
-      {successMsg && (
-        <div style={{ color: 'green', marginBottom: '1rem', textAlign: 'center' }}>
-          {successMsg}
+
+        <div className="account-sidebar">
+          <div className="user-greeting">
+            <div className="user-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="#d0d0d0"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <h2 className="user-greeting-title">Hello, {userFirstName}!</h2>
+          </div>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-          Name
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              marginTop: '0.25rem',
-              boxSizing: 'border-box',
-            }}
-          />
-        </label>
-
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-          Email
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              marginTop: '0.25rem',
-              boxSizing: 'border-box',
-            }}
-          />
-        </label>
-
-        <label style={{ display: 'block', marginBottom: '1rem' }}>
-          Phone
-          <input
-            type="tel"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="10-digit mobile"
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              marginTop: '0.25rem',
-              boxSizing: 'border-box',
-            }}
-          />
-        </label>
-
-        <button
-          type="submit"
-          disabled={saving}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            background: saving ? '#888' : '#07aca4',
-            color: 'white',
-            border: 'none',
-            cursor: saving ? 'not-allowed' : 'pointer',
-            fontSize: '1rem',
-            marginBottom: '1rem',
-          }}
-        >
-          {saving ? 'Saving…' : 'Save Changes'}
-        </button>
-      </form>
-
-      <hr style={{ margin: '2rem 0' }} />
-
-      <div style={{ textAlign: 'center' }}>
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          style={{
-            background: deleting ? '#888' : 'crimson',
-            color: 'white',
-            border: 'none',
-            padding: '0.75rem 1.5rem',
-            cursor: deleting ? 'not-allowed' : 'pointer',
-            borderRadius: '4px',
-            fontSize: '1rem',
-          }}
-        >
-          {deleting ? 'Deleting…' : 'Delete My Account'}
-        </button>
       </div>
-    </div>
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDeleteAccount}
+        title="Confirm Account Deletion"
+      >
+        Are you sure you want to permanently delete your account? This action cannot be undone.
+      </ConfirmationModal>
+    </>
   );
 }

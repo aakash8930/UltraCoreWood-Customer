@@ -211,12 +211,14 @@ export const CartProvider = ({ children }) => {
   };
 
   // ✅ FIX: `cartTotal` now correctly calculates using the discount
-  const cartTotal = cart.items.reduce((sum, item) => {
-      const discountedPrice = (item.product.price * (100 - (item.product.discount || 0))) / 100;
-      return sum + discountedPrice * item.quantity;
-    },
-    0
-  );
+const cartTotal = cart.items.reduce((sum, item) => {
+    // Calculate the price after applying the discount
+    const discountedPrice = (item.product.price * (100 - (item.product.discount || 0))) / 100;
+    // Add the discounted price to the total sum
+    return sum + discountedPrice * item.quantity;
+  },
+  0
+);
 
   return (
     <CartContext.Provider

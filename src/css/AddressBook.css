@@ -1,0 +1,315 @@
+.address-page-wrapper {
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #f2f2f2;
+  min-height: 120vh;
+}
+
+.address-sidebar {
+  width: 250px;
+  background-color: #000;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  margin-top: 1px;
+}
+.drop_address {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 6px;
+}
+
+.drop_address.rotate {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  pointer-events: none; 
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.submenu.open {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+.sidebar-subitem {
+  padding: 12px 30px;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar-subitem:hover,
+.sidebar-subitem.active {
+  background-color: #222;
+  color: #fff;
+  border-radius: 15px;
+}
+
+.sidebar-item {
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  margin-bottom: 10px;
+}
+
+.sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item.active {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+}
+
+.sidebar-item.dropdown {
+  font-weight: bold;
+  padding: 14px 20px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.address-content {
+  flex: 1;
+  padding: 20px 40px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+h2.Heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin-top: 0px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+/* ================================================================== */
+/* == Top-Notch Form Styles (Reverted)                             == */
+/* ================================================================== */
+
+.address-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-bottom: 30px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid #EAEAEA;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+}
+
+/* --- Input Field Styles --- */
+.address-form input[type="text"],
+.address-form input[type="tel"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fcfcfc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.address-form input[type="text"]:focus,
+.address-form input[type="tel"]:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Custom Checkbox Styles --- */
+.address-form label {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.address-form input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  height: 22px;
+  width: 22px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.address-form input[type="checkbox"]:checked {
+  background-color: #000;
+  border-color: #000;
+}
+
+.address-form input[type="checkbox"]:checked::after {
+  content: '✔';
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+/* --- Button Styles --- */
+.button-row {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.address-form button {
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.address-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.address-form button[type="submit"] {
+  background-color: #000;
+  color: white;
+}
+
+.address-form button[type="button"] {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.address-form button[type="button"]:hover {
+  background-color: #e5e5e5;
+}
+
+
+/* ================================================================== */
+/* == Elegant Light Theme for Address Cards                        == */
+/* ================================================================== */
+
+.address-list {
+  display: grid;
+  /* --- MODIFIED: Enforce a strict 2-column layout --- */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.address-card {
+  background: linear-gradient(145deg, #ffffff, #f7f9fb);
+  color: #555;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid #EAEAEA;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.address-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06), 0 16px 32px rgba(0, 0, 0, 0.08);
+}
+
+.name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #111;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.badge-inline {
+  background-color: #222;
+  color: #FFFFFF;
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  border-radius: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.address-card p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.phone {
+  margin-top: 15px;
+  font-weight: 500;
+  color: #222;
+}
+
+.card-actions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #F0F0F0;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  color: #777;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-button:hover {
+  color: #000000;
+  background-color: #f5f5f5;
+}
+
+.action-button.delete:hover {
+  color: #D93025;
+  background-color: #FDE8E8;
+}
