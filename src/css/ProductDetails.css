@@ -7,27 +7,104 @@
   padding: 24px;
 }
 
-/* Gallery on the left side */
+/* --- UPDATED: Slider Gallery Section --- */
 .gallery-section {
-  flex: 1 1 400px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
+  flex: 1 1 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.gallery-image {
+.slider-main-image {
+  position: relative; /* For positioning nav buttons */
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
+  padding-top: 75%; /* Aspect ratio 4:3 for HD feel */
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
 }
+
+.gallery-image-main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures HD quality without distortion */
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+/* Slider Navigation Buttons */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  height: 44px;
+  width: 44px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background-color 0.2s ease;
+}
+
+.slider-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
+/* Thumbnails */
+.slider-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.thumbnail-image {
+  width: 100%;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  opacity: 0.7;
+}
+
+.thumbnail-image:hover {
+  opacity: 1;
+}
+
+.thumbnail-image.active {
+  border-color: #1976d2; /* Blue to indicate active */
+  opacity: 1;
+}
+
 
 /* Details on the right side */
 .details-section {
   flex: 1 1 300px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .detail-name {
@@ -93,7 +170,7 @@
 }
 
 .detail-add-cart-btn {
-  margin-top: auto;
+  margin-top: 24px;
   padding: 10px 20px;
   background: #1976d2;
   color: #fff;
@@ -130,7 +207,6 @@
   padding-bottom: 8px;
 }
 
-/* Overall average rating (stars + text) */
 .overall-rating {
   display: flex;
   align-items: center;
@@ -145,7 +221,7 @@
 }
 
 .avg-star.selected {
-  color: #ffc107; /* Gold for filled stars */
+  color: #ffc107;
 }
 
 .avg-text {
@@ -155,7 +231,6 @@
   font-weight: 500;
 }
 
-/* Loading / no reviews messages */
 .loading-text,
 .empty-text,
 .no-reviews {
@@ -165,9 +240,26 @@
   margin-top: 16px;
 }
 
-/* ================================
-   Review List Styles
-   ================================ */
+.add-to-cart-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(200%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 1000;
+}
+
+.add-to-cart-toast.active {
+  transform: translateY(0);
+}
 
 .review-list {
   display: flex;
@@ -192,7 +284,7 @@
 }
 
 .review-stars .star.filled {
-  color: #ffc107; /* Gold for filled stars */
+  color: #ffc107;
 }
 
 .review-header {
@@ -221,11 +313,11 @@
   white-space: pre-wrap;
 }
 
-/* ================================
-   Responsive Adjustments
-   ================================ */
-
 @media (max-width: 768px) {
+  .product-details-page {
+    flex-direction: column;
+  }
+  
   .reviews-section {
     padding: 16px;
   }
@@ -260,3 +352,4 @@
     font-size: 0.95rem;
   }
 }
+

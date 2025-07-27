@@ -54,3 +54,6 @@
 
 - v 1.1.2
 - Account deletion confirmation fix/Review
+
+- v 1.1.3
+- Product Details Page - Image slider added/Cart button Function updated
