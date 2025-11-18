@@ -57,3 +57,7 @@
 
 - v 1.1.3
 - Product Details Page - Image slider added/Cart button Function updated
+
+v 1.1.4 
+- Product category page responsiveness done.
+- and some responsiveness changes in the product details page

@@ -24,11 +24,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import ProfilePanel from './pages/ProfilePanel';
 
-// --- FIX: Import missing auth components ---
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 
 
 function App() {
@@ -48,8 +45,6 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/resetpassword/:token" element={<ResetPassword />} />
 
               {/* --- Product Routes --- */}
               {/* FIX: Removed duplicate route and corrected function name */}

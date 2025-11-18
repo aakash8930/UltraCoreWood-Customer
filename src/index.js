@@ -1,4 +1,5 @@
-// src/index.js
+//  src/index.js
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -12,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <App />
-    {/* Invisible reCAPTCHA mount point */}
+    
     <div id="recaptcha-container" />
   </React.StrictMode>
 );

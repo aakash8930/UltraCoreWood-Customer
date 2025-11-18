@@ -1,3 +1,5 @@
+// src/pages/ConfirmationModal.js
+
 import React from 'react';
 import '../css/ConfirmationModal.css'; // We'll create this next
 

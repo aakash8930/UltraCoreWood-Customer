@@ -46,6 +46,10 @@ const ProductPage = ({ openCart }) => {
 
   const sidebarFilterOptions = SUBCATEGORY_MAP[urlCategory] || [];
 
+  // --- NEW: State hooks for mobile detection and filter dropdown ---
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+
   // --- DATA FETCHING ---
   useEffect(() => {
     const loadAllProducts = async () => {
@@ -149,25 +153,43 @@ const ProductPage = ({ openCart }) => {
     return urlCategory || "All Products";
   };
 
+  // --- NEW: Update window size on resize ---
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="product-page">
-      <FilterSidebar
-        categoryTitle={urlCategory}
-        subCategoryOptions={sidebarFilterOptions}
-        selectedSubCategories={selectedSubCategories}
-        onSubCategoryChange={setSelectedSubCategories}
-        colorOptions={COLOR_OPTIONS}
-        selectedColors={selectedColors}
-        onColorChange={setSelectedColors}
-        // --- Pass new props for the price slider ---
-        priceRange={priceRange}
-        onPriceChange={(e) => setPriceRange(Number(e.target.value))}
-        maxPrice={maxPrice}
-      />
-
-      <main className="main-content">
+      {/* Sidebar for desktop only */}
+      {!isMobile && (
+        <FilterSidebar
+          categoryTitle={urlCategory}
+          subCategoryOptions={sidebarFilterOptions}
+          selectedSubCategories={selectedSubCategories}
+          onSubCategoryChange={setSelectedSubCategories}
+          colorOptions={COLOR_OPTIONS}
+          selectedColors={selectedColors}
+          onColorChange={setSelectedColors}
+          priceRange={priceRange}
+          onPriceChange={(e) => setPriceRange(Number(e.target.value))}
+          maxPrice={maxPrice}
+        />
+      )}
+      
+  <main className="main-content">
         <div className="page-header">
           <h2>{getHeading()}</h2>
+          {/* Filter button on mobile inside header */}
+          {isMobile && (
+            <button
+              className="filter-dropdown-btn"
+              onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            >
+              Filters
+            </button>
+          )}
           <div className="sort-container">
             <label htmlFor="sort">Sort by: </label>
             <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="sort-dropdown">
@@ -179,6 +201,36 @@ const ProductPage = ({ openCart }) => {
             </select>
           </div>
         </div>
+
+        {/* Mobile filter overlay */}
+        {isMobile && showFilterDropdown && (
+          <div className="filter-dropdown-overlay" onClick={() => setShowFilterDropdown(false)}>
+            <div className="filter-dropdown-content" onClick={(e) => e.stopPropagation()}>
+              <div className="filter-overlay-header">
+                <h3>Filter Products</h3>
+                <button 
+                  className="close-filter-btn"
+                  onClick={() => setShowFilterDropdown(false)}
+                  aria-label="Close filters"
+                >
+                  ✕
+                </button>
+              </div>
+              <FilterSidebar
+                categoryTitle={urlCategory}
+                subCategoryOptions={sidebarFilterOptions}
+                selectedSubCategories={selectedSubCategories}
+                onSubCategoryChange={setSelectedSubCategories}
+                colorOptions={COLOR_OPTIONS}
+                selectedColors={selectedColors}
+                onColorChange={setSelectedColors}
+                priceRange={priceRange}
+                onPriceChange={(e) => setPriceRange(Number(e.target.value))}
+                maxPrice={maxPrice}
+              />
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <p>Loading products...</p>

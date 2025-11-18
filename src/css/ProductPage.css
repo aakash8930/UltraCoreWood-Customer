@@ -1,3 +1,5 @@
+/* src/css/ProductPage.css */
+
 .product-page {
   display: flex;
   font-family: 'Poppins', sans-serif;
@@ -56,11 +58,10 @@
 
 
 .product-grid {
-  /* CHANGE THIS FROM GRID TO FLEX */
   display: flex;
   flex-wrap: wrap; /* Allows cards to wrap to the next line */
   gap: 2rem; /* Keeps the spacing between cards */
-  justify-content: flex-start; /* Aligns cards to the left */
+  justify-content: space-between; /* Ensures cards are evenly distributed */
 }
 
 /* Modern Product Card */
@@ -143,4 +144,302 @@
   font-size: 0.95rem;
   background-color: #fff;
   cursor: pointer;
+}
+
+/* Mobile filter button and overlay styles */
+.filter-dropdown-btn {
+  background-color: var(--color-primary, #734128);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.filter-dropdown-btn:hover {
+  background-color: var(--color-secondary, #391E10);
+}
+
+.filter-dropdown-overlay {
+  position: fixed;
+  margin-top: 80px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: right;
+  padding-top: 8rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.filter-dropdown-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 320px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+.filter-dropdown-overlay::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #ddd;
+}
+
+.filter-dropdown-overlay::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #fff;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile filter sidebar adjustments */
+.filter-dropdown-content .filter-sidebar {
+  border: none;
+  padding: 0;
+}
+
+.filter-dropdown-content .filter-sidebar h3 {
+  display: none;
+}
+
+.filter-dropdown-content .filter-group {
+  margin-bottom: 1rem;
+}
+
+.filter-dropdown-content .filter-group h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.filter-dropdown-content .price-slider {
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.filter-dropdown-content .color-swatches {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.25rem;
+}
+
+.filter-dropdown-content .swatch {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+}
+
+.filter-dropdown-content .swatch.selected {
+  border-color: var(--color-primary, #734128);
+  transform: scale(1.1);
+}
+
+/* Filter overlay header */
+.filter-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.filter-overlay-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-primary, #734128);
+  font-weight: 600;
+}
+
+.close-filter-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-filter-btn:hover {
+  background-color: #f0f0f0;
+  color: var(--color-primary, #734128);
+}
+
+/* Hide the FilterSidebar's own title when in overlay */
+.filter-dropdown-overlay .filter-sidebar h3 {
+  display: none;
+}
+
+/* Responsive styles for product page; only applying on smaller screens */
+@media (max-width: 1024px) {
+  .product-page {
+    flex-direction: column;
+    padding: 1rem 2%;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+  }
+  .main-content {
+    width: 100%;
+  }
+  .page-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .page-header h2 {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .filter-dropdown-btn {
+    order: 2;
+  }
+  
+  .sort-container {
+    order: 3;
+  }
+  .product-grid {
+    justify-content: center;
+    gap: 1.5rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .product-page {
+    padding: 1rem 3%;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    justify-items: center;
+  }
+  
+  .product-card-modern {
+    width: 100%;
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .page-header h2 {
+    order: 1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .filter-dropdown-btn {
+    order: 2;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .sort-container {
+    order: 3;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-page {
+    padding: 0.75rem 3%;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .product-card-modern {
+    width: 100%;
+    max-width: 160px;
+  }
+  
+  .filter-dropdown-content {
+    max-width: 280px;
+    width: 95%;
+  }
+  
+  .filter-dropdown-overlay {
+    padding-top: 6rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+  .product-page {
+    padding: 0.5rem 2%;
+  }
+  
+  .product-grid {
+    gap: 0.5rem;
+  }
+  
+  .product-card-modern {
+    max-width: 140px;
+  }
 }

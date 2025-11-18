@@ -1,6 +1,5 @@
-
-
 // src/components/Navbar.js
+
 import React, { useState, useRef, useEffect } from 'react';
 import '../css/Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';

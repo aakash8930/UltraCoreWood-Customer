@@ -1,3 +1,5 @@
+// src/pages/WishList.js
+
 import React, { useState } from "react";
 import { useCart } from "./CartContext";
 import { useWishlist } from "./WishlistContext";

@@ -2,7 +2,7 @@
 
 import { getAuth } from 'firebase/auth';
 
-const API_BASE = '/api/users/profile'; // Via "proxy": "http://localhost:8000" in package.json
+const API_BASE = '/api/users/profile'; 
 
 /**
  * Fetch the current user’s profile.
