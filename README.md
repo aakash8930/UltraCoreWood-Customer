@@ -67,3 +67,9 @@ v 1.1.5
 
 - tasks - 1. there will be changes into navbar dropdown screen that needed to be done    ...
           2. home page Why Us section is needed to up updated too. its Responsiveness between  780px and below is not good.
+
+v 1.1.6
+- Updated Product Api for handling filter
+- Updated navbar fixed profile dropdown
+- Updated product page and product card (js and css both) fix issue with toast notification and filter 
+- Updated wishlist card add delete button
