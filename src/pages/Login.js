@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { auth, setupRecaptcha } from '../firebaseConfig';
-import { signInWithPhoneNumber } from 'firebase/auth';
+import { signInWithPhoneNumber, signOut } from 'firebase/auth';
 import '../css/Login.css'
 const Login = () => {
   const [step, setStep] = useState(1);
@@ -55,6 +55,8 @@ const Login = () => {
       localStorage.setItem('token', data.token);
       navigate('/', { replace: true });
     } catch (err) {
+      console.error("Login failed:", err);
+      await signOut(auth); // Ensure Firebase logout on backend failure
       setError(err.response?.data?.error || 'Invalid OTP. Please try again.');
     }
   };
