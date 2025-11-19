@@ -1,13 +1,14 @@
-// /src/api/productApi.js
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api/products';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const BASE_URL = `${API_URL}/api/products`;
 
-// --- MODIFIED: This function now sends filters to the backend ---
+// ============================================================
+// CUSTOMER FUNCTIONS
+// ============================================================
+
 export const getAllProducts = async (filters = {}) => {
-  // Use URLSearchParams to easily build the query string
   const params = new URLSearchParams();
-
   if (filters.category) params.append('category', filters.category);
   if (filters.subCategories?.length > 0) params.append('subCategories', filters.subCategories.join(','));
   if (filters.colors?.length > 0) params.append('colors', filters.colors.join(','));
@@ -15,20 +16,78 @@ export const getAllProducts = async (filters = {}) => {
   if (filters.sort) params.append('sort', filters.sort);
   if (filters.search) params.append('search', filters.search);
 
-  // axios will automatically append the params as a query string (e.g., "?category=BEDROOM&...")
-  const res = await axios.get(BASE_URL, { params });
-  return res.data;
+  const { data } = await axios.get(BASE_URL, { params });
+  return data;
 };
 
-// This can now be removed or kept if you have direct category links elsewhere
+export const fetchProductById = async (id) => {
+  const { data } = await axios.get(`${BASE_URL}/${id}`);
+  return data;
+};
+export const getProductById = fetchProductById; 
+
 export const getProductsByCategory = async (category) => {
-  if (!category) return getAllProducts();
-  const res = await axios.get(`${BASE_URL}/category/${encodeURIComponent(category)}`);
-  return res.data;
+  return getAllProducts({ category });
 };
 
-// This function remains the same
-export const getProductById = async (id) => {
-  const res = await axios.get(`${BASE_URL}/${id}`);
-  return res.data;
+// ============================================================
+// ADMIN FUNCTIONS
+// ============================================================
+
+export const fetchAllProducts = async () => {
+  return getAllProducts({});
+};
+
+export const createProduct = async (productData, token) => {
+  const formData = new FormData();
+
+  // 🚨🚨 CHECK THIS ARRAY IN YOUR FILE 🚨🚨
+  // You are likely missing 'subCategory' and 'color' in this list!
+  ['name', 'category', 'subCategory', 'color', 'price', 'stock', 'discount', 'details']
+    .forEach(key => {
+      const val = productData[key];
+      if (val != null) formData.append(key, val);
+    });
+
+  ['image1', 'image2', 'image3', 'image4', 'image5']
+    .forEach(key => {
+      if (productData[key]) {
+        formData.append(key, productData[key]);
+      }
+    });
+
+  const { data } = await axios.post(BASE_URL, formData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+};
+
+export const updateProduct = async (productId, productData, token) => {
+  const formData = new FormData();
+
+  // 🚨🚨 CHECK THIS ARRAY HERE TOO 🚨🚨
+  ['name', 'category', 'subCategory', 'color', 'price', 'stock', 'discount', 'details']
+    .forEach(key => {
+      const val = productData[key];
+      if (val != null) formData.append(key, val);
+    });
+
+  ['image1', 'image2', 'image3', 'image4', 'image5']
+    .forEach(key => {
+      if (productData[key]) {
+        formData.append(key, productData[key]);
+      }
+    });
+
+  const { data } = await axios.put(`${BASE_URL}/${productId}`, formData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+};
+
+export const deleteProduct = async (id, token) => {
+  const { data } = await axios.delete(`${BASE_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
 };

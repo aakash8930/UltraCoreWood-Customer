@@ -8,8 +8,8 @@
   /* padding: 10px 20px; */
   font-family: "Lora", serif;
   position: relative;
-  width: 100%;
-  overflow-x: hidden;
+  /* width: 100%; */
+  overflow-x: visible;
 }
 
 .logo {

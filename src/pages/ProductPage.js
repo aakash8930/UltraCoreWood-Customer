@@ -1,13 +1,12 @@
 // src/pages/ProductPage.js
 
-import React, { useEffect, useState, useMemo } from 'react'; // Import useMemo
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getAllProducts } from '../api/productApi';
 import ProductCard from './ProductCard';
 import FilterSidebar from '../components/FilterSidebar';
 import '../css/ProductPage.css';
 
-// ... (SUBCATEGORY_MAP and COLOR_OPTIONS remain the same)
 const SUBCATEGORY_MAP = {
   'BEDROOM': ['Beds', 'Wardrobes', 'Nightstands', 'Dressers'],
   'LIVING ROOM': ['Sofas', 'Coffee Tables', 'TV Units', 'Accent Chairs'],
@@ -18,6 +17,7 @@ const SUBCATEGORY_MAP = {
   'DECOR': ['Vases', 'Lamps', 'Rugs', 'Wall Art'],
   'SALE': [],
 };
+
 const COLOR_OPTIONS = [
   { name: 'Brown', hex: '#6b3e26' },
   { name: 'Beige', hex: '#d3a268' },
@@ -25,20 +25,22 @@ const COLOR_OPTIONS = [
   { name: 'White', hex: '#ffffff' },
 ];
 
-
 const ProductPage = ({ openCart }) => {
   // --- STATE MANAGEMENT ---
+  // 1. allProducts: Used ONLY to calculate the Max Price for the slider
   const [allProducts, setAllProducts] = useState([]);
+  // 2. displayProducts: The actual filtered list shown in the grid
   const [displayProducts, setDisplayProducts] = useState([]);
+  
   const [loading, setLoading] = useState(true);
 
-  // State for all interactive filters
+  // Filter States
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
   const [sortOrder, setSortOrder] = useState('default');
-
-  // --- NEW: State for price filter ---
   const [priceRange, setPriceRange] = useState(0);
+  // debouncedPrice is used to trigger the API call only when user stops sliding
+  const [debouncedPrice, setDebouncedPrice] = useState(0); 
 
   const [searchParams] = useSearchParams();
   const urlCategory = searchParams.get('category')?.toUpperCase();
@@ -46,114 +48,110 @@ const ProductPage = ({ openCart }) => {
 
   const sidebarFilterOptions = SUBCATEGORY_MAP[urlCategory] || [];
 
-  // --- NEW: State hooks for mobile detection and filter dropdown ---
+  // Mobile Detection
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
 
-  // --- DATA FETCHING ---
+  // --- 1. INITIAL LOAD (Get Max Price) ---
   useEffect(() => {
-    const loadAllProducts = async () => {
+    const loadInitialData = async () => {
       try {
         setLoading(true);
-        const data = await getAllProducts();
-        console.log('PRODUCTS RECEIVED BY REACT:', data); // <-- ADD THIS LINE
+        // Fetch EVERYTHING once just to find the highest price item
+        const data = await getAllProducts({}); 
         setAllProducts(data);
+        
+        // Set initial price range to max
+        if (data.length > 0) {
+          const max = Math.max(...data.map(p => p.price));
+          setPriceRange(max);
+          setDebouncedPrice(max);
+        }
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error("Failed to fetch initial products:", error);
+      }
+    };
+    loadInitialData();
+  }, []); // Run once on mount
+
+  // --- 2. DEBOUNCE PRICE SLIDER ---
+  // When user moves slider, update UI immediately (priceRange), 
+  // but wait 500ms to update 'debouncedPrice' which triggers the API.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedPrice(priceRange);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [priceRange]);
+
+
+  // --- 3. SERVER-SIDE FILTERING TRIGGER ---
+  // Whenever any filter changes, ask the BACKEND for the new list.
+  useEffect(() => {
+    const fetchFilteredProducts = async () => {
+      try {
+        setLoading(true);
+        
+        const filters = {
+          category: urlCategory,
+          search: searchTerm,
+          subCategories: selectedSubCategories,
+          colors: selectedColors,
+          priceRange: debouncedPrice, // Send the rounded/debounced price
+          sort: sortOrder
+        };
+
+        console.log("Fetching from Backend with Filters:", filters);
+        
+        // The backend now handles the logic for discount calculation and regex matching
+        const data = await getAllProducts(filters);
+        setDisplayProducts(data);
+
+      } catch (error) {
+        console.error("Filter fetch failed:", error);
       } finally {
         setLoading(false);
       }
     };
-    loadAllProducts();
-  }, []);
 
-  // --- NEW: Calculate max price and initialize priceRange ---
-  const maxPrice = useMemo(() => {
-    if (allProducts.length === 0) return 100000; // Default max
-    return Math.max(...allProducts.map(p => p.price));
-  }, [allProducts]);
-
-  useEffect(() => {
-    if (maxPrice > 0) {
-      setPriceRange(maxPrice);
-    }
-  }, [maxPrice]);
-
-
-  // --- UNIFIED FILTERING & SORTING LOGIC ---
-  useEffect(() => {
-    let processedProducts = [...allProducts];
-
-    // 1. Filter by main category from URL
-    if (urlCategory) {
-      processedProducts = processedProducts.filter(product =>
-        product.category.toUpperCase() === urlCategory
-      );
+    // Only fetch if we have initialized the price (prevent fetching with 0 price)
+    if (debouncedPrice > 0 || allProducts.length === 0) {
+       fetchFilteredProducts();
     }
 
-    // 2. Filter by selected sub-categories from sidebar
-    if (selectedSubCategories.length > 0) {
-      processedProducts = processedProducts.filter(product =>
-        product.subCategory && selectedSubCategories.includes(product.subCategory)
-      );
-    }
+  }, [
+    urlCategory, 
+    searchTerm, 
+    selectedSubCategories, 
+    selectedColors, 
+    debouncedPrice, // Triggers only when slider stops
+    sortOrder
+  ]);
 
-    // 3. Filter by selected colors from sidebar
-    if (selectedColors.length > 0) {
-      processedProducts = processedProducts.filter(product =>
-        product.color && selectedColors.includes(product.color)
-      );
-    }
-
-    // --- NEW: 4. Filter by price range ---
-    if (priceRange < maxPrice) {
-      processedProducts = processedProducts.filter(product =>
-        product.price <= priceRange
-      );
-    }
-
-    // 5. Filter by search term from URL
-    if (searchTerm) {
-      processedProducts = processedProducts.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // 6. Apply sorting
-    switch (sortOrder) {
-      case 'price-asc':
-        processedProducts.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        processedProducts.sort((a, b) => b.price - a.price);
-        break;
-      case 'name-asc':
-        processedProducts.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name-desc':
-        processedProducts.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        break;
-    }
-
-    setDisplayProducts(processedProducts);
-
-  }, [allProducts, urlCategory, searchTerm, selectedSubCategories, selectedColors, sortOrder, priceRange, maxPrice]); // Add priceRange and maxPrice to dependency array
-
-  // Clear sidebar filters when the main category or search term changes
+  // --- 4. RESET FILTERS ON CATEGORY CHANGE ---
   useEffect(() => {
     setSelectedSubCategories([]);
     setSelectedColors([]);
-    setPriceRange(maxPrice); // Reset price slider
-  }, [urlCategory, searchTerm, maxPrice]); // Add maxPrice dependency
+    // Reset price to max when category changes
+    if (allProducts.length > 0) {
+        const max = Math.max(...allProducts.map(p => p.price));
+        setPriceRange(max);
+        setDebouncedPrice(max);
+    }
+  }, [urlCategory, searchTerm, allProducts]);
 
   const getHeading = () => {
     if (searchTerm) return `Search Results for: "${searchTerm}"`;
     return urlCategory || "All Products";
   };
 
-  // --- NEW: Update window size on resize ---
+  const maxPrice = useMemo(() => {
+    if (allProducts.length === 0) return 100000;
+    return Math.max(...allProducts.map(p => p.price));
+  }, [allProducts]);
+
+  // Window Resize Handler
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
     window.addEventListener('resize', handleResize);
@@ -162,6 +160,7 @@ const ProductPage = ({ openCart }) => {
 
   return (
     <div className="product-page">
+         {/*  - visualizing Sidebar vs Grid */}
       {/* Sidebar for desktop only */}
       {!isMobile && (
         <FilterSidebar
@@ -178,7 +177,7 @@ const ProductPage = ({ openCart }) => {
         />
       )}
       
-  <main className="main-content">
+      <main className="main-content">
         <div className="page-header">
           <h2>{getHeading()}</h2>
           {/* Filter button on mobile inside header */}
@@ -233,7 +232,7 @@ const ProductPage = ({ openCart }) => {
         )}
 
         {loading ? (
-          <p>Loading products...</p>
+          <p style={{textAlign:'center', marginTop: '2rem'}}>Loading products...</p>
         ) : (
           <div className="product-grid">
             {displayProducts.length > 0 ? (
@@ -241,7 +240,20 @@ const ProductPage = ({ openCart }) => {
                 <ProductCard key={product._id} product={product} openCart={openCart} />
               ))
             ) : (
-              <p>No products match your filters.</p>
+              <div className="no-products-found">
+                  <p>No products match your filters.</p>
+                  <button 
+                    className="clear-filters-btn"
+                    onClick={() => {
+                        setSelectedSubCategories([]);
+                        setSelectedColors([]);
+                        setPriceRange(maxPrice);
+                    }}
+                    style={{marginTop:'10px', padding:'8px 16px', cursor:'pointer'}}
+                  >
+                      Clear Filters
+                  </button>
+              </div>
             )}
           </div>
         )}

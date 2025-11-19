@@ -348,24 +348,46 @@ body {
 }
 
 /* Toast Notification Styles */
+/* frontend/src/css/ProductCard.css */
+
 .add-to-cart-toast {
-  position: absolute;
-  bottom: 70px;
-  left: 50% !important;
-  transform: translateX(-50%);
+  /* FIXED: Moves the toast out of the card and sticks it to the screen */
+  position: fixed; 
+  bottom: 30px;        /* 30px from the bottom of the screen */
+  left: 50%;           /* Center horizontally */
+  transform: translateX(-50%); /* Perfect centering */
+  
+  /* Design */
   background-color: #212121;
   color: #fff;
-  padding: 10px 16px;
+  padding: 12px 24px;
   border-radius: 50px;
+  
+  /* Layout */
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
+  gap: 10px;
+  
+  /* Typography */
+  font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 10;
   white-space: nowrap;
-  animation: fade-in-out 3s forwards;
+  
+  /* Shadow & Z-index (Keep it on top of everything) */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 99999; 
+  
+  /* Animation */
+  animation: toast-pop 3s forwards;
+  pointer-events: none; /* Allows clicking through it */
+}
+
+/* Add a nice little pop-up animation */
+@keyframes toast-pop {
+  0% { opacity: 0; transform: translate(-50%, 20px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  90% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
 }
 
 /* Responsive adjustments */

@@ -61,7 +61,7 @@
   display: flex;
   flex-wrap: wrap; /* Allows cards to wrap to the next line */
   gap: 2rem; /* Keeps the spacing between cards */
-  justify-content: space-between; /* Ensures cards are evenly distributed */
+  justify-content: start; 
 }
 
 /* Modern Product Card */

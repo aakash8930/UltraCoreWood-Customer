@@ -5,7 +5,8 @@ import { useCart } from "./CartContext";
 import { useWishlist } from "./WishlistContext";
 import "../css/WishList.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
 
 // Accept openCart as a prop
 const WishList = ({ openCart }) => {
@@ -65,9 +66,18 @@ const WishList = ({ openCart }) => {
                     <span>Item added to cart</span>
                   </div>
                 )}
-                <img src={imageSrc} alt={item.name} />
+                 <Link to={`/products/${item._id}`} className="image-link">
+                          <img
+                            src={imageSrc}
+                            alt={item.name}
+                            className="product-image"
+                            onError={(e) => (e.target.src = "/images/placeholder.jpg")}
+                          />
+                        </Link>
                 <div className="wishlist-card-content">
-                  <h3>{item.name}</h3>
+                  <Link to={`/products/${item._id}`} className="name-link">
+                            <h4 className="product-name">{item.name}</h4>
+                          </Link>
                   <p className="category-link">{item.category}</p>
                   <p className="price">₹{item.price}</p>
                   <div className="wishlist-action-row">
@@ -81,7 +91,7 @@ const WishList = ({ openCart }) => {
                       className="remove-icon-btn"
                       onClick={() => handleRemoveFromWishlist(item._id)}
                     >
-                      −
+                      <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </div>
                 </div>

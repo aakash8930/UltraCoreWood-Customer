@@ -2,7 +2,7 @@
 
 
 /// src/pages/ProductCard.js
-
+import ReactDOM from "react-dom"; // <--- NEW IMPORT
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -141,12 +141,13 @@ export default function ProductCard({ product, openCart }) {
           )}
         </button>
 
-        {showToast && (
-          <div className="add-to-cart-toast">
-            <FontAwesomeIcon icon={faCheckCircle} />
-            <span>Item added to cart</span>
-          </div>
-        )}
+        {showToast && ReactDOM.createPortal(
+        <div className="add-to-cart-toast">
+          <FontAwesomeIcon icon={faCheckCircle} />
+          <span>Item added to cart</span>
+        </div>,
+        document.body
+      )}
       </div>
     </div>
   );
