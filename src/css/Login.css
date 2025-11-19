@@ -1,21 +1,197 @@
-/* // src/css/Login.css */
+/* src/css/Login.css
+     Redesigned login page to match project theme.
+     Uses --color-primary fallback to the project's wood/brown primary color.
+*/
 
-.login-form{
+:root {
+    --color-primary: #734128; /* primary brand color (fallback) */
+    --color-earth: #4A3B32; /* deep walnut */
+    --color-accent: rgba(115,65,40,0.08);
+    --bg: #F9F7F2; /* warm cream */
+    --muted: #777;
+    --radius: 16px;
+}
+
+.login-page {
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    padding: 3.5rem 1rem;
+}
+
+.login-card {
+    width: 980px;
+    max-width: 96%;
+    display: flex;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    background: #fff;
+}
+
+.brand-panel {
+    width: 42%;
+    min-width: 300px;
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 1rem;
-    width: 72%;
-    border: 0.5px solid grey;
+    padding: 2.2rem 1.8rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
-.container {
+
+/* Background image and dark overlay to make white text readable */
+.brand-panel {
+    background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80');
+}
+.brand-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.5) 100%);
+    z-index: 0;
+}
+
+.brand-logo {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    z-index: 1;
+    position: relative;
+    font-family: 'Playfair Display', serif;
+}
+
+.brand-sub {
+    color: rgba(255,255,255,0.92);
+    font-size: 0.98rem;
+    z-index: 1;
+    position: relative;
+}
+
+.form-panel {
+    width: 58%;
+    padding: 3rem 3rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    max-width: 400px;
-    margin: 4rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    gap: 0.8rem;
+    justify-content: center;
 }
+
+.title {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #222;
+    font-family: 'Playfair Display', serif;
+}
+
+.subtitle {
+    margin: 0 0 1rem 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.input-label {
+    font-size: 0.85rem;
+    color: #444;
+}
+
+.phone-row {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.input {
+    flex: 1 1 auto;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #F3F4F6; /* light gray */
+    outline: none;
+    font-size: 0.95rem;
+    transition: box-shadow 150ms ease, transform 150ms ease;
+    border-bottom: 1px solid #E6E9EE; /* subtle bottom border */
+}
+
+.input:focus {
+    box-shadow: 0 8px 22px rgba(74,59,50,0.06);
+    transform: translateY(-1px);
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 0.6rem;
+}
+
+.resend-row { margin-top: 0.6rem; }
+
+.btn {
+    padding: 0.78rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn.primary {
+    background-color: var(--color-earth);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(74,59,50,0.12);
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.btn.primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(74,59,50,0.14);
+}
+
+.btn.ghost {
+    background: transparent;
+    color: var(--color-earth);
+    border: 1px solid rgba(74,59,50,0.12);
+    padding: 0.7rem 0.9rem;
+}
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.link {
+    background: none;
+    border: none;
+    color: var(--color-earth);
+    padding: 0;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.error {
+    color: #c53030;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+/* small screens */
+@media (max-width: 900px) {
+    .login-card { flex-direction: column; width: 100%; }
+    .brand-panel { display: none; }
+    .form-panel { width: 100%; padding: 1.6rem; }
+    .phone-row { flex-direction: column; align-items: stretch; }
+    .btn.primary { width: 100%; }
+}
+

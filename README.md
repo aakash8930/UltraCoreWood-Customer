@@ -61,3 +61,9 @@
 v 1.1.4 
 - Product category page responsiveness done.
 - and some responsiveness changes in the product details page
+
+v 1.1.5 
+- updated the responsiveness of the navbar , login page updated, signup page updated.
+
+- tasks - 1. there will be changes into navbar dropdown screen that needed to be done    ...
+          2. home page Why Us section is needed to up updated too. its Responsiveness between  780px and below is not good.

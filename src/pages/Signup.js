@@ -5,17 +5,15 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, setupRecaptcha } from '../firebaseConfig';
 import { signInWithPhoneNumber } from 'firebase/auth';
+import '../css/Login.css';
 
 const Signup = () => {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '+91'      // start with +91
-  });
+  const [form, setForm] = useState({ name: '', email: '', phone: '+91' });
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = e => {
@@ -23,46 +21,31 @@ const Signup = () => {
     setError('');
 
     if (name === 'phone') {
-      // strip non-digits
+      // strip non-digits, remove leading 91 if typed again, limit to 10
       let digits = value.replace(/\D/g, '');
-      // remove leading '91' if they type it again
-      if (digits.startsWith('91')) {
-        digits = digits.slice(2);
-      }
-      // rebuild with +91 prefix
-      setForm(f => ({
-        ...f,
-        phone: '+91' + digits
-      }));
+      if (digits.startsWith('91')) digits = digits.slice(2);
+      digits = digits.slice(0, 10);
+      setForm(f => ({ ...f, phone: '+91' + digits }));
     } else {
-      setForm(f => ({
-        ...f,
-        [name]: value
-      }));
+      setForm(f => ({ ...f, [name]: value }));
     }
   };
 
   // Step 1: send OTP to the phone
   const sendOtp = async e => {
-    e.preventDefault();
+    e && e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       const recaptchaVerifier = setupRecaptcha('recaptcha-container');
-
-      // ensure E.164 format
-      const phoneNumber = form.phone.startsWith('+')
-        ? form.phone
-        : `+${form.phone}`;
-
-      const result = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        recaptchaVerifier
-      );
+      const phoneNumber = form.phone.startsWith('+') ? form.phone : `+${form.phone}`;
+      const result = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       setConfirmationResult(result);
       setStep(2);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Failed to send OTP');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,89 +53,90 @@ const Signup = () => {
   const verifyOtp = async e => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       const userCredential = await confirmationResult.confirm(otp);
       const idToken = await userCredential.user.getIdToken();
 
-      // call your backend signup route with Firebase ID token
-      const config = {
-        headers: { Authorization: `Bearer ${idToken}` }
-      };
+      const config = { headers: { Authorization: `Bearer ${idToken}` } };
       const { data } = await axios.post(
         'http://localhost:8000/api/auth/signup',
-        {
-          name:  form.name,
-          email: form.email,
-          phone: form.phone
-        },
+        { name: form.name, email: form.email, phone: form.phone },
         config
       );
 
-      // store your JWT and redirect
       localStorage.setItem('token', data.token);
       alert('Registration successful!');
       navigate('/', { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid OTP. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
+  const resendOtp = async () => {
+    await sendOtp();
+  };
+
   return (
-    <div className="container">
-      <h2>Create Account</h2>
-      {error && <div className="error">{error}</div>}
+    <div className="login-page">
+      <div className="login-card">
+        <aside className="brand-panel">
+          <div className="brand-logo">FURNI</div>
+          <p className="brand-sub">Beautiful furniture. Delivered.</p>
+        </aside>
 
-      {/* recaptcha hook */}
-      <div id="recaptcha-container" />
+        <main className="form-panel">
+          <h2 className="title">Create your account</h2>
+          <p className="subtitle">Sign up quickly using your phone number</p>
 
-      {step === 1 && (
-        <form onSubmit={sendOtp}>
-          <input
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email Address"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="phone"
-            type="tel"
-            placeholder="+91XXXXXXXXXX"
-            value={form.phone}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Send OTP & Sign Up</button>
-        </form>
-      )}
+          {error && <div className="error">{error}</div>}
 
-      {step === 2 && (
-        <form onSubmit={verifyOtp}>
-          <input
-            type="text"
-            name="otp"
-            placeholder="Enter OTP"
-            value={otp}
-            onChange={e => setOtp(e.target.value)}
-            required
-          />
-          <button type="submit">Verify OTP & Complete Signup</button>
-        </form>
-      )}
+          <div id="recaptcha-container" />
 
-      {step === 1 && (
-        <p>
-          Already have an account? <Link to="/login">Login here</Link>
-        </p>
-      )}
+          {step === 1 && (
+            <form className="login-form" onSubmit={sendOtp}>
+              <label className="input-label" htmlFor="name">Full name</label>
+              <input id="name" name="name" className="input" placeholder="Full Name" value={form.name} onChange={handleChange} required />
+
+              <label className="input-label" htmlFor="email">Email address</label>
+              <input id="email" name="email" type="email" className="input" placeholder="Email Address" value={form.email} onChange={handleChange} required />
+
+              <label className="input-label" htmlFor="phone">Phone number</label>
+              <div className="phone-row">
+                <input id="phone" name="phone" type="tel" className="input" placeholder="+91XXXXXXXXXX" value={form.phone} onChange={handleChange} required />
+              </div>
+
+              <div className="form-actions">
+                <button className="btn primary" type="submit" disabled={loading}>{loading ? 'Sending...' : 'Send OTP & Sign Up'}</button>
+              </div>
+            </form>
+          )}
+
+          {step === 2 && (
+            <form className="login-form" onSubmit={verifyOtp}>
+              <label className="input-label" htmlFor="otp">Enter OTP</label>
+              <input id="otp" type="text" name="otp" className="input" placeholder="6-digit code" value={otp} onChange={e => setOtp(e.target.value)} required maxLength={6} />
+
+              <div className="form-actions">
+                <button className="btn primary" type="submit" disabled={loading}>{loading ? 'Verifying...' : 'Verify OTP & Complete Signup'}</button>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.6rem' }}>
+                <button type="button" className="btn ghost" onClick={() => { setStep(1); setOtp(''); }}>Edit details</button>
+                <button className="link" type="button" onClick={resendOtp}>Resend OTP</button>
+              </div>
+            </form>
+          )}
+
+          {step === 1 && (
+            <p style={{ marginTop: '1rem' }}>
+              Already have an account? <Link to="/login">Login here</Link>
+            </p>
+          )}
+        </main>
+      </div>
     </div>
   );
 };
