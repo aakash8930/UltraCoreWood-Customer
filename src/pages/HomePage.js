@@ -142,6 +142,7 @@ const HomePage = () => {
       )}
 
       {/* Essentials */}
+      
       <div className="essentials-section">
         <h2 className="essentials-title">THE ESSENTIALS</h2>
         <div className="essentials-grid">
