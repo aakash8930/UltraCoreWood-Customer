@@ -54,8 +54,8 @@ const Navbar = ({ openCart }) => {
       <div className="navbar-top">
         <div className="navbar-logo">
           <Link to="/" className="logo">
-            <img src="/images/logo_white.png" alt="Furniture Logo" className="navbar_logo_img" />
-            FURNITURE
+            <img src="/images/logo_main.png" alt="Furniture Logo" className="navbar_logo_img" />
+
           </Link>
         </div>
         {/* --- UPDATED SEARCH FORM STRUCTURE --- */}

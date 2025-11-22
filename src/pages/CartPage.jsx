@@ -29,7 +29,7 @@ const CartPage = ({ isOpen, onClose }) => {
 
       <div className={`cart-slider ${isOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className="cart-slider-header">
-          <h2>Your Cart</h2>
+          <h2>Your cart</h2>
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
 
@@ -57,7 +57,7 @@ const CartPage = ({ isOpen, onClose }) => {
                     <div className="cart-item-info">
                       <div>
                         <h4>{product.name}</h4>
-                        <p className="cart-item-subtext">{product.subtext || 'Walnut, Wood'}</p>
+                        <p className="cart-item-subtext">{product.subtext}</p>
                       </div>
                     </div>
                     <div className='quantity-price'>
@@ -80,7 +80,7 @@ const CartPage = ({ isOpen, onClose }) => {
           <div className="cart-slider-footer">
             <div className="subtotal">
               <span>Subtotal</span>
-              <span>{formatPrice(cartTotal)}</span>
+              <span className="price">{formatPrice(cartTotal)}</span>
             </div>
             <button onClick={handleCheckout} className="checkout-btn">Checkout</button>
           </div>

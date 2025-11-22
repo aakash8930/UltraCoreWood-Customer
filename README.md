@@ -73,3 +73,9 @@ v 1.1.6
 - Updated navbar fixed profile dropdown
 - Updated product page and product card (js and css both) fix issue with toast notification and filter 
 - Updated wishlist card add delete button
+- updated homepage banner 
+
+-v 1.1.7
+-converted into VITE
+- banner image resize fix
+

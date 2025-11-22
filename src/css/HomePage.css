@@ -10,8 +10,6 @@ body {
 
 .banner-slider {
   width: 100%;
-  max-width: 100%;
-  margin: 0;
   background: black;
   position: relative;
   overflow: hidden;
@@ -24,30 +22,42 @@ body {
 }
 
 .banner-slide {
-  width: 100vw;
-  height: 700px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: black;
+  display: block;
+  /* Changed from flex to block to help Slick Slider */
+  width: 100%;
+  background-color: #000;
   overflow: hidden;
 }
 
-.banner-image {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center center;
-  display: block;
-  transition: transform 280ms ease, opacity 220ms ease;
+.banner-image-container {
+  position: relative;
+  /* Keeps it visible in the slider flow */
+  width: 100%;
+  height: 35vw;
+  /* Fills the .banner-slide height exactly */
+  overflow: hidden;
+  z-index: 1;
 }
 
-  /* ---  BANNER / HERO (full-width, responsive) --- */
+.banner-image {
+  position: absolute;
+  top: 30px;
+  left: 100px;
+  width: 90%;
+  height: 100%;
+  display: block;
+
+
+  /* Forces image to match dimensions exactly. */
+  /* Use 'fill' to stretch it to edges (no cropping, no black bars). */
+  object-fit: fill;
+
+  object-position: center center;
+}
+
+/* ---  BANNER / HERO (full-width, responsive) --- */
 .banner-text {
-  font-size: 3.8rem;
+  font-size: 3rem;
   font-family: "Cormorant Garamond", serif;
   font-style: normal;
   color: #ffffff;
@@ -365,8 +375,10 @@ body {
 /* --- LARGE DESKTOP (1441px and above) --- */
 @media (min-width: 1441px) {
   .banner-slide {
-    height: 900px;
+    background: black;
+
   }
+
 
   .banner-text {
     font-size: 5.5rem;
@@ -376,8 +388,9 @@ body {
 
 /* --- MEDIUM DESKTOP (1025px to 1440px) --- */
 @media (max-width: 1440px) and (min-width: 1025px) {
+
   .banner-slide {
-    height: 750px;
+    background: black;
   }
 
   .banner-text {
@@ -389,7 +402,7 @@ body {
 /* --- SMALL LAPTOP/LARGE TABLET (769px to 1024px) --- */
 @media (max-width: 1024px) and (min-width: 769px) {
   .banner-slide {
-    height: 650px;
+    background: black;
   }
 
   .banner-text {
@@ -402,13 +415,27 @@ body {
 /* --- TABLET (600px to 768px) --- */
 @media (max-width: 768px) and (min-width: 600px) {
   .banner-slide {
-    height: 550px;
+    height: 100%;
+    background: black;
+  }
+
+  .banner-image-container{
+    height: 50vw;
+  }
+
+  .banner-image{
+    position: relative;
+    left: 20px;
+    width: 95%;
   }
 
   .banner-text {
+    text-align: center !important;
     font-size: 3.2rem;
     max-width: 380px;
+    top: 320px !important;
     right: 5%;
+    left: 65px;
     padding: 15px 20px;
   }
 }
@@ -428,9 +455,12 @@ body {
     width: 100%;
   }
 
-  .banner-slide {
+  /* .banner-slide {
     height: 550px;
-  }
+  } */
+   .banner-image{
+    left: 50px;
+   }
 
   .banner-text {
     text-align: right;
@@ -464,7 +494,8 @@ body {
     margin: 3vw auto;
     display: block;
   }
-/* 
+
+  /* 
   .carousel-slider-wrapper {
     height: auto;
   } */
@@ -485,7 +516,7 @@ body {
     height: auto;
   }
 
-  .whyus-content{
+  .whyus-content {
     width: 640px;
     flex-direction: row;
     align-items: center;
@@ -496,7 +527,7 @@ body {
     margin: 60px 0 0 50px;
   }
 
-  .whyus-image{
+  .whyus-image {
     margin: 0;
   }
 
@@ -540,6 +571,7 @@ body {
 
   .banner-slide {
     height: 380px;
+     background: black;
   }
 
   .banner-text {
@@ -555,7 +587,7 @@ body {
     text-align: center;
   }
 
-  .slick-slider{
+  .slick-slider {
     margin: -5px;
   }
 
@@ -703,26 +735,33 @@ body {
 /* --- FINAL OVERRIDES: ensure requested heights and full-width behavior --- */
 @media (max-width: 1024px) {
   /* Tablet and small laptops -> use 500px height */
-  .banner-slide {
+  /* .banner-slide {
     height: 500px !important;
-  }
+  } */
 
   .banner-text {
     font-size: 2.4rem !important;
     right: 4% !important;
-    left: auto !important;
     max-width: 80% !important;
     padding: 12px 16px !important;
   }
-  .banner-image {
-    object-fit: contain !important;
-  }
+
 }
 
 @media (max-width: 480px) {
+
   /* Mobile -> use 350px height */
   .banner-slide {
-    height: 350px !important;
+    height: 100% !important;
+  }
+
+  .banner-image-container{
+    height: 60vw;
+  }
+
+  .banner-image{
+    position: relative;
+    left: 20px;
   }
 
   .banner-text {
@@ -735,8 +774,4 @@ body {
     text-align: center !important;
   }
 
-  .banner-image {
-    max-height: 100% !important;
-    object-fit: contain !important;
-  }
 }

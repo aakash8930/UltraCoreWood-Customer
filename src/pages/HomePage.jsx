@@ -131,8 +131,10 @@ const HomePage = () => {
               return (
                 <a key={b._id} href={href || '#'} target="_blank" rel="noreferrer" className="banner-link">
                   <div className="banner-slide">
-                    <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
-                    {b.text && <div className="banner-text">{b.text}</div>}
+                    <div className="banner-image-container">
+                      <img src={b.image} alt={b.text || 'Banner'} className="banner-image" />
+                      {b.text && <div className="banner-text">{b.text}</div>}
+                    </div>
                   </div>
                 </a>
               );
@@ -142,7 +144,7 @@ const HomePage = () => {
       )}
 
       {/* Essentials */}
-      
+
       <div className="essentials-section">
         <h2 className="essentials-title">THE ESSENTIALS</h2>
         <div className="essentials-grid">

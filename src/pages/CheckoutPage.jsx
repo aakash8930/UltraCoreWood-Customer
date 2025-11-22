@@ -1,11 +1,9 @@
-
-// frontend/src/pages/CheckoutPage.js
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from './CartContext';
-import { createOrder } from '../api/orderApi';
+// import { createOrder } from '../api/orderApi'; // <-- REMOVED: Not needed for Online payment (Backend handles it on verify)
+import { createOrder } from '../api/orderApi'; // Keep only if used for COD
 import { fetchAddresses, createAddress } from '../api/addressApi';
 import { fetchAvailableCoupons, applyCoupon as applyCouponAPI } from '../api/couponApi';
 import { useAuth } from '../hooks/useAuth';
@@ -16,7 +14,7 @@ import { faLock, faPlus } from '@fortawesome/free-solid-svg-icons';
 const formatPrice = (amount) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount);
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const BLANK_ADDRESS_FORM = {
   fullName: '', phone: '', flat: '', area: '', landmark: '', pincode: '', city: '', state: '', isDefault: false,
@@ -81,7 +79,7 @@ export default function CheckoutPage() {
 
   // --- Price Calculation ---
   const itemsTotal = cartTotal;
-  const tax = Math.round((itemsTotal - discountValue) * 0.1); // Assumes discountValue is for coupons
+  const tax = Math.round((itemsTotal - discountValue) * 0.1);
   const deliveryFee = itemsTotal > 0 ? 99 : 0;
   const grandTotal = itemsTotal - discountValue + tax + deliveryFee;
 
@@ -125,11 +123,10 @@ export default function CheckoutPage() {
 
     try {
       const token = await user.getIdToken();
-      // Use the API to validate the coupon and get the discount amount
       const { discount } = await applyCouponAPI(code, itemsTotal, token);
       setDiscountValue(discount);
       setSelectedCouponCode(code);
-      setCustomCouponInput(''); // Clear input on success
+      setCustomCouponInput('');
     } catch (err) {
       setCouponError(err.message || "Invalid Coupon");
       setDiscountValue(0);
@@ -150,64 +147,100 @@ export default function CheckoutPage() {
       const token = await user.getIdToken();
       const finalAddressId = await getFinalAddressId(token);
 
+      // Common payload data
+      const productDetails = cart.items.map(item => ({ product: item.product._id, quantity: item.quantity }));
+      
       const orderPayload = {
         userAddress: finalAddressId,
         paymentMethod,
-        products: cart.items.map(item => ({ product: item.product._id, quantity: item.quantity })),
+        products: productDetails,
         paymentBreakdown: { itemsTotal, tax, shipping: deliveryFee, discount: discountValue, total: grandTotal },
-        couponCode: selectedCouponCode || null, // Pass applied coupon code
+        couponCode: selectedCouponCode || null,
       };
 
+      // --- OPTION 1: ONLINE PAYMENT (Razorpay) ---
       if (paymentMethod === 'Online') {
+        // 1. Create Order on Backend to get Order ID
         const { data: razorpayOrder } = await axios.post(`${API_URL}/api/payment/create-order`,
-          { amount: grandTotal },
+          { amount: grandTotal, currency: "INR" },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
+        // 2. Open Razorpay Modal
         const options = {
-          key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Ensure this is set in vite.config.js or .env
           amount: razorpayOrder.amount,
           currency: razorpayOrder.currency,
-          name: "FURNITURE",
+          name: "FURNITURE STORE",
           description: "Order Payment",
           order_id: razorpayOrder.id,
+          
+          // 3. Handle Success
           handler: async (response) => {
             setPlacingOrder(true);
             try {
+              // 🚨 CRITICAL FIX: Send the exact data structure the backend expects
               const verificationPayload = {
+                // Razorpay Proof
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: razorpayOrder.id,
                 razorpay_signature: response.razorpay_signature,
-              };
-              await axios.post(`${API_URL}/api/payment/verify`, verificationPayload, { headers: { Authorization: `Bearer ${token}` } });
 
-              const finalOrderPayload = { ...orderPayload, paymentMethod: 'Online', razorpayDetails: response };
-              const createdOrder = await createOrder(token, finalOrderPayload);
+                // Data needed to Create Order (Fixing the 'products not iterable' error)
+                products: productDetails, // ✅ Correct Variable
+                shippingAddress: finalAddressId, // ✅ Correct Variable
+                userAddress: finalAddressId, // Sending both to be safe
+                paymentMethod: 'Online',
+                paymentBreakdown: { itemsTotal, tax, shipping: deliveryFee, discount: discountValue, total: grandTotal },
+                couponCode: selectedCouponCode || null
+              };
+
+              // 4. Verify & Create Order (All in one go)
+              const result = await axios.post(
+                `${API_URL}/api/payment/verify`, 
+                verificationPayload, 
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+
+              // 5. Success!
               clearCart();
-              navigate(`/orders/${createdOrder._id}`);
+              // The backend verify endpoint returns the order object inside 'order' or as the body
+              const newOrderId = result.data.order ? result.data.order._id : result.data._id;
+              navigate(`/orders/${newOrderId}`);
+
             } catch (err) {
-              setError("Payment verification failed. Please contact support.");
+              console.error("Verification Error:", err);
+              setError("Payment successful, but order creation failed. Contact Support.");
               setPlacingOrder(false);
             }
           },
-          prefill: { name: user.displayName || 'Customer', email: user.email, contact: user.phoneNumber },
+          prefill: { 
+            name: user.displayName || 'Customer', 
+            email: user.email, 
+            contact: user.phoneNumber || '' 
+          },
           theme: { color: "#0d6efd" },
         };
 
         const rzp = new window.Razorpay(options);
         rzp.on('payment.failed', (response) => {
-          setError(`Payment Failed: ${response.error.description || 'An unknown error occurred.'}`);
+          setError(`Payment Failed: ${response.error.description}`);
           setPlacingOrder(false);
         });
         rzp.open();
-        setPlacingOrder(false); // Allow user to close Razorpay popup without being stuck
-      } else if (paymentMethod === 'CashOnDelivery') {
+        setPlacingOrder(false); 
+      } 
+      
+      // --- OPTION 2: CASH ON DELIVERY ---
+      else if (paymentMethod === 'CashOnDelivery') {
         const createdOrder = await createOrder(token, orderPayload);
         clearCart();
         navigate(`/orders/${createdOrder._id}`);
       }
+
     } catch (err) {
-      setError(err.message || 'An error occurred. Please try again.');
+      console.error(err);
+      setError(err.response?.data?.message || err.message || 'An error occurred.');
       setPlacingOrder(false);
     }
   };
@@ -285,7 +318,6 @@ export default function CheckoutPage() {
             {couponError && <p className="coupon-error-message">{couponError}</p>}
             {selectedCouponCode && !couponError && <p className="coupon-success-message">Coupon "{selectedCouponCode}" applied!</p>}
 
-            {/* --- START: NEWLY ADDED UI FOR AVAILABLE COUPONS --- */}
             {availableCoupons.length > 0 && (
               <div className="available-coupons-list">
                 {availableCoupons.map((c) => (
@@ -299,7 +331,6 @@ export default function CheckoutPage() {
                 ))}
               </div>
             )}
-            {/* --- END: NEWLY ADDED UI --- */}
           </section>
 
           {/* --- Payment Method Section --- */}

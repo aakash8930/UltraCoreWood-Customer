@@ -8,7 +8,7 @@ import {
   deleteAddress
 } from '../api/addressApi';
 import { getAuth } from 'firebase/auth';
-import ConfirmationModal from '../pages/ConfirmationModal'; // --- 1. Import the modal component ---
+import ConfirmationModal from './ConfirmationModal'; // --- 1. Import the modal component ---
 import '../css/AddressBook.css';
 
 const blankAddress = {

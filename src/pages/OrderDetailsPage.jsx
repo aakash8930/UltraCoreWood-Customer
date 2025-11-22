@@ -53,7 +53,7 @@ export default function OrderDetailsPage() {
     try {
         const token = await user.getIdToken();
         const res = await axios.get(
-            `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/orders/${id}/invoice`,
+            `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/orders/${id}/invoice`,
             {
             headers: { Authorization: `Bearer ${token}` },
             responseType: 'blob',

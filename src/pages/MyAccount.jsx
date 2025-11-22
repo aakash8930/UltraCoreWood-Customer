@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { getProfile, updateProfile, deleteProfile } from '../api/accountApi';
-import ConfirmationModal from '../pages/ConfirmationModal';
+import ConfirmationModal from './ConfirmationModal';
 import '../css/MyAccount.css';
 
 export default function MyAccountPage() {
