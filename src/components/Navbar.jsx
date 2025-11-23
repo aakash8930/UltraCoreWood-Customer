@@ -81,10 +81,44 @@ const Navbar = ({ openCart }) => {
                 {isLoggedIn ? (
                   <>
                     {/* --- Updated with new address options --- */}
-                    <Link to="/account" state={{ defaultTab: 'account' }} onClick={() => setShowDropdown(false)}>My Account</Link>
-                    <Link to="/account" state={{ defaultTab: 'orders' }} onClick={() => setShowDropdown(false)}>Orders</Link>
-                    <Link to="/account" state={{ defaultTab: 'savedAddresses' }} onClick={() => setShowDropdown(false)}>Saved Addresses</Link>
-                    <Link to="/account" state={{ defaultTab: 'addAddress' }} onClick={() => setShowDropdown(false)}>Add New Address</Link>
+                    <Link
+                      to="/account"
+                      state={{ defaultTab: 'account' }}
+                      className="dropdown-item"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      My Account
+                    </Link>
+
+                    {/* 2. Orders */}
+                    <Link
+                      to="/account"
+                      state={{ defaultTab: 'orders' }}
+                      className="dropdown-item"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Orders
+                    </Link>
+
+                    {/* 3. Saved Address */}
+                    <Link
+                      to="/account"
+                      state={{ defaultTab: 'savedAddresses' }}
+                      className="dropdown-item"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Saved Address
+                    </Link>
+
+                    {/* 4. Add New Address */}
+                    <Link
+                      to="/account"
+                      state={{ defaultTab: 'addAddress' }}
+                      className="dropdown-item"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Add New Address
+                    </Link>
                     <button onClick={handleLogout}>Logout</button>
                   </>
                 ) : (

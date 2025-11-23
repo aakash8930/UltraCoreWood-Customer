@@ -22,8 +22,7 @@ import WishList from './pages/WishList';
 import AddressBook from './pages/AddressBook';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
-import ProfilePanel from './pages/ProfilePanel';
-
+import AccountDashboard from './pages/AccountDashboard'; // Import the new component
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
@@ -55,15 +54,14 @@ function App() {
               <Route path="/wishlist" element={<ProtectedRoute><WishList openCart={openCart} /></ProtectedRoute>} />
               <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
               <Route path="/orders/:id" element={<ProtectedRoute><OrderDetailsPage /></ProtectedRoute>} />
-              
-              {/* FIX: Consolidated account section route */}
-              <Route path="/account/*" element={<ProtectedRoute><ProfilePanel /></ProtectedRoute>} />
 
+              {/* FIX: Consolidated account section route */}
+              <Route path="/account" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
             </Routes>
 
             {/* The Cart Slider is rendered outside Routes to act as an overlay */}
             <CartPage isOpen={isCartOpen} onClose={closeCart} />
-            
+
             <Footer />
           </Router>
         </WishlistProvider>
