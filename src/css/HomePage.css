@@ -22,7 +22,9 @@ body {
 }
 
 .banner-slide {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* Changed from flex to block to help Slick Slider */
   width: 100%;
   background-color: #000;
@@ -33,8 +35,7 @@ body {
   position: relative;
   /* Keeps it visible in the slider flow */
   width: 100%;
-  height: 35vw;
-  /* Fills the .banner-slide height exactly */
+  height: 45vw;
   overflow: hidden;
   z-index: 1;
 }
@@ -42,7 +43,7 @@ body {
 .banner-image {
   position: absolute;
   top: 30px;
-  left: 100px;
+  left:  5vw;
   width: 90%;
   height: 100%;
   display: block;
@@ -96,7 +97,7 @@ body {
 /* --- ESSENTIALS --- */
 .essentials-section {
   background-color: #000000;
-  padding: 60px 20px;
+  padding: 50px 0;
   text-align: center;
 }
 
@@ -109,8 +110,9 @@ body {
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  margin-bottom: 40px;
-  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  right: 36vw;
 }
 
 .essentials-grid {
@@ -149,8 +151,7 @@ body {
 }
 
 .comfort-section {
-  margin-top: 50px;
-  padding: 0 20px;
+  margin-top: 3vw;
 }
 
 .comfort-section h2 {
@@ -160,42 +161,39 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   font-size: 2rem;
-  margin: 20px 0;
 }
 
 .underline1 {
-  width: 100%;
-  max-width: 600px;
-  margin: 15px auto;
-  border: none;
-  height: 1px;
-  background-color: #666;
+  position: relative;
+  /* left: 455px; */
+  width: 600px;
+  top: 7px;
 }
 
 /* ================== NEW ARRIVALS CAROUSEL ================== */
 .new-arrivals-section {
   background-color: #000;
-  padding: 60px 20px;
+  padding: 10px 0;
 }
 
 .section-title {
   color: white;
-  font-size: 35px;
+  font-size:40px;
   font-weight: 100;
   font-style: normal;
   letter-spacing: 2px;
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  margin-bottom: 40px;
+  margin-bottom:20px;
   text-align: center;
 }
 
 .carousel-slider-wrapper {
   position: relative;
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 40px; /* Space for arrows */
+  padding: 0 80px; /* Space for arrows */
 }
 
 /* Homepage Product Slider Specific Styles */
@@ -204,11 +202,11 @@ body {
 }
 
 .homepage-product-slider .slick-slide {
-  padding: 0 15px;
+  padding: 0 10px;
 }
 
 .homepage-product-slide {
-  height: auto;
+  height:26rem;
   display: flex;
   justify-content: center;
 }
@@ -254,11 +252,11 @@ body {
 
 .carousel-slider-wrapper {
   background-color: #000;
-  padding: 30px 0px;
+  padding: 10px 0px;
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
-  min-height: 300px;
+  min-height: 320px;
 }
 
 .carousel-slider-wrapper .slick-slide {
@@ -274,13 +272,13 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
-  top: 1vw;
+  top:0.5w;
   color: white;
 }
 
 .product-card img {
   width: 100%;
-  height: 180px;
+  height: 240px;
   object-fit: cover;
   display: block;
 }
@@ -306,23 +304,10 @@ body {
   color: #777;
 }
 
-.top-selections-btn {
-  background-color: #000;
-  color: white;
-  padding: 1vw 2vw;
-  margin: 3vw 0 3vw 43vw;
-  font-size: 16px;
-  font-family: "Cormorant Garamond", serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-}
 
 .custom-arrow {
   position: absolute;
-  top: 25%;
+  top: 45%;
   transform: translateY(-50%);
   z-index: 10;
   width: 40px;
@@ -345,17 +330,18 @@ body {
 }
 
 .custom-prev {
-  left: 40px;
+  left: 50px;
 }
 
 .custom-next {
-  right: 40px;
+  right: 50px;
 }
 
 /* --- WHY US --- */
 .whyus-section {
   color: #fff;
-  padding: 60px 20px;
+  padding: 60px 5%;
+  /* text-align: center; */
 }
 
 .whyus-btn {
@@ -458,21 +444,13 @@ body {
 @media (min-width: 1441px) {
   .banner-slide {
     background: black;
+
   }
+
 
   .banner-text {
     font-size: 5.5rem;
     max-width: 650px;
-  }
-
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 80px 40px;
-  }
-
-  .carousel-slider-wrapper {
-    padding: 0 60px;
   }
 }
 
@@ -483,20 +461,71 @@ body {
     background: black;
   }
 
+  .banner-image-container{
+    height: 60vw;
+  }
+
   .banner-text {
     font-size: 4.8rem;
     max-width: 550px;
   }
 
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 70px 30px;
-  }
 
-  .carousel-slider-wrapper {
-    padding: 0 50px;
-  }
+
+.homepage-product-slide {
+  height:30rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Override ProductCard styles when in carousel context */
+.homepage-product-slider .product-card {
+  width: 100% !important; /* Take full width of slide */
+  max-width: 300px; /* Set a reasonable max width */
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
+
+/* Ensure proper card proportions in carousel */
+.homepage-product-slider .image-section {
+  height: 280px !important;
+}
+
+
+.carousel-slider-wrapper {
+  background-color: #000;
+  padding:40px 0px;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 320px;
+}
+
+
+.product-card {
+  background-color: transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top:0.5w;
+  color: white;
+}
+
+.product-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+
+.custom-arrow {
+  top: 38%;
+}
 }
 
 /* --- SMALL LAPTOP/LARGE TABLET (769px to 1024px) --- */
@@ -510,16 +539,64 @@ body {
     max-width: 450px;
     padding: 18px 25px;
   }
+  
 
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 60px 25px;
-  }
+  
+.homepage-product-slide {
+  height:11rem;
+  display: flex;
+  justify-content: center;
+}
 
-  .carousel-slider-wrapper {
-    padding: 0 40px;
-  }
+/* Override ProductCard styles when in carousel context */
+.homepage-product-slider .product-card {
+  width: 100% !important; /* Take full width of slide */
+  max-width: 227px; /* Set a reasonable max width */
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
+
+/* Ensure proper card proportions in carousel */
+.homepage-product-slider .image-section {
+  height: 150px !important;
+}
+
+
+.carousel-slider-wrapper {
+  background-color: #000;
+  padding:40px 0px !important;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 250px;
+}
+
+
+.product-card {
+  background-color: transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  width:100%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: 1vw;
+  color: white;
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px !important;
+  object-fit: cover;
+  display: block;
+}
+
+
+.custom-arrow {
+  top: 35%;
+}
+
 }
 
 /* --- TABLET (600px to 768px) --- */
@@ -527,16 +604,6 @@ body {
   .banner-slide {
     height: 100%;
     background: black;
-  }
-
-  .banner-image-container{
-    height: 50vw;
-  }
-
-  .banner-image{
-    position: relative;
-    left: 20px;
-    width: 95%;
   }
 
   .banner-text {
@@ -565,9 +632,11 @@ body {
     width: 100%;
   }
 
-  .banner-image{
-    left: 50px;
-  }
+
+   .banner-image-container{
+    height: 50vw;
+    margin-bottom: 5px;
+   }
 
   .banner-text {
     text-align: right;
@@ -577,34 +646,76 @@ body {
     padding: 15px 20px;
   }
 
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 50px 20px;
-  }
+
 
   .essentials-grid {
     grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    gap: 20px;
+    width: 95%;
   }
 
   .essentials-title {
+    right: 0;
+    text-align: center;
     margin-bottom: 30px;
   }
 
   .comfort-section {
-    margin-top: 40px;
-    padding: 0 15px;
+    margin-top: 60px;
   }
 
   .underline1 {
-    max-width: 400px;
+    left: 90px;
+
   }
 
-  .carousel-slider-wrapper {
-    padding: 0 30px;
-  }
+  .homepage-product-slide {
+  height:11rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Override ProductCard styles when in carousel context */
+.homepage-product-slider .product-card {
+  width: 100% !important; /* Take full width of slide */
+  max-width: 227px; /* Set a reasonable max width */
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
+
+/* Ensure proper card proportions in carousel */
+.homepage-product-slider .image-section {
+  height: 150px !important;
+}
+
+
+.carousel-slider-wrapper {
+  background-color: #000;
+  padding:40px 0px !important;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 250px;
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px !important;
+  object-fit: cover;
+  display: block;
+}
+
+
+.custom-arrow {
+  top: 45%;
+}
+
+.custom-prev{
+  left: 20px;
+}
+
+.custom-next{
+  right: 20px;
+}
 
   /* 
   .carousel-slider-wrapper {
@@ -680,7 +791,7 @@ body {
 
   .banner-slide {
     height: 380px;
-    background: black;
+     background: black;
   }
 
   .banner-text {
@@ -704,16 +815,9 @@ body {
     display: none;
   }
 
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 40px 15px;
-  }
-
   .essentials-grid {
     grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    gap: 15px;
+    width: 90%;
   }
 
   .essentials-item {
@@ -721,43 +825,90 @@ body {
   }
 
   .essentials-overlay {
+    /* background: transparent; */
     font-size: 12px;
     font-weight: 900;
-    padding: 4px 8px;
   }
 
   .essentials-title {
-    margin-bottom: 25px;
-    font-size: 28px;
+    right: 0;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
   .comfort-section {
-    margin-top: 30px;
-    padding: 0 10px;
+    margin-top: 50px;
   }
 
   .comfort-section h2 {
-    font-size: 18px;
-    margin: 15px 0;
+    color: white;
+    font-weight: 100;
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 17px;
   }
 
   .underline1 {
-    max-width: 250px;
+    position: relative;
+    width: 200px;
+    left: 100px;
+    top: 0px;
   }
+.homepage-product-slide {
+  height:11rem;
+  display: flex;
+  justify-content: center;
+}
 
-  .section-title {
-    font-size: 28px;
-    margin-bottom: 25px;
-  }
+/* Override ProductCard styles when in carousel context */
+.homepage-product-slider .product-card {
+  width: 100% !important; /* Take full width of slide */
+  max-width: 227px; /* Set a reasonable max width */
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
 
-  .carousel-slider-wrapper {
-    padding: 0 20px;
-  }
+/* Ensure proper card proportions in carousel */
+.homepage-product-slider .image-section {
+  height: 150px !important;
+}
 
-  .product-card img {
-    height: 140px;
-  }
 
+.carousel-slider-wrapper {
+  background-color: #000;
+  padding:40px 0px !important;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 250px;
+}
+
+
+.product-card {
+  background-color: transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  width:100%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: 1vw;
+  color: white;
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px !important;
+  object-fit: cover;
+  display: block;
+}
+
+
+.custom-arrow {
+  top: 35%;
+}
   /* Hide arrows on mobile banner and show dots for product carousel */
   .banner-slider .custom-arrow { 
     display: none; 
@@ -828,6 +979,9 @@ body {
   .banner-slide {
     height: 380px;
   }
+  .banner-image-container{
+    height: 70vw;
+  }
 
   .banner-text {
     font-size: 2rem;
@@ -853,30 +1007,6 @@ body {
 
 /* Extra small devices (392px and below) - Fix image responsiveness */
 @media (max-width: 392px) {
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 30px 10px;
-  }
-
-  .section-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  .essentials-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  .comfort-section h2 {
-    font-size: 16px;
-  }
-
-  .carousel-slider-wrapper {
-    padding: 0 15px;
-  }
-
   .whyus-container {
     width: 98%;
     padding: 15px;
@@ -904,32 +1034,8 @@ body {
   }
 }
 
-/* Very small devices (360px and below) - Further optimization */
+/* Very small devices (360px and below) - Further image optimization */
 @media (max-width: 360px) {
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 25px 8px;
-  }
-
-  .section-title {
-    font-size: 22px;
-    margin-bottom: 18px;
-  }
-
-  .essentials-title {
-    font-size: 22px;
-    margin-bottom: 18px;
-  }
-
-  .comfort-section h2 {
-    font-size: 15px;
-  }
-
-  .carousel-slider-wrapper {
-    padding: 0 12px;
-  }
-
   .whyus-container {
     width: 100%;
     padding: 10px;
@@ -959,30 +1065,6 @@ body {
 
 /* Ultra small devices (300px and below) - Maximum compression */
 @media (max-width: 300px) {
-  .essentials-section,
-  .new-arrivals-section,
-  .whyus-section {
-    padding: 20px 5px;
-  }
-
-  .section-title {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
-
-  .essentials-title {
-    font-size: 20px;
-    margin-bottom: 15px;
-  }
-
-  .comfort-section h2 {
-    font-size: 14px;
-  }
-
-  .carousel-slider-wrapper {
-    padding: 0 8px;
-  }
-
   .whyus-container {
     width: 100%;
     padding: 8px;

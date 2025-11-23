@@ -79,6 +79,10 @@ v 1.1.6
 -converted into VITE
 - banner image resize fix
 
+<<<<<<< HEAD
+-v 1.1.8
+- home page - new arrival  done
+=======
 - v 1.1.8
 - Left sidebar remove
 

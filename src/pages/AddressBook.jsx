@@ -201,21 +201,11 @@ export default function AddressBook({ initialView, onSwitchView }) {
     <>
       {currentView === 'list' && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div className="address-header-actions">
             <h2 className="Heading">Saved Addresses</h2>
             <button 
-              className="address-form button"
+              className="add-address-btn"
               onClick={switchToFormView}
-              style={{ 
-                backgroundColor: '#000', 
-                color: 'white', 
-                padding: '12px 24px', 
-                border: 'none', 
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '600'
-              }}
             >
               Add New Address
             </button>
@@ -250,44 +240,136 @@ export default function AddressBook({ initialView, onSwitchView }) {
 
       {currentView === 'form' && (
         <>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-            <button 
-              type="button"
-              onClick={switchToListView}
-              style={{
-                background: 'none',
-                border: '1px solid #ddd',
-                borderRadius: '6px',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: '#555'
-              }}
-            >
-              ← Back to Addresses
-            </button>
+          <div className="form-header">
             <h2 className="Heading">{editingId ? 'Update Address' : 'Add New Address'}</h2>
           </div>
           {error && <div className="error">{error}</div>}
           <form className='address-form' onSubmit={handleSubmit}>
-            <input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required />
-            <input name="phone" type="tel" placeholder="Mobile Number" value={formData.phone} onChange={handleChange} required maxLength="10" />
-            <input name="flat" placeholder="Flat, House No., Building" value={formData.flat} onChange={handleChange} />
-            <input name="area" placeholder="Area, Street, Sector" value={formData.area} onChange={handleChange} />
-            <input name="landmark" placeholder="Landmark" value={formData.landmark} onChange={handleChange} />
-            <input name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} required maxLength="6" />
-            <input name="city" placeholder="Town/City" value={formData.city} onChange={handleChange} required />
-            <input name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
-            <label>
-              <input name="isDefault" type="checkbox" checked={formData.isDefault} onChange={handleChange} />
-              {' '}Make default
-            </label>
+            <div className="form-section-title">Personal Details</div>
+            
+            <div className="form-field">
+              <label htmlFor="fullName">Full Name <span className="required">*</span></label>
+              <input 
+                id="fullName"
+                name="fullName" 
+                type="text"
+                placeholder="Enter your full name" 
+                value={formData.fullName} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="phone">Mobile Number <span className="required">*</span></label>
+              <input 
+                id="phone"
+                name="phone" 
+                type="tel" 
+                placeholder="10-digit mobile number" 
+                value={formData.phone} 
+                onChange={handleChange} 
+                required 
+                maxLength="10" 
+              />
+            </div>
+            
+            <div className="form-section-divider"></div>
+            <div className="form-section-title">Address Information</div>
+            
+            <div className="form-field">
+              <label htmlFor="flat">Flat, House No., Building</label>
+              <input 
+                id="flat"
+                name="flat" 
+                type="text"
+                placeholder="Flat/House No., Building Name" 
+                value={formData.flat} 
+                onChange={handleChange} 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="area">Area, Street, Sector</label>
+              <input 
+                id="area"
+                name="area" 
+                type="text"
+                placeholder="Area, Street, Sector, Village" 
+                value={formData.area} 
+                onChange={handleChange} 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="landmark">Landmark</label>
+              <input 
+                id="landmark"
+                name="landmark" 
+                type="text"
+                placeholder="E.g. Near Apollo Hospital" 
+                value={formData.landmark} 
+                onChange={handleChange} 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="pincode">Pincode <span className="required">*</span></label>
+              <input 
+                id="pincode"
+                name="pincode" 
+                type="text"
+                placeholder="6-digit pincode" 
+                value={formData.pincode} 
+                onChange={handleChange} 
+                required 
+                maxLength="6" 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="city">Town/City <span className="required">*</span></label>
+              <input 
+                id="city"
+                name="city" 
+                type="text"
+                placeholder="Enter your city" 
+                value={formData.city} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            
+            <div className="form-field">
+              <label htmlFor="state">State <span className="required">*</span></label>
+              <input 
+                id="state"
+                name="state" 
+                type="text"
+                placeholder="Enter your state" 
+                value={formData.state} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            
+            <div className="checkbox-wrapper">
+              <label>
+                <input 
+                  name="isDefault" 
+                  type="checkbox" 
+                  checked={formData.isDefault} 
+                  onChange={handleChange} 
+                />
+                Make this my default address
+              </label>
+            </div>
             
             <div className="button-row">
               <button type="submit">
                 {editingId ? 'Update Address' : 'Save Address'}
               </button>
-              <button type="button" onClick={switchToListView} style={{marginLeft: '1rem', background: '#6c757d'}}>
+              <button type="button" onClick={switchToListView} style={{ background: '#6c757d'}}>
                 Cancel
               </button>
             </div>

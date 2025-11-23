@@ -218,3 +218,214 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+/* ====================== */
+/* RESPONSIVE DESIGN      */
+/* ====================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .account-page-wrapper {
+        gap: 30px;
+        padding: 15px;
+    }
+
+    .account-header {
+        font-size: 2rem;
+    }
+
+    .info-label {
+        width: 180px;
+        font-size: 0.9rem;
+    }
+
+    .user-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .user-greeting-title {
+        font-size: 1.3rem;
+    }
+}
+
+/* Tablet and below (< 768px) - Stack sidebar below main content */
+@media (max-width: 768px) {
+    .account-page-wrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        padding: 15px;
+    }
+
+    .account-sidebar {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .account-header {
+        font-size: 1.8rem;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .info-box-header {
+        padding: 12px 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .info-box-header-title {
+        font-size: 1rem;
+    }
+
+    .info-row {
+        padding: 15px 20px;
+    }
+
+    .info-label {
+        width: 150px;
+        font-size: 0.85rem;
+    }
+
+    .info-value {
+        font-size: 0.9rem;
+    }
+
+    .delete-text {
+        max-width: 55%;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile (< 576px) */
+@media (max-width: 576px) {
+    .account-page-wrapper {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .account-header {
+        font-size: 1.5rem;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .info-box {
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .info-box-header {
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .info-box-header-title {
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+    .edit-buttons-container {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .edit-btn {
+        align-self: flex-end;
+    }
+
+    /* Stack label and value vertically on mobile */
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 8px;
+    }
+
+    .info-label {
+        width: 100%;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #888;
+    }
+
+    .info-value {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .info-input {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    /* Delete section adjustments */
+    .delete-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .delete-text {
+        max-width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .delete-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+
+    /* User greeting adjustments */
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .user-avatar svg {
+        width: 50px;
+        height: 50px;
+    }
+
+    .user-greeting-title {
+        font-size: 1.2rem;
+    }
+
+    /* Button adjustments for better mobile touch targets */
+    .edit-btn, .save-btn, .cancel-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        min-height: 36px;
+    }
+
+    .account-message {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small mobile (< 400px) */
+@media (max-width: 400px) {
+    .account-header {
+        font-size: 1.3rem;
+    }
+
+    .info-box-header-title {
+        font-size: 0.9rem;
+    }
+
+    .edit-btn, .save-btn, .cancel-btn {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    .user-greeting-title {
+        font-size: 1.1rem;
+    }
+}
+

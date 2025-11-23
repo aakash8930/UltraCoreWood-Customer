@@ -1,6 +1,4 @@
 
-
-
 /// src/pages/ProductCard.js
 import ReactDOM from "react-dom"; // <--- NEW IMPORT
 import React, { useState } from "react";

@@ -79,9 +79,12 @@ export default function OrderDetailsPage() {
 
   return (
     <div className="order-details-page">
+<<<<<<< HEAD
       <button className="back-btn" onClick={() => navigate('/account', { state: { defaultTab: 'orders' } })}>
         ← Back to Orders
       </button>
+=======
+>>>>>>> b39c67e98b7e86a220dc51c9f50c7ba9421bcae3
 
       <h1 style={{ marginBottom: '1rem' }}>Order Details</h1>
 
@@ -115,6 +118,7 @@ export default function OrderDetailsPage() {
       <div className="order-products">
         <h3>Items</h3>
         <div className="products-grid">
+<<<<<<< HEAD
           {order.products.filter(item => item.product).map(({ product, quantity }) => (
             <div key={product._id} className="product-cell">
               <img
@@ -133,6 +137,36 @@ export default function OrderDetailsPage() {
               )}
             </div>
           ))}
+=======
+          {order.products.filter(item => item.product).map(({ product, quantity }) => {
+            // Handle product images (base64 encoded)
+            let imageSrc = '/images/placeholder.jpg';
+            if (product.images) {
+              const firstImageKey = Object.keys(product.images).find(key => product.images[key]?.data);
+              if (firstImageKey) {
+                const { contentType, data } = product.images[firstImageKey];
+                imageSrc = `data:${contentType};base64,${data}`;
+              }
+            }
+
+            return (
+              <div key={product._id} className="product-cell">
+                <img
+                  src={imageSrc}
+                  alt={product.name}
+                />
+                <p>{product.name}</p>
+                <p>Qty: {quantity}</p>
+                <p>₹{(product.price * quantity).toLocaleString()}</p>
+
+                {/* **REPLACED** with the new component */}
+                {order.status === 'Delivered' && (
+                  <ProductReview productId={product._id} />
+                )}
+              </div>
+            );
+          })}
+>>>>>>> b39c67e98b7e86a220dc51c9f50c7ba9421bcae3
         </div>
       </div>
 
