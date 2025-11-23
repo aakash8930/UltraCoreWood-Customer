@@ -81,3 +81,7 @@ v 1.1.6
 
 - v 1.1.8
 - Left sidebar remove
+
+- v 1.1.9
+- orderpage and order details page image fix
+- checkout page responsiveness and cash on delivery error fix

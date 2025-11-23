@@ -1,17 +1,17 @@
-// src/pages/OrderDetailsPage.js
+// src/pages/OrderDetailsPage.jsx
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth'; // Use the auth hook
+import { useAuth } from '../hooks/useAuth';
 import { getOrder, updateOrderStatus } from '../api/orderApi';
 import axios from 'axios';
-import ProductReview from './ProductReview'; // Import the new component
+import ProductReview from './ProductReview'; 
 import '../css/OrderDetailsPage.css';
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth(); // Get user from hook
+  const { user } = useAuth();
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ export default function OrderDetailsPage() {
   const [actionLoading, setActionLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) return; // Wait for user to be authenticated
+    if (!user) return; 
 
     (async () => {
       try {
@@ -39,89 +39,95 @@ export default function OrderDetailsPage() {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
     setActionLoading(true);
     try {
-        const token = await user.getIdToken();
-        const updated = await updateOrderStatus(token, id, 'Cancelled');
-        setOrder(updated);
+      const token = await user.getIdToken();
+      // Update status to Cancelled
+      const updated = await updateOrderStatus(token, order._id || order.orderId, 'Cancelled');
+      setOrder(updated);
     } catch (err) {
-        alert(err.message || 'Unable to cancel order');
+      alert(err.message);
     } finally {
-        setActionLoading(false);
+      setActionLoading(false);
     }
   };
 
   const handleDownloadInvoice = async () => {
     try {
         const token = await user.getIdToken();
-        const res = await axios.get(
-            `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/orders/${id}/invoice`,
-            {
+        const res = await axios.get(`http://localhost:8000/api/orders/${order._id}/invoice`, {
             headers: { Authorization: `Bearer ${token}` },
             responseType: 'blob',
-            }
-        );
-        const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+        });
+        const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `invoice_${order.orderId}.pdf`);
+        link.setAttribute('download', `Invoice-${order.orderId}.pdf`);
         document.body.appendChild(link);
         link.click();
         link.remove();
     } catch (err) {
-        alert('Failed to download invoice');
-        console.error(err);
+        console.error('Download invoice failed', err);
+        alert('Could not download invoice');
     }
   };
 
-  if (loading) return <p className="center">Loading order details…</p>;
-  if (error) return <p className="center error">{error}</p>;
-  if (!order) return <p className="center">Order not found.</p>;
+  if (loading) return <div className="order-details-page">Loading...</div>;
+  if (error) return <div className="order-details-page error">{error}</div>;
+  if (!order) return <div className="order-details-page">Order not found.</div>;
 
-
-  const canCancel = order.status !== 'Cancelled' && order.status !== 'Delivered';
-  const canDownload = order.status === 'Delivered';
+  const canCancel = order.status === 'Pending' || order.status === 'Confirmed';
+  const canDownload = order.status !== 'Cancelled';
 
   return (
     <div className="order-details-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
+      <button className="back-btn" onClick={() => navigate('/account', { state: { defaultTab: 'orders' } })}>
         ← Back to Orders
       </button>
 
+      <h1 style={{ marginBottom: '1rem' }}>Order Details</h1>
+
       <div className="order-info">
-        <h2>Order #{order.orderId}</h2>
-        <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}</p>
-        <p><strong>Status:</strong> <span className={`status status-${order.status.toLowerCase()}`}>{order.status}</span></p>
+        <p><strong>Order ID:</strong> {order.orderId}</p>
+        <p><strong>Placed On:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+        <p>
+          <strong>Status:</strong>{' '}
+          <span className={`status ${'status-' + order.status.toLowerCase()}`}>
+            {order.status}
+          </span>
+        </p>
         <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
       </div>
 
       <div className="payment-breakdown">
-        <h3>Payment Breakdown</h3>
-        <div><span>Items Total:</span><span>₹{order.paymentBreakdown.itemsTotal.toLocaleString()}</span></div>
-        <div><span>Tax:</span><span>₹{order.paymentBreakdown.tax.toLocaleString()}</span></div>
-        <div><span>Shipping:</span><span>₹{order.paymentBreakdown.shipping.toLocaleString()}</span></div>
+        <h3>Payment Summary</h3>
+        <div><span>Subtotal</span> <span>₹{order.paymentBreakdown.itemsTotal}</span></div>
+        <div><span>Tax</span> <span>₹{order.paymentBreakdown.tax}</span></div>
+        <div><span>Shipping</span> <span>₹{order.paymentBreakdown.shipping}</span></div>
         {order.paymentBreakdown.discount > 0 && (
-          <div><span>Discount:</span><span>-₹{order.paymentBreakdown.discount.toLocaleString()}</span></div>
+          <div style={{ color: 'green' }}>
+            <span>Discount</span> <span>-₹{order.paymentBreakdown.discount}</span>
+          </div>
         )}
-        <hr />
         <div className="grand-total">
-          <strong>Total:</strong>
-          <strong>₹{order.paymentBreakdown.total.toLocaleString()}</strong>
+          <strong>Total</strong> <strong>₹{order.paymentBreakdown.total}</strong>
         </div>
       </div>
 
       <div className="order-products">
-        <h3>Products</h3>
+        <h3>Items</h3>
         <div className="products-grid">
           {order.products.filter(item => item.product).map(({ product, quantity }) => (
             <div key={product._id} className="product-cell">
               <img
+                // Use the imageUrl provided by the backend
                 src={product.imageUrl || '/images/placeholder.jpg'}
                 alt={product.name}
+                onError={(e) => (e.target.src = "/images/placeholder.jpg")}
               />
-              <p>{product.name}</p>
+              <p className='product-name'>{product.name}</p>
               <p>Qty: {quantity}</p>
               <p>₹{(product.price * quantity).toLocaleString()}</p>
 
-              {/* **REPLACED** with the new component */}
+              {/* Allow review if order is delivered */}
               {order.status === 'Delivered' && (
                 <ProductReview productId={product._id} />
               )}

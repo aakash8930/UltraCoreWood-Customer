@@ -1,4 +1,4 @@
-// src/pages/OrdersPage.js
+// src/pages/OrdersPage.jsx
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -36,76 +36,65 @@ export default function OrdersPage() {
     loadOrders();
   }, [user]);
 
-  const handleBuyAgain = (orderId) => {
-    setToastMessage(`Feature simulation: Items from order ${orderId} would be added to your cart!`);
-    setTimeout(() => setToastMessage(''), 3000);
-  };
-
-  if (loading) return <p className="center">Loading your orders…</p>;
-  if (error) return <p className="center error">{error}</p>;
-  if (!orders.length) return <p className="center">You have no orders yet.</p>;
-
-  // Helper function to render a single product item
-  const renderProductItem = (product, quantity) => {
-    let imageSrc = '/images/placeholder.jpg';
-    if (product.images) {
-      const firstImageKey = Object.keys(product.images).find(key => product.images[key]?.data);
-      if (firstImageKey) {
-        const { contentType, data } = product.images[firstImageKey];
-        imageSrc = `data:${contentType};base64,${data}`;
-      }
+  // Helper to handle image source safely
+  const getProductImage = (product) => {
+    if (product && product.imageUrl) {
+      return product.imageUrl;
     }
-    // Calculate discounted price for a single item
-    const discountedPrice = (product.price * (100 - (product.discount || 0))) / 100;
-
-    return { imageSrc, discountedPrice };
+    return "/images/placeholder.jpg"; // Fallback image
   };
+
+  if (loading) return <div className="orders-container">Loading orders...</div>;
+  if (error) return <div className="orders-container error">{error}</div>;
+  if (!orders.length) return <div className="orders-container">You have no orders yet.</div>;
 
   return (
     <>
       {toastMessage && <div className="order-toast">{toastMessage}</div>}
-
+      
       <div className="orders-container">
-        <h1>Your Orders</h1>
-        {orders.map(order => (
-          <div key={order._id} className="order-card">
-            <div className="order-card-header">
-              <div className="order-header-info">
-                <div><strong>Order ID:</strong> {order.orderId}</div>
-                <div><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</div>
-                <div>
-                  <strong>Status:</strong>{' '}
-                  <span className={`status status-${order.status.toLowerCase()}`}>{order.status}</span>
-                </div>
-                <div className="order-total">
-                  <strong>Total:</strong> {formatPrice(order.paymentBreakdown.total)}
-                </div>
+        <h1 className="page-title">My Orders</h1>
+        
+        {orders.map((order) => (
+          <div key={order._id || order.orderId} className="order-card">
+            {/* Order Header */}
+            <div className="order-header">
+              <div className="order-meta">
+                <span className="order-id">Order #{order.orderId}</span>
+                <span className="order-date">
+                  Placed on {new Date(order.createdAt).toLocaleDateString()}
+                </span>
               </div>
-              <div className="order-header-actions">
-                <button className="buy-again-btn" onClick={() => handleBuyAgain(order.orderId)}>
-                  Buy Again
-                </button>
-                <Link to={`/orders/${order._id}`} className="view-order-btn">
+              <div className="order-actions-header">
+                <span className={`status-badge status-${order.status.toLowerCase()}`}>
+                  {order.status}
+                </span>
+                <Link to={`/orders/${order._id || order.orderId}`} className="btn-view-details">
                   View Details
                 </Link>
               </div>
             </div>
 
-            {/* --- UI IMPROVEMENT: Conditional Layout Logic --- */}
-            {order.products.length < 3 ? (
-              // Use LIST VIEW for 1 or 2 products
-              // Find this section in your OrdersPage.js file
-
-              // Use LIST VIEW for 1 or 2 products
-              <div className="order-products-list">
+            {/* Order Items Preview */}
+            {order.products.length <= 2 ? (
+              // LIST VIEW for few products
+              <div className="order-items-list">
                 {order.products.filter(item => item.product).map(({ product, quantity }) => {
-                  const { imageSrc, discountedPrice } = renderProductItem(product, quantity);
+                  // Calculate price accounting for discount if present, otherwise raw price
+                  const price = product.price || 0;
+                  const discount = product.discount || 0;
+                  const discountedPrice = Math.floor(price * (1 - discount / 100));
+
                   return (
                     <div key={product._id} className="list-item">
-                      <img src={imageSrc} alt={product.name} className="list-item-image" />
-                      {/* --- CHANGE IS HERE --- */}
-                      <div className="list-item-details">
-                        <div className="list-item-info">
+                      <img
+                        src={getProductImage(product)}
+                        alt={product.name}
+                        className="list-item-image"
+                        onError={(e) => (e.target.src = "/images/placeholder.jpg")}
+                      />
+                      <div className="list-item-info">
+                        <div className="item-header">
                           <span className="list-item-name">{product.name}</span>
                           <span className="list-item-qty">Qty: {quantity}</span>
                         </div>
@@ -116,14 +105,12 @@ export default function OrdersPage() {
                 })}
               </div>
             ) : (
-              // Use GRID VIEW for 3 or more products
+              // GRID VIEW for 3 or more products
               <div className="order-products-grid">
-                {order.products.filter(item => item.product).map(({ product, quantity }) => {
-                  const { imageSrc } = renderProductItem(product, quantity);
-                  return (
+                {order.products.filter(item => item.product).map(({ product, quantity }) => (
                     <div key={product._id} className="product-cell">
                       <img
-                        src={imageSrc}
+                        src={getProductImage(product)}
                         alt={product.name}
                         className="product-thumb"
                         onError={(e) => (e.target.src = "/images/placeholder.jpg")}
@@ -133,8 +120,8 @@ export default function OrdersPage() {
                         <p className="product-qty">Qty: {quantity}</p>
                       </div>
                     </div>
-                  );
-                })}
+                  )
+                )}
               </div>
             )}
           </div>
