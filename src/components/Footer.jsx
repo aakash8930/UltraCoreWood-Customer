@@ -124,11 +124,6 @@ const Footer = () => {
             <FontAwesomeIcon icon={faXTwitter} className="social-icon" />
           </div>
         </div>
-
-        <div className="footer-logo-area">
-          <img src="/images/logo_black.png" alt="Furniture Logo" className="footer-logo" />
-          <h3>FURNITURE</h3>
-        </div>
       </div>
     </footer>
   );

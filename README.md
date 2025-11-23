@@ -79,3 +79,5 @@ v 1.1.6
 -converted into VITE
 - banner image resize fix
 
+-v 1.1.8
+- home page - new arrival  done
