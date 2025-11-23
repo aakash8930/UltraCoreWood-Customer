@@ -1,33 +1,35 @@
-//  src/pages/AccountDashboard.js
+// src/pages/AccountDashboard.js
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import AddressBook from './AddressBook';
 import OrdersPage from './OrdersPage';
 import MyAccount from './MyAccount';
-import { useLocation } from 'react-router-dom';
-import '../css/AddressBook.css';
+import '../css/AddressBook.css'; 
 
-// This component handles account views without sidebar
 export default function AccountDashboard() {
   const location = useLocation();
   const [mainView, setMainView] = useState('account');
-  const [addressView, setAddressView] = useState('list');
+  const [addressView, setAddressView] = useState('list'); // 'list' or 'form'
 
-  // Handle navigation from URL state (from dropdown clicks)
+  // Listen for changes coming from Navbar clicks
   useEffect(() => {
     if (location.state?.defaultTab) {
       const tab = location.state.defaultTab;
-      setMainView(tab);
       
-      // Set address view based on specific address action
       if (tab === 'savedAddresses') {
+        setMainView('address');
         setAddressView('list');
       } else if (tab === 'addAddress') {
+        setMainView('address');
         setAddressView('form');
+      } else {
+        setMainView(tab);
       }
     }
   }, [location.state]);
 
+  // Handle internal switching within AddressBook (e.g., clicking "Add Address" inside the list)
   const handleAddressViewSwitch = (subView) => {
     setAddressView(subView);
   };
@@ -37,9 +39,12 @@ export default function AccountDashboard() {
       case 'orders':
         return <OrdersPage />;
       case 'address':
-      case 'savedAddresses':
-      case 'addAddress':
-        return <AddressBook initialView={addressView} onSwitchView={handleAddressViewSwitch} />;
+        return (
+          <AddressBook 
+            initialView={addressView} 
+            onSwitchView={handleAddressViewSwitch} 
+          />
+        );
       case 'account':
       default:
         return <MyAccount />;
