@@ -96,7 +96,7 @@ body {
 /* --- ESSENTIALS --- */
 .essentials-section {
   background-color: #000000;
-  padding: 50px 0;
+  padding: 60px 20px;
   text-align: center;
 }
 
@@ -109,9 +109,8 @@ body {
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
-  margin-bottom: 50px;
-  position: relative;
-  right: 36vw;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .essentials-grid {
@@ -150,7 +149,8 @@ body {
 }
 
 .comfort-section {
-  margin-top: 3vw;
+  margin-top: 50px;
+  padding: 0 20px;
 }
 
 .comfort-section h2 {
@@ -160,23 +160,105 @@ body {
   font-optical-sizing: auto;
   font-style: normal;
   font-size: 2rem;
+  margin: 20px 0;
 }
 
 .underline1 {
+  width: 100%;
+  max-width: 600px;
+  margin: 15px auto;
+  border: none;
+  height: 1px;
+  background-color: #666;
+}
+
+/* ================== NEW ARRIVALS CAROUSEL ================== */
+.new-arrivals-section {
+  background-color: #000;
+  padding: 60px 20px;
+}
+
+.section-title {
+  color: white;
+  font-size: 35px;
+  font-weight: 100;
+  font-style: normal;
+  letter-spacing: 2px;
+  font-family: "Cormorant Garamond", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.carousel-slider-wrapper {
   position: relative;
-  /* left: 455px; */
-  width: 600px;
-  top: 7px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px; /* Space for arrows */
+}
+
+/* Homepage Product Slider Specific Styles */
+.homepage-product-slider {
+  position: relative;
+}
+
+.homepage-product-slider .slick-slide {
+  padding: 0 15px;
+}
+
+.homepage-product-slide {
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Override ProductCard styles when in carousel context */
+.homepage-product-slider .product-card {
+  width: 100% !important; /* Take full width of slide */
+  max-width: 280px; /* Set a reasonable max width */
+  margin-bottom: 0 !important;
+  flex-shrink: 0;
+}
+
+/* Ensure proper card proportions in carousel */
+.homepage-product-slider .image-section {
+  height: 220px !important;
+}
+
+.homepage-product-slider .product-info {
+  padding: 1rem 1rem 0.6rem !important;
+}
+
+.homepage-product-slider .card-footer {
+  padding: 0.5rem 1rem 1rem !important;
+}
+
+/* Slick carousel dots styling */
+.carousel-slider-wrapper .slick-dots {
+  bottom: -40px;
+}
+.carousel-slider-wrapper .slick-dots li button:before {
+  color: #777;
+  font-size: 12px;
+}
+.carousel-slider-wrapper .slick-dots li.slick-active button:before {
+  color: white;
 }
 
 /* --- TOP SELECTIONS --- */
+/* --- LEGACY CAROUSEL STYLES (for backward compatibility) --- */
+.top-button-section {
+  text-align: center;
+}
+
 .carousel-slider-wrapper {
   background-color: #000;
   padding: 30px 0px;
   margin: 0;
   overflow: hidden;
   box-sizing: border-box;
-  height: 300px;
+  min-height: 300px;
 }
 
 .carousel-slider-wrapper .slick-slide {
@@ -273,17 +355,14 @@ body {
 /* --- WHY US --- */
 .whyus-section {
   color: #fff;
-  padding: 60px 5%;
-  /* text-align: center; */
+  padding: 60px 20px;
 }
 
 .whyus-btn {
-  position: relative;
-  left: 38vw;
   background-color: #000;
   color: white;
   padding: 1vw 4.5vw;
-  margin-bottom: 4vw;
+  margin: 0 auto 4vw auto;
   font-size: 16px;
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
@@ -291,50 +370,56 @@ body {
   font-weight: 900;
   letter-spacing: 1.5px;
   cursor: pointer;
+  display: block;
 }
 
 .whyus-container {
   background-color: #111;
-  width: 1200px;
-  height: 650px;
-  margin-left: 80px;
+  max-width: 1200px;
+  width: 90%;
+  min-height: 500px;
+  margin: 0 auto;
+  padding: 40px;
+  box-sizing: border-box;
 }
 
 .whyus-content {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-
+  align-items: flex-start;
+  gap: 30px;
 }
 
 .whyus-description {
+  flex: 1;
+  min-width: 300px;
   text-align: left;
   font-size: 14px;
   line-height: 1.6;
 }
 
 .whyus-description p {
-  width: 520px;
-  margin-left: 120px;
-  margin-top: 85px;
+  max-width: 100%;
+  margin: 0;
   font-family: "Cormorant Garamond", serif;
   font-optical-sizing: auto;
   font-style: normal;
   letter-spacing: 1.5px;
   font-size: 16px;
-
 }
 
 .whyus-image {
-  margin: 0 auto auto 75px;
+  flex-shrink: 0;
+  margin: 0;
 }
 
 .whyus-image img {
-  position: relative;
-  width: 330px;
+  width: 100%;
+  max-width: 330px;
   border-radius: 8px;
-  height: 195px;
-  top: 5vw;
-  left: 25px;
+  height: auto;
+  display: block;
 }
 
 .whyus-features {
@@ -342,18 +427,15 @@ body {
   flex-direction: column;
   justify-content: space-between;
   padding: 30px 0;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  width: 50vw;
+  width: 100%;
 }
 
 .whyus_column {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 340px;
-  height: auto;
-  margin-left: 110px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 30px;
 }
 
 .feature {
@@ -376,13 +458,21 @@ body {
 @media (min-width: 1441px) {
   .banner-slide {
     background: black;
-
   }
-
 
   .banner-text {
     font-size: 5.5rem;
     max-width: 650px;
+  }
+
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 80px 40px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 60px;
   }
 }
 
@@ -397,6 +487,16 @@ body {
     font-size: 4.8rem;
     max-width: 550px;
   }
+
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 70px 30px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 50px;
+  }
 }
 
 /* --- SMALL LAPTOP/LARGE TABLET (769px to 1024px) --- */
@@ -409,6 +509,16 @@ body {
     font-size: 4rem;
     max-width: 450px;
     padding: 18px 25px;
+  }
+
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 60px 25px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 40px;
   }
 }
 
@@ -455,12 +565,9 @@ body {
     width: 100%;
   }
 
-  /* .banner-slide {
-    height: 550px;
-  } */
-   .banner-image{
+  .banner-image{
     left: 50px;
-   }
+  }
 
   .banner-text {
     text-align: right;
@@ -470,29 +577,33 @@ body {
     padding: 15px 20px;
   }
 
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 50px 20px;
+  }
+
   .essentials-grid {
     grid-template-columns: repeat(2, 1fr);
-    width: 95%;
+    width: 100%;
+    gap: 20px;
   }
 
   .essentials-title {
-    right: 0;
-    text-align: center;
     margin-bottom: 30px;
   }
 
   .comfort-section {
-    margin-top: 60px;
+    margin-top: 40px;
+    padding: 0 15px;
   }
 
   .underline1 {
-    left: 90px;
-
+    max-width: 400px;
   }
 
-  .top-selections-btn {
-    margin: 3vw auto;
-    display: block;
+  .carousel-slider-wrapper {
+    padding: 0 30px;
   }
 
   /* 
@@ -505,53 +616,51 @@ body {
   }
 
   .whyus-btn {
-    left: 0;
-    display: block;
     margin: 0 auto 3vw;
+    padding: 12px 30px;
   }
 
   .whyus-container {
-    width: 100%;
-    margin: 0 auto;
-    height: auto;
+    width: 95%;
+    padding: 30px;
   }
 
   .whyus-content {
-    width: 640px;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .whyus-description {
+    width: 100%;
   }
 
   .whyus-description p {
-    width: 60%;
-    margin: 60px 0 0 50px;
+    width: 100%;
+    margin: 0;
+    font-size: 15px;
   }
 
   .whyus-image {
-    margin: 0;
+    align-self: center;
+    margin: 20px 0;
   }
 
   .whyus-image img {
-    width: 150px;
-    height: auto;
-    margin: 20px auto;
-    display: block;
-    position: static;
+    width: 250px;
+    max-width: 100%;
   }
 
   .whyus-features {
-    width: 60%;
     margin: 20px 0;
   }
 
   .whyus_column {
-    width: 100%;
-    margin-left: 50px;
+    margin: 0;
   }
 
   .underline2 {
-    width: 325px;
-    margin: 10px 0;
+    width: 100%;
+    margin: 15px 0;
   }
 }
 
@@ -571,7 +680,7 @@ body {
 
   .banner-slide {
     height: 380px;
-     background: black;
+    background: black;
   }
 
   .banner-text {
@@ -595,9 +704,16 @@ body {
     display: none;
   }
 
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 40px 15px;
+  }
+
   .essentials-grid {
     grid-template-columns: repeat(2, 1fr);
-    width: 90%;
+    width: 100%;
+    gap: 15px;
   }
 
   .essentials-item {
@@ -605,51 +721,49 @@ body {
   }
 
   .essentials-overlay {
-    /* background: transparent; */
     font-size: 12px;
     font-weight: 900;
+    padding: 4px 8px;
   }
 
   .essentials-title {
-    right: 0;
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    font-size: 28px;
   }
 
   .comfort-section {
-    margin-top: 50px;
+    margin-top: 30px;
+    padding: 0 10px;
   }
 
   .comfort-section h2 {
-    color: white;
-    font-weight: 100;
-    font-family: "Cormorant Garamond", serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-    font-size: 17px;
+    font-size: 18px;
+    margin: 15px 0;
   }
 
   .underline1 {
-    position: relative;
-    width: 200px;
-    left: 100px;
-    top: 0px;
+    max-width: 250px;
+  }
+
+  .section-title {
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 20px;
   }
 
   .product-card img {
     height: 140px;
   }
 
-  .top-selections-btn {
-    margin: 3vw auto;
-    display: block;
-    padding: 10px 20px;
-    font-size: 14px;
+  /* Hide arrows on mobile banner and show dots for product carousel */
+  .banner-slider .custom-arrow { 
+    display: none; 
   }
 
   .whyus-btn {
-    left: 0;
-    display: block;
     margin: 0 auto 2vw;
     padding: 10px 20px;
     font-size: 14px;
@@ -657,49 +771,54 @@ body {
 
   .whyus-container {
     width: 95%;
-    height: auto;
-    margin: 0 auto;
+    padding: 20px;
   }
 
   .whyus-content {
     flex-direction: column;
+    gap: 20px;
+  }
+
+  .whyus-description {
+    width: 100%;
   }
 
   .whyus-description p {
-    width: 90%;
-    margin: 40px auto 0 auto;
+    width: 100%;
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
   }
 
   .whyus-image {
-    margin: 0;
+    align-self: center;
+    margin: 20px 0;
   }
 
   .whyus-image img {
-    width: 300px;
-    margin: 0;
+    width: 100%;
+    max-width: 280px;
   }
 
   .whyus-features {
-    width: 75%;
-    margin-left: 20px;
-  }
-
-  .feature {
-    font-size: 18px;
-
-  }
-
-  .whyus_column {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 400px;
+    width: 100%;
     margin: 0;
   }
 
+  .feature {
+    font-size: 16px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .whyus_column {
+    margin: 0;
+    width: 100%;
+  }
+
   .underline2 {
-    width: 90%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 15px 0;
   }
 
 }
@@ -729,6 +848,169 @@ body {
     max-width: 90%;
     letter-spacing: 1px;
     bottom: 5%;
+  }
+}
+
+/* Extra small devices (392px and below) - Fix image responsiveness */
+@media (max-width: 392px) {
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 30px 10px;
+  }
+
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .essentials-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .comfort-section h2 {
+    font-size: 16px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 15px;
+  }
+
+  .whyus-container {
+    width: 98%;
+    padding: 15px;
+  }
+
+  .whyus-description p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .whyus-image img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+  }
+
+  .feature {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .whyus-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Very small devices (360px and below) - Further optimization */
+@media (max-width: 360px) {
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 25px 8px;
+  }
+
+  .section-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .essentials-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .comfort-section h2 {
+    font-size: 15px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 12px;
+  }
+
+  .whyus-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .whyus-description p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .whyus-image img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+
+  .feature {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .whyus-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Ultra small devices (300px and below) - Maximum compression */
+@media (max-width: 300px) {
+  .essentials-section,
+  .new-arrivals-section,
+  .whyus-section {
+    padding: 20px 5px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .essentials-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .comfort-section h2 {
+    font-size: 14px;
+  }
+
+  .carousel-slider-wrapper {
+    padding: 0 8px;
+  }
+
+  .whyus-container {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .whyus-description p {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .whyus-image img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+  }
+
+  .feature {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .whyus-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .underline2 {
+    width: 95%;
   }
 }
 

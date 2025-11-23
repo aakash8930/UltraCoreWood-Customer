@@ -10,6 +10,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../css/HomePage.css';
 import { getAllProducts } from '../api/productApi';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import ProductCard from './ProductCard';
 
 const essentials = [
   { title: "COFFEE TABLE", image: "/images/coffee_table.jpg" },
@@ -57,9 +58,9 @@ const productSliderSettings = {
   slidesToShow: 4,
   slidesToScroll: 1,
   responsive: [
-    { breakpoint: 1024, settings: { slidesToShow: 3 } },
-    { breakpoint: 768, settings: { slidesToShow: 2 } },
-    { breakpoint: 480, settings: { slidesToShow: 1 } },
+    { breakpoint: 1280, settings: { slidesToShow: 3 } },
+    { breakpoint: 900, settings: { slidesToShow: 2 } },
+    { breakpoint: 600, settings: { slidesToShow: 1, arrows: false, dots: true } },
   ],
 };
 
@@ -71,11 +72,13 @@ const baseBannerSettings = {
   autoplaySpeed: 3000,
 };
 
-const HomePage = () => {
+const HomePage = ({ openCart }) => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [loadingArrivals, setLoadingArrivals] = useState(true);
 
   useEffect(() => {
     const loadBanners = async () => {
@@ -87,6 +90,21 @@ const HomePage = () => {
       }
     };
     loadBanners();
+  }, []);
+
+  useEffect(() => {
+    const loadNewArrivals = async () => {
+      try {
+        setLoadingArrivals(true);
+        const data = await getAllProducts({ sort: 'newest' });
+        setNewArrivals(Array.isArray(data) ? data.slice(0, 8) : []);
+      } catch (err) {
+        console.error('Failed to load new arrivals:', err);
+      } finally {
+        setLoadingArrivals(false);
+      }
+    };
+    loadNewArrivals();
   }, []);
 
   useEffect(() => {
@@ -159,48 +177,60 @@ const HomePage = () => {
           ))}
         </div>
         <div className="comfort-section">
-          <hr className="underline1" />
+        
           <h2>CRAFTED COMFORT DELIVERED TO YOUR DOOR</h2>
-          <hr className="underline1" />
+        
         </div>
       </div>
 
-      {/* Top Selections */}
-      <div className="top-button-section">
-        <button className="top-selections-btn">TOP SELECTIONS</button>
-      </div>
-      <div className="carousel-slider-wrapper">
-        <Slider {...productSliderSettings}>
-          {products.map((item, i) => (
-            <div className="product-card" key={i}>
-              <img src={item.image} alt={item.name} />
-              <div className="product-text">
-                <h4>{item.name}</h4>
-                <p>{item.subtext}</p>
-              </div>
+      {/* New Arrivals */}
+      <div className="new-arrivals-section">
+        <h2 className="section-title">NEW ARRIVALS</h2>
+        <div className="carousel-slider-wrapper">
+          {loadingArrivals ? (
+            <p style={{ textAlign: "center", color: "var(--text-dark)" }}>
+              Loading new products…
+            </p>
+          ) : (
+            <div className="homepage-product-slider">
+              <Slider {...productSliderSettings}>
+                {(filteredProducts.length ? filteredProducts : newArrivals).map(
+                  (product) => (
+                    <div key={product._id || product.id} className="homepage-product-slide">
+                      <ProductCard
+                        product={product}
+                        openCart={openCart}
+                        isCarouselContext={true}
+                      />
+                    </div>
+                  )
+                )}
+              </Slider>
             </div>
-          ))}
-        </Slider>
+          )}
+        </div>
       </div>
 
       {/* Filtered Products */}
       {category && filteredProducts.length > 0 && (
         <>
-          <div className="top-button-section">
-            <button className="top-selections-btn">{category.toUpperCase()} PRODUCTS</button>
-          </div>
-          <div className="carousel-slider-wrapper">
-            <Slider {...productSliderSettings}>
-              {filteredProducts.map((item, i) => (
-                <div className="product-card" key={i}>
-                  <img src={item.image} alt={item.name} />
-                  <div className="product-text">
-                    <h4>{item.name}</h4>
-                    <p>{item.subtext}</p>
-                  </div>
-                </div>
-              ))}
-            </Slider>
+          <div className="new-arrivals-section">
+            <h2 className="section-title">{category.toUpperCase()} PRODUCTS</h2>
+            <div className="carousel-slider-wrapper">
+              <div className="homepage-product-slider">
+                <Slider {...productSliderSettings}>
+                  {filteredProducts.map((product, i) => (
+                    <div key={product._id || product.id || i} className="homepage-product-slide">
+                      <ProductCard
+                        product={product}
+                        openCart={openCart}
+                        isCarouselContext={true}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </div>
           </div>
         </>
       )}
@@ -223,9 +253,9 @@ const HomePage = () => {
           <div className='whyus_column'>
             <div className="whyus-features">
               <div className="feature">🚚 <span>Free Delivery and Returns</span></div>
-              <hr className="underline2" />
+             
               <div className="feature">🔁 <span>7 Day Return Policy</span></div>
-              <hr className="underline2" />
+             
             </div>
           </div>
         </div>

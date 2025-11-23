@@ -1,27 +1,33 @@
 //  src/pages/AccountDashboard.js
 
-import React, { useState } from 'react';
-import Sidebar from './Sidebar'; // We'll create this next
-import AddressBook from './pages/AddressBook';
-import OrdersPage from './pages/OrdersPage';
-import MyAccountInfo from './pages/MyAccountInfo'; // A placeholder for your main account details
+import React, { useState, useEffect } from 'react';
+import AddressBook from './AddressBook';
+import OrdersPage from './OrdersPage';
+import MyAccount from './MyAccount';
+import { useLocation } from 'react-router-dom';
+import '../css/AddressBook.css';
 
-// This component wraps your entire account section
+// This component handles account views without sidebar
 export default function AccountDashboard() {
-  // State to manage the main view: 'account', 'orders', or 'address'
+  const location = useLocation();
   const [mainView, setMainView] = useState('account');
-
-  // State to manage the sub-view within AddressBook: 'list' or 'form'
   const [addressView, setAddressView] = useState('list');
 
-  const handleNavigate = (view) => {
-    setMainView(view);
-    // When navigating to the address section, always default to the list view
-    if (view === 'address') {
-      setAddressView('list');
+  // Handle navigation from URL state (from dropdown clicks)
+  useEffect(() => {
+    if (location.state?.defaultTab) {
+      const tab = location.state.defaultTab;
+      setMainView(tab);
+      
+      // Set address view based on specific address action
+      if (tab === 'savedAddresses') {
+        setAddressView('list');
+      } else if (tab === 'addAddress') {
+        setAddressView('form');
+      }
     }
-  };
-  
+  }, [location.state]);
+
   const handleAddressViewSwitch = (subView) => {
     setAddressView(subView);
   };
@@ -31,22 +37,18 @@ export default function AccountDashboard() {
       case 'orders':
         return <OrdersPage />;
       case 'address':
-        // AddressBook's view is now controlled by the 'addressView' state
+      case 'savedAddresses':
+      case 'addAddress':
         return <AddressBook initialView={addressView} onSwitchView={handleAddressViewSwitch} />;
       case 'account':
       default:
-        return <MyAccountInfo />;
+        return <MyAccount />;
     }
   };
 
   return (
-    <div className="address-page-wrapper">
-      <Sidebar
-        activeView={mainView}
-        onNavigate={handleNavigate}
-        onAddressSubNavigate={handleAddressViewSwitch}
-      />
-      <div className="address-content">
+    <div className="account-dashboard-wrapper">
+      <div className="account-content">
         {renderContent()}
       </div>
     </div>

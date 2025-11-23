@@ -80,10 +80,11 @@ const Navbar = ({ openCart }) => {
               <div className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
-                    {/* --- FIX: Added onClick to each link to close the dropdown --- */}
-                    <Link to="/account" state={{ defaultTab: 'address' }} onClick={() => setShowDropdown(false)}>Address</Link>
+                    {/* --- Updated with new address options --- */}
                     <Link to="/account" state={{ defaultTab: 'account' }} onClick={() => setShowDropdown(false)}>My Account</Link>
                     <Link to="/account" state={{ defaultTab: 'orders' }} onClick={() => setShowDropdown(false)}>Orders</Link>
+                    <Link to="/account" state={{ defaultTab: 'savedAddresses' }} onClick={() => setShowDropdown(false)}>Saved Addresses</Link>
+                    <Link to="/account" state={{ defaultTab: 'addAddress' }} onClick={() => setShowDropdown(false)}>Add New Address</Link>
                     <button onClick={handleLogout}>Logout</button>
                   </>
                 ) : (

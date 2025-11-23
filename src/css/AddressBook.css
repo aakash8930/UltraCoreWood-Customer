@@ -1,21 +1,92 @@
 /* // src/css/AddressBook.css */
 
+/* Simplified Account Dashboard without sidebar */
+.account-dashboard-wrapper {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9f9;
+  padding: 40px 20px;
+}
+
+.account-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+}
+
+.mobile-menu-toggle span {
+  width: 100%;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.mobile-menu-toggle.active span:first-child {
+  transform: rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+/* Mobile Overlay */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
 .address-page-wrapper {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: #f2f2f2;
-  min-height: 120vh;
+  flex-direction: row;
 }
 
 .address-sidebar {
-  width: 250px;
+  width: 280px;
+  min-width: 280px;
   background-color: #000;
   color: white;
   display: flex;
   flex-direction: column;
   padding: 30px 20px;
-  margin-top: 1px;
+  position: sticky;
+  top: 0;
+  height: fit-content;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 .drop_address {
   display: inline-block;
@@ -90,6 +161,9 @@
   padding: 20px 40px;
   overflow-y: auto;
   background-color: #f9f9f9;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 h2.Heading {
@@ -114,7 +188,7 @@ h2.Heading {
 
 .address-form {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 25px;
   margin-bottom: 30px;
   background: #ffffff;
@@ -122,6 +196,8 @@ h2.Heading {
   border-radius: 16px;
   border: 1px solid #EAEAEA;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* --- Input Field Styles --- */
@@ -227,9 +303,10 @@ h2.Heading {
 
 .address-list {
   display: grid;
-  /* --- MODIFIED: Enforce a strict 2-column layout --- */
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .address-card {
@@ -314,4 +391,328 @@ h2.Heading {
 .action-button.delete:hover {
   color: #D93025;
   background-color: #FDE8E8;
+}
+
+/* ================================================================== */
+/* == RESPONSIVE DESIGN                                             == */
+/* ================================================================== */
+
+/* Large Desktop (1441px and above) */
+@media (min-width: 1441px) {
+  .address-content {
+    padding: 30px 60px;
+  }
+  
+  .address-form {
+    padding: 50px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .address-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Medium Desktop (1025px to 1440px) */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .address-content {
+    padding: 25px 45px;
+  }
+  
+  .address-form {
+    padding: 40px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .address-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Small Laptop/Large Tablet (769px to 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .address-sidebar {
+    width: 250px;
+    min-width: 250px;
+  }
+  
+  .address-content {
+    padding: 20px 30px;
+  }
+  
+  .address-form {
+    padding: 30px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .address-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+  
+  .sidebar-item {
+    padding: 12px 15px;
+    font-size: 15px;
+  }
+}
+
+/* Tablet (600px to 768px) */
+@media (max-width: 768px) and (min-width: 600px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .mobile-overlay {
+    display: block;
+  }
+  
+  .address-page-wrapper {
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .address-sidebar {
+    width: 300px;
+    min-width: unset;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    padding: 60px 20px 20px;
+  }
+  
+  .address-sidebar.mobile-open {
+    left: 0;
+  }
+  
+  .address-content {
+    padding: 70px 20px 20px;
+    order: 2;
+    width: 100%;
+  }
+  
+  .address-form {
+    padding: 25px;
+    grid-template-columns: 1fr;
+  }
+  
+  .address-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  h2.Heading {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Mobile (less than 600px) */
+@media (max-width: 599px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .mobile-overlay {
+    display: block;
+  }
+  
+  .address-page-wrapper {
+    flex-direction: column;
+    position: relative;
+  }
+  
+  .address-sidebar {
+    width: 280px;
+    min-width: unset;
+    position: fixed;
+    top: 0;
+    left: -280px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    padding: 60px 20px 20px;
+  }
+  
+  .address-sidebar.mobile-open {
+    left: 0;
+  }
+  
+  .address-content {
+    padding: 70px 15px 15px;
+    order: 2;
+    margin-top: 0;
+    width: 100%;
+  }
+  
+  .sidebar-item {
+    display: block;
+    margin: 8px 0;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .sidebar-item.dropdown {
+    padding: 12px 15px;
+  }
+  
+  .sidebar-subitem {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+  
+  .address-form {
+    padding: 20px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .address-form input[type="text"],
+  .address-form input[type="tel"] {
+    padding: 14px;
+    font-size: 1rem;
+  }
+  
+  .address-list {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .address-card {
+    padding: 20px;
+  }
+  
+  .name {
+    font-size: 1.2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .badge-inline {
+    font-size: 0.6rem;
+    padding: 4px 10px;
+  }
+  
+  .card-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  h2.Heading {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .button-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .address-form button {
+    padding: 14px 20px;
+    font-size: 1rem;
+    width: 100%;
+  }
+}
+
+/* Extra Small (392px and below) */
+@media (max-width: 392px) {
+  .address-sidebar {
+    width: 260px;
+    left: -260px;
+    padding: 50px 15px 15px;
+  }
+  
+  .address-content {
+    padding: 60px 12px 12px;
+  }
+  
+  .address-form {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .address-form input[type="text"],
+  .address-form input[type="tel"] {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+  
+  .address-card {
+    padding: 15px;
+  }
+  
+  .name {
+    font-size: 1.1rem;
+  }
+  
+  h2.Heading {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Ultra Small (300px and below) */
+@media (max-width: 300px) {
+  .address-sidebar {
+    width: 240px;
+    left: -240px;
+    padding: 50px 12px 12px;
+  }
+  
+  .address-content {
+    padding: 60px 8px 8px;
+  }
+  
+  .address-form {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .address-form input[type="text"],
+  .address-form input[type="tel"] {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .address-card {
+    padding: 12px;
+  }
+  
+  .name {
+    font-size: 1rem;
+  }
+  
+  h2.Heading {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .sidebar-item {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .action-button {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+}
+  
+  .action-button {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
 }

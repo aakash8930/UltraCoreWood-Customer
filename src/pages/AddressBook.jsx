@@ -43,6 +43,21 @@ export default function AddressBook({ initialView, onSwitchView }) {
     }
   }, [initialView]);
 
+  // View switching functions
+  const switchToFormView = () => {
+    setCurrentView('form');
+    setEditingId(null);
+    setFormData(blankAddress);
+    if (onSwitchView) onSwitchView('form');
+  };
+
+  const switchToListView = () => {
+    setCurrentView('list');
+    setEditingId(null);
+    setFormData(blankAddress);
+    if (onSwitchView) onSwitchView('list');
+  };
+
   const getToken = async () => {
     const user = getAuth().currentUser;
     return user ? await user.getIdToken() : null;
@@ -113,7 +128,7 @@ export default function AddressBook({ initialView, onSwitchView }) {
       setFormData(blankAddress);
       setEditingId(null);
       await loadAddresses();
-      onSwitchView('list'); 
+      onSwitchView('list');
     } catch (err) {
       console.error('Save address failed:', err);
       setError(err.response?.data?.error || err.message);
@@ -133,7 +148,8 @@ export default function AddressBook({ initialView, onSwitchView }) {
       state: addr.state,
       isDefault: addr.isDefault
     });
-    onSwitchView('form');
+    setCurrentView('form');
+    if (onSwitchView) onSwitchView('form');
   };
 
   // --- 3. Replace the old handleDelete with functions to manage the modal ---
@@ -185,7 +201,25 @@ export default function AddressBook({ initialView, onSwitchView }) {
     <>
       {currentView === 'list' && (
         <>
-          <h2 className="Heading">Saved Addresses</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h2 className="Heading">Saved Addresses</h2>
+            <button 
+              className="address-form button"
+              onClick={switchToFormView}
+              style={{ 
+                backgroundColor: '#000', 
+                color: 'white', 
+                padding: '12px 24px', 
+                border: 'none', 
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              Add New Address
+            </button>
+          </div>
           {error && <div className="error">{error}</div>}
           <div className="address-list">
             {addresses.map(addr => (
@@ -216,7 +250,24 @@ export default function AddressBook({ initialView, onSwitchView }) {
 
       {currentView === 'form' && (
         <>
-          <h2 className="Heading">{editingId ? 'Update Address' : 'Add New Address'}</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+            <button 
+              type="button"
+              onClick={switchToListView}
+              style={{
+                background: 'none',
+                border: '1px solid #ddd',
+                borderRadius: '6px',
+                padding: '8px 12px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                color: '#555'
+              }}
+            >
+              ← Back to Addresses
+            </button>
+            <h2 className="Heading">{editingId ? 'Update Address' : 'Add New Address'}</h2>
+          </div>
           {error && <div className="error">{error}</div>}
           <form className='address-form' onSubmit={handleSubmit}>
             <input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required />
@@ -236,7 +287,7 @@ export default function AddressBook({ initialView, onSwitchView }) {
               <button type="submit">
                 {editingId ? 'Update Address' : 'Save Address'}
               </button>
-              <button type="button" onClick={() => onSwitchView('list')} style={{marginLeft: '1rem', background: '#6c757d'}}>
+              <button type="button" onClick={switchToListView} style={{marginLeft: '1rem', background: '#6c757d'}}>
                 Cancel
               </button>
             </div>
