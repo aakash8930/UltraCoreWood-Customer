@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from './CartContext';
-// import { createOrder } from '../api/orderApi'; // <-- REMOVED: Not needed for Online payment (Backend handles it on verify)
 import { createOrder } from '../api/orderApi'; // Keep only if used for COD
 import { fetchAddresses, createAddress } from '../api/addressApi';
 import { fetchAvailableCoupons, applyCoupon as applyCouponAPI } from '../api/couponApi';

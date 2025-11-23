@@ -82,9 +82,6 @@ export default function OrderDetailsPage() {
 
   return (
     <div className="order-details-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Back to Orders
-      </button>
 
       <div className="order-info">
         <h2>Order #{order.orderId}</h2>
@@ -111,22 +108,34 @@ export default function OrderDetailsPage() {
       <div className="order-products">
         <h3>Products</h3>
         <div className="products-grid">
-          {order.products.filter(item => item.product).map(({ product, quantity }) => (
-            <div key={product._id} className="product-cell">
-              <img
-                src={product.imageUrl || '/images/placeholder.jpg'}
-                alt={product.name}
-              />
-              <p>{product.name}</p>
-              <p>Qty: {quantity}</p>
-              <p>₹{(product.price * quantity).toLocaleString()}</p>
+          {order.products.filter(item => item.product).map(({ product, quantity }) => {
+            // Handle product images (base64 encoded)
+            let imageSrc = '/images/placeholder.jpg';
+            if (product.images) {
+              const firstImageKey = Object.keys(product.images).find(key => product.images[key]?.data);
+              if (firstImageKey) {
+                const { contentType, data } = product.images[firstImageKey];
+                imageSrc = `data:${contentType};base64,${data}`;
+              }
+            }
 
-              {/* **REPLACED** with the new component */}
-              {order.status === 'Delivered' && (
-                <ProductReview productId={product._id} />
-              )}
-            </div>
-          ))}
+            return (
+              <div key={product._id} className="product-cell">
+                <img
+                  src={imageSrc}
+                  alt={product.name}
+                />
+                <p>{product.name}</p>
+                <p>Qty: {quantity}</p>
+                <p>₹{(product.price * quantity).toLocaleString()}</p>
+
+                {/* **REPLACED** with the new component */}
+                {order.status === 'Delivered' && (
+                  <ProductReview productId={product._id} />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

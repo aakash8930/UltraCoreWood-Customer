@@ -11,6 +11,9 @@ const formatPrice = (amount) =>
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
+  const [viewedTabs, setViewedTabs] = useState(new Set(['all'])); // Track viewed tabs
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { user } = useAuth();
@@ -26,6 +29,7 @@ export default function OrdersPage() {
         const token = await user.getIdToken();
         const data = await getMyOrders(token);
         setOrders(data);
+        setFilteredOrders(data);
       } catch (err) {
         console.error('Failed to load orders', err);
         setError(err.message || 'Could not load your orders.');
@@ -35,6 +39,43 @@ export default function OrdersPage() {
     };
     loadOrders();
   }, [user]);
+
+  // Filter orders based on active tab
+  useEffect(() => {
+    if (activeTab === 'all') {
+      // Show only pending and shipped orders in "On Shipping"
+      setFilteredOrders(orders.filter(order => 
+        order.status.toLowerCase() === 'shipped' || 
+        order.status.toLowerCase() === 'pending' ||
+        order.status.toLowerCase() === 'confirmed'
+      ));
+    } else if (activeTab === 'delivered') {
+      setFilteredOrders(orders.filter(order => order.status.toLowerCase() === 'delivered'));
+    } else if (activeTab === 'cancelled') {
+      setFilteredOrders(orders.filter(order => order.status.toLowerCase() === 'cancelled'));
+    }
+  }, [activeTab, orders]);
+
+  // Calculate counts for each status
+  const getStatusCounts = () => {
+    return {
+      shipped: orders.filter(order => 
+        order.status.toLowerCase() === 'shipped' || 
+        order.status.toLowerCase() === 'pending' ||
+        order.status.toLowerCase() === 'confirmed'
+      ).length,
+      delivered: orders.filter(order => order.status.toLowerCase() === 'delivered').length,
+      cancelled: orders.filter(order => order.status.toLowerCase() === 'cancelled').length,
+    };
+  };
+
+  const statusCounts = getStatusCounts();
+
+  // Handle tab click - mark as viewed
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+    setViewedTabs(prev => new Set([...prev, tabName]));
+  };
 
   const handleBuyAgain = (orderId) => {
     setToastMessage(`Feature simulation: Items from order ${orderId} would be added to your cart!`);
@@ -66,19 +107,52 @@ export default function OrdersPage() {
       {toastMessage && <div className="order-toast">{toastMessage}</div>}
 
       <div className="orders-container">
-        <h1>Your Orders</h1>
-        {orders.map(order => (
+        <h1>My Orders</h1>
+        
+        {/* Status Tabs */}
+        <div className="status-tabs">
+          <button 
+            className={`status-tab ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => handleTabClick('all')}
+          >
+            On Shipping
+          </button>
+          <button 
+            className={`status-tab ${activeTab === 'delivered' ? 'active' : ''}`}
+            onClick={() => handleTabClick('delivered')}
+          >
+            Arrived
+          </button>
+          <button 
+            className={`status-tab ${activeTab === 'cancelled' ? 'active' : ''}`}
+            onClick={() => handleTabClick('cancelled')}
+          >
+            Canceled
+          </button>
+        </div>
+
+        {filteredOrders.length === 0 ? (
+          <p className="center">No orders found in this category.</p>
+        ) : (
+          filteredOrders.map(order => (
           <div key={order._id} className="order-card">
             <div className="order-card-header">
               <div className="order-header-info">
-                <div><strong>Order ID:</strong> {order.orderId}</div>
-                <div><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</div>
                 <div>
-                  <strong>Status:</strong>{' '}
+                  <strong>Order ID</strong>
+                  <span className="order-id">{order.orderId}</span>
+                </div>
+                <div>
+                  <strong>Estimated arrival</strong>
+                  <span>{new Date(order.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                </div>
+                <div>
+                  <strong>Status</strong>
                   <span className={`status status-${order.status.toLowerCase()}`}>{order.status}</span>
                 </div>
-                <div className="order-total">
-                  <strong>Total:</strong> {formatPrice(order.paymentBreakdown.total)}
+                <div>
+                  <strong>Total</strong>
+                  <span className="order-total">{formatPrice(order.paymentBreakdown.total)}</span>
                 </div>
               </div>
               <div className="order-header-actions">
@@ -86,28 +160,23 @@ export default function OrdersPage() {
                   Buy Again
                 </button>
                 <Link to={`/orders/${order._id}`} className="view-order-btn">
-                  View Details
+                  Details
                 </Link>
               </div>
             </div>
 
-            {/* --- UI IMPROVEMENT: Conditional Layout Logic --- */}
+            {/* Products Grid - Always use 2 columns for grid like Nike design */}
             {order.products.length < 3 ? (
-              // Use LIST VIEW for 1 or 2 products
-              // Find this section in your OrdersPage.js file
-
-              // Use LIST VIEW for 1 or 2 products
               <div className="order-products-list">
                 {order.products.filter(item => item.product).map(({ product, quantity }) => {
                   const { imageSrc, discountedPrice } = renderProductItem(product, quantity);
                   return (
                     <div key={product._id} className="list-item">
                       <img src={imageSrc} alt={product.name} className="list-item-image" />
-                      {/* --- CHANGE IS HERE --- */}
                       <div className="list-item-details">
                         <div className="list-item-info">
                           <span className="list-item-name">{product.name}</span>
-                          <span className="list-item-qty">Qty: {quantity}</span>
+                          <span className="list-item-qty">Size: {quantity}</span>
                         </div>
                         <span className="list-item-price">{formatPrice(discountedPrice * quantity)}</span>
                       </div>
@@ -116,10 +185,9 @@ export default function OrdersPage() {
                 })}
               </div>
             ) : (
-              // Use GRID VIEW for 3 or more products
               <div className="order-products-grid">
                 {order.products.filter(item => item.product).map(({ product, quantity }) => {
-                  const { imageSrc } = renderProductItem(product, quantity);
+                  const { imageSrc, discountedPrice } = renderProductItem(product, quantity);
                   return (
                     <div key={product._id} className="product-cell">
                       <img
@@ -130,7 +198,8 @@ export default function OrdersPage() {
                       />
                       <div className="product-info">
                         <p className="product-name">{product.name}</p>
-                        <p className="product-qty">Qty: {quantity}</p>
+                        <p className="product-qty">Size: {quantity}</p>
+                        <p className="product-price">{formatPrice(discountedPrice * quantity)}</p>
                       </div>
                     </div>
                   );
@@ -138,7 +207,8 @@ export default function OrdersPage() {
               </div>
             )}
           </div>
-        ))}
+          ))
+        )}
       </div>
     </>
   );
